@@ -1,0 +1,99 @@
+.miniGame {
+  .heading-box {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url("../../assets/images/header_box.jpg") no-repeat center
+      center;
+    background-size: cover;
+  }
+  .heading-box h1 {
+    display: block;
+    margin: 0 auto;
+    font-size: 36px;
+    text-transform: uppercase;
+    font-weight: 400;
+    position: relative;
+    padding-bottom: 20px;
+    text-align: center;
+  }
+  @media (max-width: 1023px) {
+    .heading-box h1 {
+      font-size: 32px;
+    }
+  }
+  @media (max-width: 480px) {
+    .heading-box h1 {
+      font-size: 24px;
+    }
+  }
+  .heading-box h1:after {
+    content: "";
+    display: block;
+    width: 216px;
+    height: 1px;
+    background: url("../../assets/images/header_line.svg") no-repeat center
+      center;
+    background-size: contain;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+  .heading-box h1 strong {
+    font-weight: 700;
+  }
+  .heading-box h1:after {
+    content: "";
+    display: block;
+    width: 216px;
+  }
+
+  .section-games {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    border: 1px solid #424242;
+    padding: 0;
+    margin: auto;
+    background: #1d1d1d;
+    margin-top: 20px;
+    .menu-games {
+      flex: 6;
+      .item {
+        display: flex;
+        padding: 15px 0;
+        cursor: pointer;
+        justify-content: space-around;
+
+        .btn-predict {
+          background-color: #4caf50 !important;
+          border-color: #4caf50 !important;
+          border-radius: 12px;
+          font-size: 12px;
+          height: 24px;
+          align-items: center;
+          cursor: default;
+          padding: 0 12px;
+          border: none !important;
+        }
+      }
+      .item.active {
+        background: #1b2340;
+      }
+    }
+    .detail-games {
+      flex: 4;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      margin: auto;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

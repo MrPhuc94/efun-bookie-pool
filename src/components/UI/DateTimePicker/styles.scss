@@ -1,0 +1,15 @@
+.date-custom-input {
+  width: 100%;
+  background-color: var(--background-color);
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: left;
+  align-items: center;
+  display: flex;
+  img {
+    width: 20px !important;
+    height: 20px !important;
+    margin-right: 5px;
+  }
+}

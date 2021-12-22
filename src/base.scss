@@ -1,0 +1,140 @@
+:root {
+  // background
+  --primary-color: #1e1e1e;
+  --white-color: #ffffff;
+
+  // dimension
+  --tiny: 6px;
+  --small: 10px;
+  --medium: 14px;
+  --large: 16px;
+  --big: 24px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+.divider {
+  height: 1px;
+  width: "100%";
+  background: rgb(253, 234, 234);
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
+.center {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  align-self: center;
+  width: 100%;
+}
+
+.flex_row_start {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.flex_row_end {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.flex_wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+// text
+.text-tiny {
+  color: var(--text-primary-color);
+  font-size: 10px !important;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.text-small {
+  color: var(--text-primary-color);
+  font-size: 12px !important;
+  font-weight: 400;
+}
+
+.text-medium {
+  color: var(--text-primary-color);
+  font-size: 14px !important;
+  font-weight: 400;
+}
+
+.text-large {
+  color: var(--text-primary-color);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+// text-color
+.white {
+  color: var(--white-color);
+}
+
+// margin
+.mb-big {
+  margin-bottom: var(--big) !important;
+}
+
+.mb-large {
+  margin-bottom: var(--large) !important;
+}
+
+.mb-medium {
+  margin-bottom: var(--medium) !important;
+}
+
+.mb-small {
+  margin-bottom: var(--small) !important;
+}
+
+.mb-tiny {
+  margin-bottom: var(--tiny) !important;
+}
+
+//margin right
+.mr-big {
+  margin-right: var(--big) !important;
+}
+
+.mr-large {
+  margin-right: var(--large) !important;
+}
+
+.mr-medium {
+  margin-right: var(--medium) !important;
+}
+
+.mr-small {
+  margin-right: var(--small) !important;
+}
+
+.mr-tiny {
+  margin-right: var(--tiny) !important;
+}

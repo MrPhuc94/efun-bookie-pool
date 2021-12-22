@@ -1,0 +1,60 @@
+.modal-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+
+  .modal-wrapper {
+    position: relative;
+    width: 80vw;
+    background: var(--primary-color);
+    box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    max-width: 450px;
+    padding: 20px 30px;
+    .btn-close {
+      background-color: rgb(224, 224, 224);
+      border-color: rgb(224, 224, 224);
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .btn-metamask {
+      height: 54px;
+      padding: 0 12px;
+      background: #f5d0b1;
+      color: #282c37;
+      border-color: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+    }
+    .btn-trust {
+      height: 54px;
+      padding: 0 12px;
+      background: linear-gradient(
+          0deg,
+          rgba(59, 153, 251, 0.1),
+          rgba(59, 153, 251, 0.1)
+        ),
+        #ffffff;
+      color: #282c37;
+      border-color: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+    }
+  }
+
+  .choose-wallet-connect {
+    padding: 20px 30px;
+  }
+  @media screen and (max-width: 959px) {
+    .choose-wallet-connect {
+      padding: 0;
+    }
+  }
+}

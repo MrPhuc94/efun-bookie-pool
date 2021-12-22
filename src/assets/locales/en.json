@@ -1,0 +1,175 @@
+{
+  "translation": {
+    "common": {
+      "note": "Note",
+      "quantity": "Quantity",
+      "select": "Select",
+      "cart": "Cart",
+      "submit": "Submit",
+      "total": "Total",
+      "send": "Send",
+      "homepage": "Homepage",
+      "search": "Search",
+      "cancelRequest": "Cancel your request",
+      "requestHistory": "Request History",
+      "message": "Notifications",
+      "language": "Language",
+      "booking": "Book now",
+      "login": "Log In",
+      "thankYou": "Thank you",
+      "accept": "Accept",
+      "received": "Received",
+      "notification": "Notification",
+      "logout": "Sign Out",
+      "numberOfPax": "Number of pax",
+      "date": "Date & Time",
+      "hour": "Hour",
+      "reference": "Preference",
+      "adults": "Adults",
+      "children": "Children",
+      "startingTime": "Starting time",
+      "endingTime": "Ending time",
+      "duration": "Duration",
+      "bookingDetail": "Booking detail",
+      "on": "On",
+      "off": "Off",
+      "repeat": "Repeat",
+      "notes": "Notes",
+      "pickUpPlace": "Pick-up point",
+      "dropPlace": "Drop off point",
+      "numberOfSeats": "Number of seats",
+      "destinations": "Destinations",
+      "selectPickUpPoint": "Select your Pick-up point",
+      "yourContactOrNote": "Your contact or Note",
+      "save": "Save",
+      "specialTax": "Special tax",
+      "price": "Price",
+      "hotelDirectory": "Hotel map",
+      "destination": "Destination",
+      "viewMenu": "View menu",
+      "subTotal": "Sub total",
+      "serviceChargeTax": "Service charge and Tax",
+      "laundry": "Laundry",
+      "privacyMode": "Privacy mode",
+      "turnDown": "Turn Down",
+      "pleaseTurnDown": "Please turn down",
+      "noNeedTurnDown": "No need turn down tonight",
+      "inRoomDiningOrder": "In room dining order",
+      "miniMartOrder": "Mini mart order",
+      "spaWellnessOrder": "Spa & Wellness order",
+      "laundryOrder": "Laundry order",
+      "amenitiesOrder": "Amenities order",
+      "amenities": "Amenities",
+      "roomRequest": "Room Request",
+      "roomRequestOrder": "Room Request order",
+      "selectPackage": "Select package",
+      "mins": "mins",
+      "dataUpdated": "Data updated. Please \"Accept\" to continue.",
+      "ticketPrice": "Ticket price",
+      "selectLanguage": "Select language",
+      "makeUpRoom": "Make Up Room",
+      "serviceRequest":"Service Request",
+      "restaurantAndBars":"Restaurants & Bar",
+      "tourBooking":"Tour Booking",
+      "excusionAndEvent": "Excusion & Events",
+      "spaAndWellness":"Spa & Wellness",
+      "hotelShop":"Hotel Shop",
+      "feedback":"Feedback",
+      "dearGuest":"Dear Guest",
+      "loginFalse":"Login Failed! Pls check again!"
+    },
+    "services": {
+      "inRoomDining": "In Room Dining",
+      "spa": "Spa & Wellness",
+      "miniMart": "Hotel Shop"
+    },
+    "login": {
+      "inputLastName": "Input your last name",
+      "inputRoomNumber": "Your room number",
+      "loginHere": "Login here to proceed with\nyour request!",
+      "title": "Please Sign-in to Access"
+    },
+    "modal": {
+      "captcha": {
+        "title": "Please input code\nto confirm your order",
+        "textInputPlaceHolder": "Fill in the code here",
+        "paymentTitle": "Payment method",
+        "incorrectCaptchaMessage": "The captcha you entered is incorrect."
+      },
+      "bookingSuccess": {
+        "title": "Your order was sent successfully",
+        "des": "Your order will be delivered in 30 minutes",
+        "note": "In case you wish to cancel your order, please go to the cart, or dial number 0 on your in room telephone. Cancellations are accepted within 5 minutes from ordering"
+      }
+    },
+    "home": {
+      "followUs": "Follow us",
+      "roomNumber": "Room number"
+    },
+    "restaurant": {
+      "listTitle": "Impressive restaurants in the hotel"
+    },
+    "tour": {
+      "customLocationTitle": "Choose the destination by yourself",
+      "tourBookingConfirmation": "Tour Booking Confirmation",
+      "addedPassenger": "Added passenger",
+      "inputPassengerName": "Input passenger name",
+      "chooseDestination": "Choose the destination by yourself"
+    },
+    "instantComments": {
+      "des1": "We would appreciate any suggestions you may have as we continue to improve our hotel and its services.",
+      "des2": "How would you rate your experience?",
+      "des3": "I hope we will have the opportunity of welcoming you back to Furama Resort soon.",
+      "thanks": "Thank you for taking time to give us your very valuable feedback.",
+      "shareOn": "Thank you for taking time to give us your very valuable feedback. We greatly appreciate your experience sharing on"
+    },
+    "serviceRequest": {
+      "laundry": {
+        "selectOption": "Select option",
+        "allItems": "All items ",
+        "expressService": "Express service",
+        "expressServiceDes": "Return within 3 hours and 150% price above",
+        "babyClothes": "Baby-clothes",
+        "babyClothesDes": "50% price above"
+      },
+      "privacyMode": {
+        "title": "Your Privacy Mode",
+        "doNotDisturb": "Do not disturb"
+      },
+      "makeUpRoom": {
+        "roomCleaning": "Room Cleaning",
+        "makeUpRoom": "Make up my room",
+        "unWant": "No need clean room today only",
+        "makeUpBed": "Make up bed only",
+        "cleanFloor": "Clean floor only",
+        "cleanBathroom": "Clean bathroom only",
+        "cleanFurniture": "Clean furniture only"
+      },
+      "luggage": {
+        "packageQuantity": "Number of suitcases"
+      },
+      "businessCenter": {
+        "accessoriesRequirements": "Accessories & Requirements"
+      },
+      "kidsClub": {
+        "onDemand": "On-demand babysitting",
+        "serviceClub": "Service at the club",
+        "location": "Please tell us where to take care your child(s)"
+      }
+    },
+    "spa": {
+      "selectTheFirstService": "Select the first service"
+    },
+    "feedback":{
+     "1": "Overall attitude & friendliness of front desk staff",
+     "2":"Cleanliness & servicing of room during your stay",
+     "3":"Service quality at our restaurant",
+     "4":"Food quality at our restaurant",
+     "5":"Rate your overall experience at our restaurant",
+     "6": "Garden & landscaping",
+     "7":"We would appreciate any suggestions you might have as we continue to improve our hotel and its services",
+     "8":"How would you rate your experience?",
+     "9":"I hope we will have the opportunity of welcoming you back to Furama Resort soon."
+    }
+  }
+}

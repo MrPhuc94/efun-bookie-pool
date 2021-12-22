@@ -1,0 +1,14 @@
+.input-custom {
+  display: flex;
+  flex: row;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: var(--background-color);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.input-content {
+  padding-left: 7px;
+  width: 100%;
+}
