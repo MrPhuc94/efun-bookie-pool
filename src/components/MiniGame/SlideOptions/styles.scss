@@ -1,0 +1,21 @@
+.SlideItem {
+  display: flex !important;
+  flex-wrap: wrap;
+  .ItemOption {
+    display: flex;
+    flex-wrap: wrap;
+    width: 125px;
+    height: 50px;
+    margin: 12px;
+    background: #2e2e2e;
+    border-radius: 8px;
+    font-size: 20px;
+    align-items: center;
+    cursor: default;
+    padding: 0 40px;
+  }
+
+  .ItemOption.active {
+    background: #fbc02d;
+  }
+}

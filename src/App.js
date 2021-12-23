@@ -2,14 +2,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
-import Layout from "./screens/Home/Home";
 import MAppPopups from "./common/MAppPopups";
 import "./base.scss";
+import Home from "./screens/Home/Home";
 
 const PrivateRoute = [
   {
     path: "/",
-    component: Layout,
+    component: Home,
   },
 ];
 

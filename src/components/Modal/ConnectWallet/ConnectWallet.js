@@ -89,7 +89,7 @@ const ModalConnectWallet = () => {
           <div>Metamask wallet</div>
         </div>
         <div
-          class="flex_row_start btn-trust"
+          className="flex_row_start btn-trust"
           onClick={() => {
             connectWallet("TrustWallet");
           }}

@@ -3,7 +3,7 @@ import Header from "src/components/Header/Header";
 import Footer from "src/components/Footer/Footer";
 import MiniGame from "src/components/MiniGame/MiniGame";
 
-const Layout = () => {
+const Home = () => {
   return (
     <>
       <Header />
@@ -13,4 +13,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default Home;
