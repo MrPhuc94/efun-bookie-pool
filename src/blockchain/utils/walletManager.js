@@ -1,49 +1,65 @@
 /* eslint-disable no-useless-catch */
 // import _get from 'lodash/get'
-const Web3 = require('web3')
-const BigNumber = require('bignumber.js')
-const WalletError = require('./error')
-const { supportWallet } = require('./contants')
+const Web3 = require("web3");
+const BigNumber = require("bignumber.js");
+const WalletError = require("./error");
+const { supportWallet } = require("./contants");
 // const { getWeb3walletConnect } = require('./walletconnect')
-const erc20Abi = require('./contracts/erc20.abi.json')
+const erc20Abi = require("./contracts/erc20.abi.json");
 // const betAbi = require('./contracts/ftm.abi.json')
-const { getWeb3walletConnect } = require('./walletconnect')
+const { getWeb3walletConnect } = require("./walletconnect");
+const { store } = require("src/redux/store");
+const { changeCurrentAddress } = require("src/redux/reducers/walletSlice");
 // #need_config
-const network = process.env.NODE_ENV === 'development' ? process.env.BLOCKCHAIN_NETWORK : process.env.BLOCKCHAIN_NETWORK_MAINNET
+const network =
+  process.env.NODE_ENV === "development"
+    ? process.env.BLOCKCHAIN_NETWORK
+    : process.env.BLOCKCHAIN_NETWORK_MAINNET;
 // const network = 'MAINNET'
 
-const supportSymbol = network === 'TESTNET' ? require('./tokens/supportSymbolTest') : require('./tokens/supportSymbol')
+const supportSymbol =
+  network === "TESTNET"
+    ? require("./tokens/supportSymbolTest")
+    : require("./tokens/supportSymbol");
 // const supportSymbolFantom = network === 'TESTNET' ? require('./tokens/supportSymbolFantomTest') : require('./tokens/supportSymbolFantomTest')
-let currentAddress = ''
-const supportedWalletsType = Object.values(supportWallet)
+let currentAddress = "";
+const supportedWalletsType = Object.values(supportWallet);
 
 // const REACT_APP_API_URL_WEB3 = 'https://rpc.testnet.fantom.network/'
 // let web3Provider = new Web3(new Web3.providers.HttpProvider(REACT_APP_API_URL_WEB3 || ''))
 
 // let keystore = null
-let isConnected = false
-let currentWalletType = null
-let tokens = []
+let isConnected = false;
+let currentWalletType = null;
+let tokens = [];
 
-function checkSupportedWalletsType () {
-  const result = [supportWallet.dfyWallet, supportWallet.walletConnect]
-  if (window.ethereum && window.ethereum.isMetaMask) { result.push(supportWallet.metamask) }
-  if (window.BinanceChain) { result.push(supportWallet.binanceChain) }
-  if (window.ethereum && window.ethereum.isTrust) { result.push(supportWallet.trustWallet) }
-  if (window.ethereum && window.ethereum.isSafePal) { result.push(supportWallet.safePal) }
+function checkSupportedWalletsType() {
+  const result = [supportWallet.dfyWallet, supportWallet.walletConnect];
+  if (window.ethereum && window.ethereum.isMetaMask) {
+    result.push(supportWallet.metamask);
+  }
+  if (window.BinanceChain) {
+    result.push(supportWallet.binanceChain);
+  }
+  if (window.ethereum && window.ethereum.isTrust) {
+    result.push(supportWallet.trustWallet);
+  }
+  if (window.ethereum && window.ethereum.isSafePal) {
+    result.push(supportWallet.safePal);
+  }
   // if (!!(localStorage.getItem('walletConnect'))) result.push(supportWallet.connectWallet)
 
-  return result
+  return result;
 }
 
-let web3 = null
+let web3 = null;
 
 /**
  *
  * @param {string} walletType dựa theo loại ví nào để kết nối
  * @param {number} timeout thời gian hết hạn khi kết nối ví, như bình thường call là 1000000
  */
-async function connectWallet (walletType, timeout) {
+async function connectWallet(walletType, timeout) {
   try {
     // const prov = new Web3.providers.HttpProvider(REACT_APP_API_URL_WEB3 || '')
     // if (!web3Provider) {
@@ -52,38 +68,49 @@ async function connectWallet (walletType, timeout) {
     //   web3Provider.setProvider(prov)
     // }
     // TODO Env check
-    if (walletType === supportWallet.metamask || walletType === supportWallet.trustWallet || walletType === supportWallet.safePal) {
-      await window.ethereum.enable()
-      web3 = new Web3(window.ethereum)
+    if (
+      walletType === supportWallet.metamask ||
+      walletType === supportWallet.trustWallet ||
+      walletType === supportWallet.safePal
+    ) {
+      await window.ethereum.enable();
+      web3 = new Web3(window.ethereum);
 
       if (walletType === supportWallet.metamask) {
-        currentWalletType = supportWallet.metamask
+        currentWalletType = supportWallet.metamask;
       } else if (walletType === supportWallet.safePal) {
-        currentWalletType = supportWallet.safePal
+        currentWalletType = supportWallet.safePal;
       } else {
-        currentWalletType = supportWallet.trustWallet
+        currentWalletType = supportWallet.trustWallet;
       }
     } else if (walletType === supportWallet.binanceChain) {
-      await window.BinanceChain.enable()
-      web3 = new Web3(window.BinanceChain)
-      currentWalletType = supportWallet.binanceChain
+      await window.BinanceChain.enable();
+      web3 = new Web3(window.BinanceChain);
+      currentWalletType = supportWallet.binanceChain;
     } else if (walletType === supportWallet.walletConnect) {
-      web3 = await getWeb3walletConnect()
-      currentWalletType = supportWallet.walletConnect
+      web3 = await getWeb3walletConnect();
+      currentWalletType = supportWallet.walletConnect;
     }
-    const accounts = await web3.eth.getAccounts()
+    const accounts = await web3.eth.getAccounts();
     // const accounts = await web3.eth.getAccounts()
-    currentAddress = accounts[0]
-    isConnected = true
+    currentAddress = accounts[0];
+    console.log("currentAddress123", currentAddress);
+    // set currentAddress to store
+    store.dispatch(changeCurrentAddress(currentAddress));
+    isConnected = true;
   } catch (error) {
-    console.log(error)
-    throw new WalletError.NewUnknowError('user rejected permission or don\'t install wallet extension')
+    console.log(error);
+    throw new WalletError.NewUnknowError(
+      "user rejected permission or don't install wallet extension"
+    );
   }
 
   try {
-    await getBalances()
+    console.log("abced44444");
+    await getBalances();
+    console.log("abced44444");
   } catch (error) {
-    throw error
+    throw error;
   }
 }
 /**
@@ -177,11 +204,11 @@ async function connectWallet (walletType, timeout) {
 /**
  * logout loại bỏ các key lẫn token
  */
-function logout () {
+function logout() {
   // keystore = null
-  isConnected = false
-  currentWalletType = null
-  tokens = []
+  isConnected = false;
+  currentWalletType = null;
+  tokens = [];
 }
 
 /**
@@ -233,62 +260,67 @@ function logout () {
 //     throw new WalletError.NewUnknowError('can not get balances now')
 //   }
 // }
-async function getBalances () {
+async function getBalances() {
   try {
     // #need_config
-    const node = process.env.NODE_ENV === 'development' ? process.env.BLOCKCHAIN_RPC_NETWORK : process.env.BLOCKCHAIN_RPC_NETWORK_MAINNET
-    const web3 = new Web3(node)
-    tokens = await Promise.all(Object.keys(supportSymbol).map(async (symbol) => {
-      if (symbol === 'BNB') {
-        const userBalance = await web3.eth.getBalance(currentAddress)
-        return {
-          symbol,
-          balance: BigNumber(userBalance).dividedBy(10 ** 18).toString()
-        }
-      } else {
-        const address = supportSymbol[symbol]
-        const tokenContract = new web3.eth.Contract(
-          erc20Abi,
-          address
-        )
-        const userBalance = await tokenContract.methods
-          .balanceOf(currentAddress)
-          .call()
+    const node =
+      process.env.REACT_APP_NODE_ENV === "development"
+        ? process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK
+        : process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET;
+    const web3 = new Web3(node);
+    tokens = await Promise.all(
+      Object.keys(supportSymbol).map(async (symbol) => {
+        if (symbol === "BNB") {
+          const userBalance = await web3.eth.getBalance(currentAddress);
+          return {
+            symbol,
+            balance: BigNumber(userBalance)
+              .dividedBy(10 ** 18)
+              .toString(),
+          };
+        } else {
+          const address = supportSymbol[symbol];
+          const tokenContract = new web3.eth.Contract(erc20Abi, address);
+          const userBalance = await tokenContract.methods
+            .balanceOf(currentAddress)
+            .call();
 
-        return {
-          symbol,
-          balance: BigNumber(userBalance).dividedBy(10 ** 18).toString()
+          return {
+            symbol,
+            balance: BigNumber(userBalance)
+              .dividedBy(10 ** 18)
+              .toString(),
+          };
         }
-      }
-    }))
+      })
+    );
   } catch (error) {
-    throw new WalletError.NewUnknowError('can not get balances now')
+    throw new WalletError.NewUnknowError("can not get balances now");
   }
 }
 
-module.exports = {
+export const walletManager = {
   getBalances,
-  currentAddress () {
-    return currentAddress
+  currentAddress() {
+    return currentAddress;
   },
-  currentWalletType () {
-    return currentWalletType
+  currentWalletType() {
+    return currentWalletType;
   },
-  supportedWalletsType () {
-    return supportedWalletsType
+  supportedWalletsType() {
+    return supportedWalletsType;
   },
-  tokens () {
-    return tokens
+  tokens() {
+    return tokens;
   },
-  isConnected () {
-    return isConnected
+  isConnected() {
+    return isConnected;
   },
-  web3 () {
-    return web3
+  web3() {
+    return web3;
   },
   checkSupportedWalletsType,
   connectWallet,
   // send,
-  logout
-
-}
+  logout,
+};

@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { dismissAppPopup } from "src/redux/reducers/appSlice";
 import { store } from "src/redux/store";
 import { useTranslation } from "react-i18next";
 import "./styles.scss";
 import Images from "src/common/Images";
+import { walletManager } from "src/blockchain/utils/walletManager";
+import { useSelector } from "react-redux";
 
 const ModalConnectWallet = () => {
   //default function
@@ -26,15 +28,29 @@ const ModalConnectWallet = () => {
   const [hasTrust, setHasTrust] = useState();
   const [errorDialog, setShowErrorDialog] = useState();
 
+  useEffect(() => {
+    let isAvailableWallet = walletManager.checkSupportedWalletsType();
+    setAvailableWallet(isAvailableWallet);
+    console.log("availableWallet", isAvailableWallet);
+  }, []);
+
+  const currentAddress = useSelector((state) => state?.wallet?.currentAddress);
+  console.log("currentAddress", currentAddress);
+
   // dynamic function
   const connectWallet = async (walletName) => {
     if (availableWallet && availableWallet.includes(walletName)) {
+      console.log("availableWallet", availableWallet);
+      console.log("walletName", walletName);
+
+      console.log("process.env.API_HOST ", process.env);
       try {
-        isSigning = walletName;
-        await connectWallet(walletName, false);
-        isSigning = false;
+        setIsSigning(true);
+        await walletManager.connectWallet(walletName, false);
         //emit("close");
+        setIsSigning(false);
         localStorage.setItem("extensionName", walletName);
+        store.dispatch(dismissAppPopup());
       } catch (e) {
         setShowErrorDialog({ text: e });
       }

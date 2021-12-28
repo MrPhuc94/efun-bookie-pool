@@ -7,6 +7,8 @@ import statistic_dfy from "../assets/images/statistic_dfy.png";
 import laliga from "../assets/images/laliga.png";
 import wales from "../assets/images/wales.png";
 import finland from "../assets/images/finland.png";
+import mu from "../assets/images/mu.png";
+import newcas from "../assets/images/newcas.png";
 
 const Images = {
   metaMask,
@@ -18,6 +20,8 @@ const Images = {
   laliga,
   wales,
   finland,
+  mu,
+  newcas,
 };
 
 export default Images;

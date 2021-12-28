@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.scss";
 import { showAppPopup } from "src/redux/reducers/appSlice";
 import { store } from "src/redux/store";
 import ModalConnectWallet from "../Modal/ConnectWallet/ConnectWallet";
 import Images from "src/common/Images";
+import { useSelector } from "react-redux";
+import { shortAddress } from "src/utils/helper";
 
 const showChooseWallet = () => {
   console.log("ABCDEF");
@@ -11,6 +13,9 @@ const showChooseWallet = () => {
 };
 
 const Header = () => {
+  const currentAddress = useSelector((state) => state.wallet.currentAddress);
+  console.log("currentAddress1234", currentAddress);
+
   return (
     <header className="header">
       <div className="container">
@@ -47,14 +52,20 @@ const Header = () => {
                 </a>
               </li>
               <li>
-                <div>
-                  <button
-                    className="connect-wallet-btn"
-                    onClick={showChooseWallet}
-                  >
-                    Connect Wallet
+                {currentAddress !== null ? (
+                  <button className="btn-address">
+                    {shortAddress(currentAddress, 5)}
                   </button>
-                </div>
+                ) : (
+                  <div>
+                    <button
+                      className="connect-wallet-btn"
+                      onClick={showChooseWallet}
+                    >
+                      Connect Wallet
+                    </button>
+                  </div>
+                )}
               </li>
             </ul>
             <ul className="menu-mb">

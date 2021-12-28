@@ -3,11 +3,15 @@ import Slider from "react-slick";
 import lodash from "lodash";
 import "./styles.scss";
 
+const ArrowLeft = (props) => <button {...props} className={"prev"} />;
+const ArrowRight = (props) => <button {...props} className={"next"} />;
 export default class SlideOptions extends Component {
   state = {
     display: true,
-    width: 600,
     selectedOptions: [],
+    prevArrow: <ArrowLeft />,
+    nextArrow: <ArrowRight />,
+    width: 600,
   };
 
   render() {
@@ -40,6 +44,32 @@ export default class SlideOptions extends Component {
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            infinite: true,
+            dots: true,
+          },
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            initialSlide: 2,
+          },
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+          },
+        },
+      ],
     };
 
     let dataSource = this.props.data;

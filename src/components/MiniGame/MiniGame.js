@@ -1,5 +1,5 @@
 import Images from "src/common/Images";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./styles.scss";
 import MenuTop from "../MenuTop/MenuTop";
 import SlideOptions from "./SlideOptions/SlideOptions";
@@ -154,24 +154,28 @@ const MiniGame = () => {
               </div>
             </div>
 
-            <div className="MatchGame flex_row">
-              <div>
+            <div className="MatchGame flex_row mb-large">
+              <div style={{ width: 200 }}>
                 <div className="mb-small">
                   <img src={dataMiniGame[selectedItem].Logo1} alt="" />
                 </div>
                 <div>
-                  <span>{dataMiniGame[selectedItem].Team1}</span>
+                  <span className="text-medium gray">
+                    {dataMiniGame[selectedItem].Team1}
+                  </span>
                 </div>
               </div>
 
               <div className="match-result">0 - 0</div>
 
-              <div>
+              <div style={{ width: 200 }}>
                 <div className="mb-small">
                   <img src={dataMiniGame[selectedItem].Logo2} alt="" />
                 </div>
                 <div>
-                  <span>{dataMiniGame[selectedItem].Team2}</span>
+                  <span className="text-medium gray">
+                    {dataMiniGame[selectedItem].Team2}
+                  </span>
                 </div>
               </div>
             </div>
@@ -183,18 +187,26 @@ const MiniGame = () => {
                 </div>
 
                 <div className="text-small">
-                  <span>
+                  <span className="text-medium yellow">
                     For each 50k EFUN in your wallet, you have 1 more chance to
                     predict
-                    <br /> <span>Your can select multi options</span>
+                    <br />
+                    <span>{`You can select ${dataOptions.length} options`}</span>
                   </span>
                 </div>
               </div>
 
-              <div className="table-options">
+              <div className="table-options mb-large">
                 <div className="slider-option">
                   <SlideOptions data={dataOptions} />
                 </div>
+              </div>
+
+              <div className="text-small yellow">
+                With 150,000 EFUN, you have 3 options to predict now !
+              </div>
+              <div className="">
+                <button className="btn-submit">Predict</button>
               </div>
             </div>
           </div>
