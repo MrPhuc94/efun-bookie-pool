@@ -96,6 +96,7 @@ async function connectWallet(walletType, timeout) {
     currentAddress = accounts[0];
     console.log("currentAddress123", currentAddress);
     // set currentAddress to store
+    localStorage.setItem("currentAddress", currentAddress);
     store.dispatch(changeCurrentAddress(currentAddress));
     isConnected = true;
   } catch (error) {

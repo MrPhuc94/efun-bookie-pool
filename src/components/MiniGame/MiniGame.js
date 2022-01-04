@@ -196,7 +196,10 @@ const MiniGame = () => {
               </div>
             </div>
 
-            <div className="MatchGame flex_row mb-large">
+            <div
+              className="MatchGame flex_row mb-large"
+              style={{ justifyContent: "center" }}
+            >
               <div style={{ width: 200 }}>
                 <div className="mb-small">
                   <img src={dataMiniGame[selectedItem].Logo1} alt="" />
