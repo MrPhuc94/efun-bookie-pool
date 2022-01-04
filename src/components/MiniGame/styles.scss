@@ -69,11 +69,34 @@
 
     .menu-games {
       flex: 6;
+
+      @media (max-width: 1023px) {
+        flex: 1;
+      }
       .item {
+        position: relative;
         display: flex;
+        justify-content: center;
         padding: 15px 0;
         cursor: pointer;
-        justify-content: space-around;
+        border-top: 1px solid #424242;
+        align-items: center;
+        .team {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 120px;
+        }
+        span {
+          color: #bdbdbd;
+          font-size: 15px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        img {
+          margin: 0 20px;
+        }
 
         .btn-predict {
           background-color: #4caf50 !important;
@@ -85,6 +108,10 @@
           cursor: default;
           padding: 0 12px;
           border: none !important;
+
+          @media (max-width: 480px) {
+            display: none;
+          }
         }
       }
       .item.active {

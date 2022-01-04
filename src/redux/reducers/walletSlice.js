@@ -7,7 +7,7 @@ export const initialState = () => ({
 });
 
 export const walletSlice = createSlice({
-  name: "app",
+  name: "wallet",
   initialState,
   reducers: {
     changeCurrentAddress(state, action) {

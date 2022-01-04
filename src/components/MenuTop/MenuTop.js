@@ -4,56 +4,6 @@ import { useSelector } from "react-redux";
 import "./styles.scss";
 
 const MenuTop = ({ menu, onPressItem }) => {
-  menu = [
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-    {
-      title: "Hot games",
-      icon: Images.laliga,
-    },
-  ];
   const menuTab = useSelector((state) => state.user?.menuTab || 0);
   const [active, setActive] = useState(menuTab);
 
@@ -75,9 +25,9 @@ const MenuTop = ({ menu, onPressItem }) => {
               handleMenuActive(index);
             }}
           >
-            <div className="flex_row">
-              <img src={item?.icon} alt="" />
-              <span> {item?.title}</span>
+            <div>
+              <img src={item?.logo} alt="" width={40} height={40} />
+              <span> {item?.name}</span>
             </div>
           </li>
         ))}

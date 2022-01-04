@@ -1,90 +1,94 @@
 import Images from "src/common/Images";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.scss";
 import MenuTop from "../MenuTop/MenuTop";
 import SlideOptions from "./SlideOptions/SlideOptions";
+import { store } from "src/redux/store";
+import { changeSeasonList } from "src/redux/reducers/matchesSlice";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const MiniGame = () => {
   const dataMiniGame = [
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
       Logo2: Images.finland,
     },
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
       Logo2: Images.finland,
     },
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
       Logo2: Images.finland,
     },
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
       Logo2: Images.finland,
     },
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
       Logo2: Images.finland,
     },
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
       Logo2: Images.finland,
     },
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
       Logo2: Images.finland,
     },
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
       Logo2: Images.finland,
     },
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
       Logo2: Images.finland,
     },
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
       Logo2: Images.finland,
     },
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
       Logo2: Images.finland,
     },
     {
-      Team1: "Inter",
+      Team1: "Liverpool",
       Team2: "Torino",
       Time: "23/12 - 00:30",
       Logo1: Images.wales,
@@ -92,10 +96,35 @@ const MiniGame = () => {
     },
   ];
 
+  const [seasonList, setSeasonList] = useState(null);
+  const [leagueList, setLeagueList] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_API_HOST + "/api/v1/seasons")
+      .then((response) => {
+        console.log("Success ========>", response.data.data);
+        setSeasonList(response.data.data);
+      })
+      .catch((error) => {
+        console.log("Error ========>", error);
+      });
+
+    axios
+      .get(process.env.REACT_APP_API_HOST + "/api/v1/leagues")
+      .then((response) => {
+        console.log("Success ========>", response);
+        setLeagueList(response.data.data || []);
+      })
+      .catch((error) => {
+        console.log("Error ========>", error);
+      });
+  }, []);
+
   const dataOptions = [];
 
-  [0, 1, 2, 3, 4, 5].map((item) => {
-    return [0, 1, 2, 3, 4, 5].map((item2) => {
+  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => {
+    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item2) => {
       return dataOptions.push({
         Ban1: item,
         Ban2: item2,
@@ -112,7 +141,7 @@ const MiniGame = () => {
             Mini <strong>games</strong>
           </h1>
         </div>
-        <MenuTop />
+        <MenuTop menu={leagueList?.items || []} />
         <div className="section-games">
           <div className="menu-games">
             {dataMiniGame?.map((item, index) => {
@@ -122,12 +151,25 @@ const MiniGame = () => {
                   key={index}
                   onClick={() => setSelectedItem(index)}
                 >
-                  <span>{item.Team1}</span>
-                  <img src={item?.Logo1} alt="logo-team1" />
+                  <div className="team">
+                    <span>{item.Team1}</span>
+                    <img
+                      src={item?.Logo1}
+                      alt="logo-team1"
+                      width={30}
+                      height={30}
+                    />
+                  </div>
                   <span>{item.Time}</span>
-                  <img src={item?.Logo2} alt="logo-team2" />
-
-                  <span>{item.Team2}</span>
+                  <div className="team">
+                    <img
+                      src={item?.Logo2}
+                      alt="logo-team2"
+                      width={30}
+                      height={30}
+                    />
+                    <span>{item.Team2}</span>
+                  </div>
                   <button className="btn-predict">Predict</button>
                 </div>
               );

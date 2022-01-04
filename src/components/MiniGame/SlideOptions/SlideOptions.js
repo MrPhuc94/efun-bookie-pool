@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Slider from "react-slick";
 import lodash from "lodash";
 import "./styles.scss";
+import { WIDTH } from "src/assets/themes/dimension";
 
 const ArrowLeft = (props) => <button {...props} className={"prev"} />;
 const ArrowRight = (props) => <button {...props} className={"next"} />;
@@ -11,10 +12,12 @@ export default class SlideOptions extends Component {
     selectedOptions: [],
     prevArrow: <ArrowLeft />,
     nextArrow: <ArrowRight />,
-    width: 600,
+    width: WIDTH > 800 ? 600 : WIDTH > 600 ? 480 : 320,
+    innerHeight: true,
   };
 
   render() {
+    console.log("WIDTH", WIDTH);
     const handleChooseOption = (item) => {
       if (this.state.selectedOptions.includes(item)) {
         let newSelectedOptions = this.state.selectedOptions.filter(
@@ -48,10 +51,9 @@ export default class SlideOptions extends Component {
         {
           breakpoint: 1024,
           settings: {
-            slidesToShow: 3,
+            slidesToShow: 2,
             slidesToScroll: 3,
             infinite: true,
-            dots: true,
           },
         },
         {
@@ -59,7 +61,7 @@ export default class SlideOptions extends Component {
           settings: {
             slidesToShow: 2,
             slidesToScroll: 2,
-            initialSlide: 2,
+            initialSlide: 1,
           },
         },
         {

@@ -62,6 +62,4 @@ async function getTransactions(address, type, fromDate, toDate, limit, offset) {
   }
 }
 
-export const TransactionServices = {
-  getTransactions,
-};
+export default getTransactions;

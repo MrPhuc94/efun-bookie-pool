@@ -4,15 +4,21 @@
   .ItemOption {
     display: flex;
     flex-wrap: wrap;
-    width: 125px;
-    height: 50px;
-    margin: 12px;
+    width: 21%;
+    margin: 2%;
     background: #2e2e2e;
     border-radius: 8px;
-    font-size: 20px;
-    align-items: center;
+    font-size: 16px;
     cursor: default;
     padding: 0 40px;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    padding: 15px 0;
+    cursor: pointer;
+    border-top: 1px solid #424242;
+    text-align: center;
+    justify-content: center;
   }
 
   .ItemOption.active {

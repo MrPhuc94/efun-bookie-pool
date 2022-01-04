@@ -31,8 +31,8 @@ const initialState = {
   hotMatchList: null,
 };
 
-export const walletSlice = createSlice({
-  name: "app",
+export const matchesSlice = createSlice({
+  name: "matches",
   initialState,
   reducers: {
     async changeRound1(state, action) {
@@ -47,13 +47,17 @@ export const walletSlice = createSlice({
       const data = await axios.get("json/round3.json");
       state.round2 = data.data.response;
     },
-    async changeSeasonList(state, action) {
-      const data = await axios.get(process.env.API_HOST + "/api/v1/seasons");
-      state.changeSeasonList = data.data.response;
-    },
+    changeSeasonList(state, action) {},
     async changeLeagueList(state, action) {
-      const data = await axios.get(process.env.API_HOST + "/api/v1/leagues");
-      state.changeLeagueList = data.data.response;
+      axios
+        .get(process.env.REACT_APP_API_HOST + "/api/v1/leagues")
+        .then((response) => {
+          console.log("Success ========>", response);
+          state.leagueList = response.data.data;
+        })
+        .catch((error) => {
+          console.log("Error ========>", error);
+        });
     },
     async changeCurrentRound(state, action) {
       // const data = await axios.get(`https://a.efun.tech/api/v1/rounds?filter[league_id]=${payload.leagueId}`)
@@ -142,6 +146,6 @@ export const {
   changeCurrentRoundSelected,
   changeHotMatch,
   changeHotMatchList,
-} = walletSlice.actions;
+} = matchesSlice.actions;
 
-export default walletSlice.reducer;
+export default matchesSlice.reducer;
