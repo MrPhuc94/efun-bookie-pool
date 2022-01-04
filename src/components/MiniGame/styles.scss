@@ -76,11 +76,16 @@
       .item {
         position: relative;
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         padding: 15px 0;
         cursor: pointer;
         border-top: 1px solid #424242;
         align-items: center;
+
+        @media (max-width: 480px) {
+          justify-content: center;
+        }
+
         .team {
           display: flex;
           justify-content: center;
