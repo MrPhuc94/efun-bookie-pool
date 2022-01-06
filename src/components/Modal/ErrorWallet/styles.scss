@@ -12,11 +12,25 @@
   .modal-wrapper {
     position: relative;
     width: 80vw;
-    background: var(--primary-color);
+    background: #000000;
     box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.15);
     border-radius: 6px;
     max-width: 500px;
-    padding: 20px 30px;
+    padding: 50px;
+
+    .btn-logout {
+      height: 36px;
+      min-width: 64px;
+      padding: 0 16px;
+      color: rgb(248, 176, 23);
+      caret-color: rgb(248, 176, 23);
+      border-radius: 28px;
+      -webkit-appearance: button;
+      border: thin solid currentColor;
+      background-color: transparent;
+      cursor: pointer;
+      margin-top: 40px;
+    }
     .btn-close {
       background-color: rgb(224, 224, 224);
       border-color: rgb(224, 224, 224);

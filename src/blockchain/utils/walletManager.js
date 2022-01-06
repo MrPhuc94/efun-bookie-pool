@@ -9,12 +9,15 @@ const erc20Abi = require("./contracts/erc20.abi.json");
 // const betAbi = require('./contracts/ftm.abi.json')
 const { getWeb3walletConnect } = require("./walletconnect");
 const { store } = require("src/redux/store");
-const { changeCurrentAddress } = require("src/redux/reducers/walletSlice");
+const {
+  changeCurrentAddress,
+  changeListToken,
+} = require("src/redux/reducers/walletSlice");
 // #need_config
 const network =
   process.env.NODE_ENV === "development"
-    ? process.env.BLOCKCHAIN_NETWORK
-    : process.env.BLOCKCHAIN_NETWORK_MAINNET;
+    ? process.env.REACT_APP_BLOCKCHAIN_NETWORK
+    : process.env.REACT_APP_BLOCKCHAIN_NETWORK_MAINNET;
 // const network = 'MAINNET'
 
 const supportSymbol =
@@ -107,9 +110,13 @@ async function connectWallet(walletType, timeout) {
   }
 
   try {
-    console.log("abced44444");
-    await getBalances();
-    console.log("abced44444");
+    const tokens = await getBalances();
+    //console.log("balances====", balances);
+    // set list token
+    if (tokens) {
+      localStorage.setItem("tokens", JSON.stringify(tokens));
+      store.dispatch(changeListToken(tokens));
+    }
   } catch (error) {
     throw error;
   }
@@ -268,7 +275,10 @@ async function getBalances() {
       process.env.REACT_APP_NODE_ENV === "development"
         ? process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK
         : process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET;
+
+    console.log("node=====", node);
     const web3 = new Web3(node);
+    console.log("web3======", web3);
     tokens = await Promise.all(
       Object.keys(supportSymbol).map(async (symbol) => {
         if (symbol === "BNB") {
@@ -295,6 +305,9 @@ async function getBalances() {
         }
       })
     );
+
+    // return tokens getBalance?
+    return tokens;
   } catch (error) {
     throw new WalletError.NewUnknowError("can not get balances now");
   }

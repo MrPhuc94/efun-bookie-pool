@@ -18,6 +18,7 @@ export default class SlideOptions extends Component {
 
   render() {
     console.log("WIDTH", WIDTH);
+
     const handleChooseOption = (item) => {
       if (this.state.selectedOptions.includes(item)) {
         let newSelectedOptions = this.state.selectedOptions.filter(
@@ -35,6 +36,10 @@ export default class SlideOptions extends Component {
       this.setState({
         selectedOptions: newSelectedOptions,
       });
+
+      //this.props?.setListPredict(item);
+
+      console.log("selectedOptions", this.state.selectedOptions);
     };
 
     const checkItemSelected = (item) => {
@@ -100,6 +105,7 @@ export default class SlideOptions extends Component {
                         }`}
                         onClick={() => {
                           handleChooseOption(item);
+                          // setListPredict(item);
                         }}
                         key={index}
                       >

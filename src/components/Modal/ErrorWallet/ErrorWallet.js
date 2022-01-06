@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import "./styles.scss";
 import { changeCurrentAddress } from "src/redux/reducers/walletSlice";
 
-const ModalLogout = (props) => {
-  const { currentAddress } = props;
+const ModalErrorWallet = (props) => {
+  const { messageError } = props;
   //default function
   const handleCloseModal = (e) => {
     if (e.target === modalRef.current) onClose();
@@ -28,39 +28,24 @@ const ModalLogout = (props) => {
     };
   }, [modalRef]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("currentAddress");
-    store.dispatch(changeCurrentAddress(null));
-    store.dispatch(dismissAppPopup());
-  };
-
   return (
     <div
       className="modal-container"
       ref={modalRef}
-      onClick={(e) => handleCloseModal(e)}
+      // onClick={(e) => handleCloseModal(e)}
     >
       <div className="modal-wrapper">
-        <div className="flex_row center mb-large">
-          <div>
-            <span className="text-large">Your wallet</span>
-          </div>
-          <div className="btn-close" onClick={onClose}></div>
-        </div>
-
         <div className="mb-large center">
-          <a
-            className="text-medium"
-            href={`https://testnet.bscscan.com/address/0x6b4De875dD6e6C4524Dc65Fc9B96b1Bf95BABbaA`}
-            alt=""
-            style={{ color: "#7676ff" }}
+          <div
+            className="text-large"
+            style={{ color: "#fff", wordBreak: "break-all" }}
           >
-            {currentAddress}
-          </a>
+            {messageError}
+          </div>
         </div>
-        <div className="mb-large center">
-          <button className="btn-logout" onClick={handleLogout}>
-            Logout
+        <div className="center">
+          <button className="btn-logout" onClick={onClose}>
+            OK
           </button>
         </div>
       </div>
@@ -68,4 +53,4 @@ const ModalLogout = (props) => {
   );
 };
 
-export default ModalLogout;
+export default ModalErrorWallet;

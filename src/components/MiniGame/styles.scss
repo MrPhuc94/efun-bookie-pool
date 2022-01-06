@@ -132,13 +132,12 @@
       padding: 5%;
 
       .btn-submit {
-        width: 125px;
         height: 40px;
         margin: 12px;
-        border-radius: 8px;
+        border-radius: 4px;
         font-size: 20px;
         align-items: center;
-        cursor: default;
+        cursor: pointer;
         padding: 0 20px;
         background: linear-gradient(
           221.15deg,
@@ -149,6 +148,12 @@
         );
         color: #fff;
         border: none;
+      }
+
+      .btn-submit:disabled {
+        filter: grayscale(100%) !important;
+        background-color: hsla(0, 0%, 100%, 0.12) !important;
+        color: rgba(255, 255, 255, 0.3) !important;
       }
 
       .description {

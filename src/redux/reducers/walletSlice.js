@@ -4,6 +4,7 @@ export const initialState = () => ({
   currentAddress: null,
   supportTokenAndBalance: [],
   isLoadingWallet: false,
+  tokens: null,
 });
 
 export const walletSlice = createSlice({
@@ -11,8 +12,13 @@ export const walletSlice = createSlice({
   initialState,
   reducers: {
     changeCurrentAddress(state, action) {
-      console.log("phuctnAddress", action);
+      console.log("currentAddress", action);
       state.currentAddress = action.payload;
+    },
+
+    changeListToken(state, action) {
+      console.log("tokensList", action);
+      state.tokens = action.payload;
     },
 
     changeSupportTokenAndBalance(state, action) {
@@ -31,6 +37,7 @@ export const {
   changeCurrentAddress,
   changeSupportTokenAndBalance,
   changeLoadingWallet,
+  changeListToken,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

@@ -29,6 +29,14 @@ const ModalConnectWallet = () => {
   const [errorDialog, setShowErrorDialog] = useState();
 
   useEffect(() => {
+    const body = document.querySelector("body");
+    body.style.overflow = modalRef ? "hidden" : "auto";
+    return () => {
+      body.style.overflow = "auto";
+    };
+  }, [modalRef]);
+
+  useEffect(() => {
     let isAvailableWallet = walletManager.checkSupportedWalletsType();
     setAvailableWallet(isAvailableWallet);
     console.log("availableWallet", isAvailableWallet);
