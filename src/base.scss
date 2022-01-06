@@ -45,7 +45,6 @@ body.modal-container {
   align-items: center;
   flex-wrap: wrap;
   align-self: center;
-  width: 100%;
 }
 
 .flex_row_center {
@@ -55,7 +54,6 @@ body.modal-container {
   align-items: center;
   flex-wrap: wrap;
   align-self: center;
-  width: 100%;
 }
 
 .flex_row_start {
@@ -163,4 +161,24 @@ body.modal-container {
 
 .mr-tiny {
   margin-right: var(--tiny) !important;
+}
+
+.mt-big {
+  margin-top: var(--big) !important;
+}
+
+.mt-large {
+  margin-top: var(--large) !important;
+}
+
+.mt-medium {
+  margin-top: var(--medium) !important;
+}
+
+.mt-small {
+  margin-top: var(--small) !important;
+}
+
+.mt-tiny {
+  margin-top: var(--tiny) !important;
 }

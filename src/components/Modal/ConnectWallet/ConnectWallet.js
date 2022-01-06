@@ -6,8 +6,17 @@ import "./styles.scss";
 import Images from "src/common/Images";
 import { walletManager } from "src/blockchain/utils/walletManager";
 import { useSelector } from "react-redux";
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
+
+const override = css`
+  margin: 0 auto;
+`;
 
 const ModalConnectWallet = () => {
+  let [loading, setLoading] = useState(false);
+  let [color, setColor] = useState("#ffffff");
+
   //default function
   const handleCloseModal = (e) => {
     if (e.target === modalRef.current) onClose();
@@ -47,16 +56,16 @@ const ModalConnectWallet = () => {
 
   // dynamic function
   const connectWallet = async (walletName) => {
+    setLoading(true);
     if (availableWallet && availableWallet.includes(walletName)) {
       console.log("availableWallet", availableWallet);
       console.log("walletName", walletName);
 
       console.log("process.env.API_HOST ", process.env);
       try {
-        setIsSigning(true);
         await walletManager.connectWallet(walletName, false);
+        setLoading(true);
         //emit("close");
-        setIsSigning(false);
         localStorage.setItem("extensionName", walletName);
         store.dispatch(dismissAppPopup());
       } catch (e) {
@@ -107,15 +116,27 @@ const ModalConnectWallet = () => {
             connectWallet("Metamask");
           }}
         >
-          <div className="mr-small">
-            <img src={Images.metaMask} alt="" width={40} height={40} />
-          </div>
-          <div>Metamask wallet</div>
+          {!loading ? (
+            <>
+              <div className="mr-small">
+                <img src={Images.metaMask} alt="" width={40} height={40} />
+              </div>
+              <div>Metamask wallet</div>
+            </>
+          ) : (
+            <ClipLoader
+              color={color}
+              loading={loading}
+              css={override}
+              size={40}
+            />
+          )}
         </div>
+
         <div
           className="flex_row_start btn-trust"
           onClick={() => {
-            connectWallet("TrustWallet");
+            // connectWallet("TrustWallet");
           }}
         >
           <div className="mr-small">

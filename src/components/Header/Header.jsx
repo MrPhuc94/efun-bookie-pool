@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.scss";
 import { dismissAppPopup, showAppPopup } from "src/redux/reducers/appSlice";
 import { store } from "src/redux/store";
@@ -13,9 +13,15 @@ const showChooseWallet = () => {
 };
 
 const Header = () => {
-  const currentAddress =
+  const _currentAddress =
     useSelector((state) => state.wallet.currentAddress) ||
     localStorage.getItem("currentAddress");
+
+  const [currentAddress, setCurrentAddress] = useState("");
+
+  useEffect(() => {
+    setCurrentAddress(_currentAddress);
+  }, [_currentAddress]);
 
   const showModalLogout = () => {
     store.dispatch(dismissAppPopup());

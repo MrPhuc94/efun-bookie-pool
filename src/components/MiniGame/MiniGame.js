@@ -24,6 +24,11 @@ import {
 } from "src/redux/reducers/walletSlice";
 import { showAppPopup } from "src/redux/reducers/appSlice";
 import ModalErrorWallet from "../Modal/ErrorWallet/ErrorWallet";
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
+const override = css`
+  margin: 0 auto;
+`;
 
 const MiniGame = () => {
   // const
@@ -85,6 +90,8 @@ const MiniGame = () => {
 
   //list selected options predict
   const [selectedOptionList, setSelectedOptionList] = useState([]);
+
+  let [color, setColor] = useState("#ffffff");
 
   const currentMatches = {
     id: "1",
@@ -344,18 +351,17 @@ const MiniGame = () => {
   };
 
   const approve = async () => {
-    console.log("currentToken", currentToken);
     try {
       setWaitingApprove(true);
       const approve = await MatchesContract.createApproveTx(
         currentAddress,
-        currentToken?.symbol
+        currentToken.symbol
       );
       // sign approve TX
       const recept = await Support.signAndSendTx(approve);
       // console.log(recept, 'recept')
       if (recept) {
-        if (currentToken?.symbol === "EFUN") {
+        if (currentToken.symbol === "EFUN") {
           setCheckApprove(1);
         } else {
           repeat2(this, 10);
@@ -806,20 +812,46 @@ const MiniGame = () => {
                 {`With ${balanceEfun} EFUN, you have ${timesCanChance} options to predict now !`}
               </div>
 
-              <div className="">
+              <div className="flex_row_center mt-tiny center">
                 {checkApprove === 0 ? (
                   <div className="flex_row_center">
-                    <button className="btn-submit" onClick={approve}>
-                      Approve Efun
-                    </button>
-                    <button className="btn-submit" disabled="disabled">
+                    <div
+                      className="btn-submit flex_row"
+                      onClick={approve}
+                      style={{ minWidth: "30%" }}
+                    >
+                      {waitingApprove ? (
+                        <ClipLoader
+                          color={color}
+                          loading={waitingApprove}
+                          css={override}
+                          size={30}
+                        />
+                      ) : (
+                        <span> Approve Efun</span>
+                      )}
+                    </div>
+                    <div className="btn-submit flex_row" disabled="disabled">
                       Place your predict now
-                    </button>
+                    </div>
                   </div>
                 ) : (
-                  <button className="btn-submit" onClick={bet}>
-                    Place your predict now
-                  </button>
+                  <div
+                    className="flex_row btn-submit"
+                    onClick={bet}
+                    style={{ width: "50%" }}
+                  >
+                    {loadingPlace ? (
+                      <ClipLoader
+                        color={color}
+                        loading={loadingPlace}
+                        css={override}
+                        size={30}
+                      />
+                    ) : (
+                      <span>Place your predict now</span>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
