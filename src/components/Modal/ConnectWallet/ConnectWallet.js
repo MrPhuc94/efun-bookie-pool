@@ -58,10 +58,6 @@ const ModalConnectWallet = () => {
   const connectWallet = async (walletName) => {
     setLoading(true);
     if (availableWallet && availableWallet.includes(walletName)) {
-      console.log("availableWallet", availableWallet);
-      console.log("walletName", walletName);
-
-      console.log("process.env.API_HOST ", process.env);
       try {
         await walletManager.connectWallet(walletName, false);
         setLoading(true);

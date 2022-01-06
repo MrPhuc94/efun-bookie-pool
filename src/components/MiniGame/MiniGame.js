@@ -355,13 +355,13 @@ const MiniGame = () => {
       setWaitingApprove(true);
       const approve = await MatchesContract.createApproveTx(
         currentAddress,
-        currentToken.symbol
+        currentToken?.symbol
       );
       // sign approve TX
       const recept = await Support.signAndSendTx(approve);
       // console.log(recept, 'recept')
       if (recept) {
-        if (currentToken.symbol === "EFUN") {
+        if (currentToken?.symbol === "EFUN") {
           setCheckApprove(1);
         } else {
           repeat2(this, 10);
@@ -374,9 +374,9 @@ const MiniGame = () => {
     } catch (e) {
       console.log(e, "eee");
       setWaitingApprove(false);
-      setApproveMsg(e.message);
+      setApproveMsg(e?.message);
       store.dispatch(
-        showAppPopup(<ModalErrorWallet messageError={e.message} />)
+        showAppPopup(<ModalErrorWallet messageError={e?.message} />)
       );
     } finally {
       // approveDialog = true
