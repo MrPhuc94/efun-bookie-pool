@@ -176,6 +176,12 @@
         .table-options {
           width: 100%;
         }
+
+        .slider-option {
+          display: flex !important;
+          justify-content: center;
+          align-items: center;
+        }
       }
     }
   }

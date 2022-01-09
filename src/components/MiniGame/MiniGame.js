@@ -26,6 +26,7 @@ import { showAppPopup } from "src/redux/reducers/appSlice";
 import ModalErrorWallet from "../Modal/ErrorWallet/ErrorWallet";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
+import { WIDTH } from "src/assets/themes/dimension";
 const override = css`
   margin: 0 auto;
 `;
@@ -758,7 +759,7 @@ const MiniGame = () => {
               className="MatchGame flex_row mb-large"
               style={{ justifyContent: "center" }}
             >
-              <div style={{ width: 200 }}>
+              <div style={{ width: "25%" }}>
                 <div className="mb-small">
                   <img src={dataMiniGame[selectedItem].Logo1} alt="" />
                 </div>
@@ -771,7 +772,7 @@ const MiniGame = () => {
 
               <div className="match-result">0 - 0</div>
 
-              <div style={{ width: 200 }}>
+              <div style={{ width: "25%" }}>
                 <div className="mb-small">
                   <img src={dataMiniGame[selectedItem].Logo2} alt="" />
                 </div>
@@ -818,7 +819,7 @@ const MiniGame = () => {
                     <div
                       className="btn-submit flex_row"
                       onClick={approve}
-                      style={{ minWidth: "30%" }}
+                      style={{ minWidth: `${WIDTH < 600 ? "60%" : "30%"}` }}
                     >
                       {waitingApprove ? (
                         <ClipLoader
