@@ -11,7 +11,7 @@
 
   .modal-wrapper {
     position: relative;
-    width: 80vw;
+    width: 90vw;
     background: var(--primary-color);
     box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.15);
     border-radius: 6px;
@@ -28,14 +28,6 @@
       -webkit-appearance: button;
       border: thin solid currentColor;
       background-color: transparent;
-      cursor: pointer;
-    }
-    .btn-close {
-      background-color: rgb(224, 224, 224);
-      border-color: rgb(224, 224, 224);
-      height: 30px;
-      width: 30px;
-      border-radius: 50%;
       cursor: pointer;
     }
 

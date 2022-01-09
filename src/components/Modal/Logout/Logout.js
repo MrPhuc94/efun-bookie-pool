@@ -41,7 +41,7 @@ const ModalLogout = (props) => {
       onClick={(e) => handleCloseModal(e)}
     >
       <div className="modal-wrapper">
-        <div className="flex_row center mb-large">
+        <div className="flex_row_center center mb-large">
           <div>
             <span className="text-large">Your wallet</span>
           </div>

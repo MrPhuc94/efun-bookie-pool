@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { dismissAppPopup } from "src/redux/reducers/appSlice";
+import { dismissAppPopup, showAppPopup } from "src/redux/reducers/appSlice";
 import { store } from "src/redux/store";
 import { useTranslation } from "react-i18next";
 import "./styles.scss";
@@ -8,6 +8,7 @@ import { walletManager } from "src/blockchain/utils/walletManager";
 import { useSelector } from "react-redux";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
+import ModalErrorWallet from "../ErrorWallet/ErrorWallet";
 
 const override = css`
   margin: 0 auto;
@@ -60,17 +61,22 @@ const ModalConnectWallet = () => {
     if (availableWallet && availableWallet.includes(walletName)) {
       try {
         await walletManager.connectWallet(walletName, false);
-        setLoading(true);
-        //emit("close");
         localStorage.setItem("extensionName", walletName);
+        setLoading(false);
         store.dispatch(dismissAppPopup());
       } catch (e) {
         setShowErrorDialog({ text: e });
       }
     } else {
-      setShowErrorDialog({
-        text: `You need to have the ${walletName} extension first. Please set up or login to your ${walletName} account and connect it to continue.`,
-      });
+      setLoading(false);
+      store.dispatch(dismissAppPopup());
+      store.dispatch(
+        showAppPopup(
+          <ModalErrorWallet
+            messageError={`You need to have the ${walletName} extension first. Please set up or login to your ${walletName} account and connect it to continue.`}
+          />
+        )
+      );
     }
   };
 
@@ -94,10 +100,8 @@ const ModalConnectWallet = () => {
       onClick={(e) => handleCloseModal(e)}
     >
       <div className="modal-wrapper">
-        <div className="flex_row center mb-large">
-          <div>
-            <span className="text-large">Wallet integration</span>
-          </div>
+        <div className="flex_row_center center mb-large">
+          <span className="text-large">Wallet integration</span>
           <div className="btn-close" onClick={onClose}></div>
         </div>
 

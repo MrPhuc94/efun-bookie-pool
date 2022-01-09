@@ -1,4 +1,43 @@
 .header {
+  .nav-wrapper {
+    // display: none;
+    display: inline-block;
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform: translateX(-100%);
+    transition: all linear 0.25s;
+    background: transparent;
+    z-index: 9999;
+  }
+
+  .nav-wrapper.nav-active {
+    transform: translateX(0);
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .nav-mobile {
+    list-style: none;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: 12;
+    overflow: auto;
+    padding: 40px;
+    &-item {
+      padding: 8px 0;
+    }
+  }
+
+  .nav-mobile a {
+    width: 100vw;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+  }
+
   .connect-wallet-btn {
     height: 36px;
     min-width: 64px;

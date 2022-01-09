@@ -11,13 +11,16 @@
 
   .modal-wrapper {
     position: relative;
-    width: 80vw;
+    width: 90vw;
     background: var(--primary-color);
     box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.15);
     border-radius: 6px;
     max-width: 500px;
     padding: 20px 30px;
     .btn-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
       background-color: rgb(224, 224, 224);
       border-color: rgb(224, 224, 224);
       height: 30px;

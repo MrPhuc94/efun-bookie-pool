@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./styles.scss";
 import { dismissAppPopup, showAppPopup } from "src/redux/reducers/appSlice";
 import { store } from "src/redux/store";
@@ -18,6 +18,8 @@ const Header = () => {
     localStorage.getItem("currentAddress");
 
   const [currentAddress, setCurrentAddress] = useState("");
+  const [activeNav, setActiveNav] = useState(false);
+  const navWrapper = useRef();
 
   useEffect(() => {
     setCurrentAddress(_currentAddress);
@@ -29,6 +31,8 @@ const Header = () => {
       showAppPopup(<ModalLogout currentAddress={currentAddress} />)
     );
   };
+
+  const handleCloseNav = () => setActiveNav(!activeNav);
 
   return (
     <header className="header">
@@ -82,8 +86,24 @@ const Header = () => {
                 )}
               </li>
             </ul>
-            <ul className="menu-mb">
+            <ul className="menu-mobile">
               <li>
+                {currentAddress !== null ? (
+                  <button className="btn-address" onClick={showModalLogout}>
+                    {shortAddress(currentAddress, 5)}
+                  </button>
+                ) : (
+                  <div>
+                    <button
+                      className="connect-wallet-btn"
+                      onClick={showChooseWallet}
+                    >
+                      Connect Wallet
+                    </button>
+                  </div>
+                )}
+              </li>
+              <li onClick={handleCloseNav}>
                 <span
                   className="menu_mb_btn"
                   onClick={() => {
@@ -126,6 +146,45 @@ const Header = () => {
               </li>
             </ul>
           </nav>
+          <div
+            className={`nav-wrapper ${activeNav ? "nav-active" : ""}`}
+            ref={navWrapper}
+            onClick={handleCloseNav}
+          >
+            <ul className="nav-mobile">
+              <li style={{ marginBottom: 10 }}>
+                <a
+                  href="https://app.efun.tech/"
+                  target="_blank"
+                  alt=""
+                  rel="noreferrer"
+                  className="logo"
+                >
+                  <img src={Images.logo} alt="" />
+                </a>
+              </li>
+              <li className="nav-mobile-item">
+                <a
+                  href="https://efun.tech/"
+                  target="_blank"
+                  alt=""
+                  rel="noreferrer"
+                >
+                  About
+                </a>
+              </li>
+              <li className="nav-mobile-item">
+                <a
+                  href="https://docs.efun.tech/efun-ecosystem-1/efun-sponsored-events"
+                  target="_blank"
+                  alt=""
+                  rel="noreferrer"
+                >
+                  How It Works
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </header>

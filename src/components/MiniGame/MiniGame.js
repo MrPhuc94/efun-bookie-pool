@@ -836,11 +836,7 @@ const MiniGame = () => {
                     </div>
                   </div>
                 ) : (
-                  <div
-                    className="flex_row btn-submit"
-                    onClick={bet}
-                    style={{ width: "50%" }}
-                  >
+                  <div className="flex_row btn-submit" onClick={bet}>
                     {loadingPlace ? (
                       <ClipLoader
                         color={color}
