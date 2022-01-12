@@ -202,7 +202,7 @@ const MiniGame = () => {
     useSelector((state) => state.matches.yourBet) ||
     JSON.parse(localStorage.getItem("yourPredictBet")) ||
     [];
-  console.log("yourPredictBet", yourPredictBet);
+  //console.log("yourPredictBet", yourPredictBet);
 
   const resultMatch = { Ban1: 0, Ban2: 3 };
 
@@ -743,11 +743,11 @@ const MiniGame = () => {
             {dataMiniGame?.map((item, index) => {
               return (
                 <div
-                  className={`item ${selectedItem === index ? "active" : ""}`}
+                  className={`item  ${selectedItem === index ? "active" : ""}`}
                   key={index}
                   onClick={() => setSelectedItem(index)}
                 >
-                  <div className="team">
+                  <div className="team team-left">
                     <span>{item.Team1}</span>
                     <img
                       src={item?.Logo1}
@@ -757,7 +757,7 @@ const MiniGame = () => {
                     />
                   </div>
                   <span>{item.Time}</span>
-                  <div className="team">
+                  <div className="team team-right">
                     <img
                       src={item?.Logo2}
                       alt="logo-team2"
@@ -852,8 +852,9 @@ const MiniGame = () => {
                   <br />
                   {isMaxChance && (
                     <div className="mt-small text-small">
-                      <RiErrorWarningLine /> Your chances is limited. Uncheck
-                      your selected options for your change!
+                      <RiErrorWarningLine /> You have selected all your possible
+                      options. If you want to change, please deselect some
+                      first.
                     </div>
                   )}
                 </div>
@@ -904,7 +905,7 @@ const MiniGame = () => {
                             size={30}
                           />
                         ) : (
-                          <span> Approve Efun</span>
+                          <span> Approve to Predict</span>
                         )}
                       </div>
                       <div className="btn-submit flex_row" disabled="disabled">

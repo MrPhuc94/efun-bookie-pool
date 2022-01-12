@@ -1,11 +1,21 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "../assets/locales/en.json";
-import vi from "../assets/locales/vi.json";
+import id from "../assets/locales/id.json";
+import kr from "../assets/locales/kr.json";
+import ir from "../assets/locales/ir.json";
+import pl from "../assets/locales/pl.json";
+import jp from "../assets/locales/jp.json";
+import cn from "../assets/locales/cn.json";
 
 const resources = {
   en: en,
-  vi: vi,
+  id: id,
+  kr: kr,
+  ir: ir,
+  pl: pl,
+  jp: jp,
+  cn: cn,
 };
 
 const languageDetector = {

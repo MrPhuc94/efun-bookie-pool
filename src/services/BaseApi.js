@@ -1,7 +1,6 @@
 import axios from "axios";
 import PropTypes from "prop-types";
 import { store } from "../redux/store";
-import { ENVIRONMENT } from "../common/Environment";
 import { showAppLoading } from "../redux/reducers/appSlice";
 import { getData } from "src/utils/storageUtils";
 import { ASYNC_STORAGE_KEYS } from "src/common/constants/Constant";

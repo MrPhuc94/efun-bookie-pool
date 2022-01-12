@@ -6,14 +6,37 @@ import { WIDTH } from "src/assets/themes/dimension";
 import { store } from "src/redux/store";
 import { changeYourBet } from "src/redux/reducers/matchesSlice";
 
-const ArrowLeft = (props) => <button {...props} className={"prev"} />;
-const ArrowRight = (props) => <button {...props} className={"next"} />;
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "red" }}
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "green" }}
+      onClick={onClick}
+    >
+      ASDASDSA
+    </div>
+  );
+}
+
 export default class SlideOptions extends Component {
   state = {
     display: true,
-    prevArrow: <ArrowLeft />,
-    nextArrow: <ArrowRight />,
-    width: WIDTH > 800 ? 600 : WIDTH > 600 ? 480 : 320,
+    infinite: true,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+    width: WIDTH > 800 ? 400 : WIDTH > 600 ? 480 : 320,
     innerHeight: true,
   };
 
@@ -64,44 +87,20 @@ export default class SlideOptions extends Component {
     };
 
     const settings = {
-      dots: true,
+      dots: false,
       infinite: true,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 3,
-            infinite: true,
-          },
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-            initialSlide: 1,
-          },
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-          },
-        },
-      ],
     };
 
     let dataSource = this.props.data;
 
-    if (dataSource.length > 16) {
-      dataSource = lodash.chunk(dataSource, 16);
+    if (dataSource.length > 11) {
+      dataSource = lodash.chunk(dataSource, 11);
     }
 
+    console.log("dataSource", dataSource);
     return (
       <div>
         <div

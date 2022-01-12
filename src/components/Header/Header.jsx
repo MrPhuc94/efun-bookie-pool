@@ -7,12 +7,22 @@ import Images from "src/common/Images";
 import { useSelector } from "react-redux";
 import { shortAddress } from "src/utils/helper";
 import ModalLogout from "../Modal/Logout/Logout";
+import World from "src/assets/icons/World";
+import unitedKingdom from "src/assets/images/country/united-kingdom.png";
+import china from "src/assets/images/country/china.png";
+import indonesia from "src/assets/images/country/indonesia.png";
+import japan from "src/assets/images/country/japan.png";
+import philippines from "src/assets/images/country/philippines.png";
+import southKorea from "src/assets/images/country/south-korea.png";
+import iran from "src/assets/images/country/iran.png";
+import { useTranslation } from "react-i18next";
 
 const showChooseWallet = () => {
   store.dispatch(showAppPopup(<ModalConnectWallet />));
 };
 
 const Header = () => {
+  const { t, i18n } = useTranslation();
   const _currentAddress =
     useSelector((state) => state.wallet.currentAddress) ||
     localStorage.getItem("currentAddress");
@@ -20,6 +30,20 @@ const Header = () => {
   const [currentAddress, setCurrentAddress] = useState("");
   const [activeNav, setActiveNav] = useState(false);
   const navWrapper = useRef();
+
+  const listLang = [
+    { key: "en", label: "English", icon: unitedKingdom },
+    { key: "in", label: "Indonesia", icon: indonesia },
+    { key: "kr", label: "Korea", icon: southKorea },
+    { key: "ir", label: "Persian", icon: iran },
+    { key: "pl", label: "Philippines", icon: philippines },
+    { key: "jp", label: "Japan", icon: japan },
+    { key: "cn", label: "Chinese", icon: china },
+  ];
+
+  const handleChangeLanguage = (param) => {
+    i18n.changeLanguage(param?.key);
+  };
 
   useEffect(() => {
     setCurrentAddress(_currentAddress);
@@ -70,6 +94,27 @@ const Header = () => {
                 </a>
               </li>
               <li>
+                <div className="dropdown">
+                  <span className="button">
+                    <World />
+                  </span>
+                  <div class="dropdown-content">
+                    {listLang.map((item, index) => (
+                      <div key={index}>
+                        <img
+                          src={item.icon}
+                          width={20}
+                          height={20}
+                          alt={item.label}
+                        />
+                        <span style={{ marginLeft: 10 }}>{item.label} </span>
+                        <br />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </li>
+              <li>
                 {currentAddress !== null ? (
                   <button className="btn-address" onClick={showModalLogout}>
                     {shortAddress(currentAddress, 5)}
@@ -87,6 +132,30 @@ const Header = () => {
               </li>
             </ul>
             <ul className="menu-mobile">
+              <li>
+                <div className="dropdown">
+                  <span className="button">
+                    <World />
+                  </span>
+                  <div class="dropdown-content">
+                    {listLang.map((item, index) => (
+                      <div
+                        key={index}
+                        onClick={() => handleChangeLanguage(item)}
+                      >
+                        <img
+                          src={item.icon}
+                          width={20}
+                          height={20}
+                          alt={item.label}
+                        />
+                        <span style={{ marginLeft: 10 }}>{item.label} </span>
+                        <br />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </li>
               <li>
                 {currentAddress !== null ? (
                   <button className="btn-address" onClick={showModalLogout}>
