@@ -41,7 +41,7 @@
   .connect-wallet-btn {
     height: 36px;
     min-width: 64px;
-    padding: 0 16px;
+    padding: 0 10px;
     background: #00050a;
     color: #ffffff;
     border: thin solid currentColor;
@@ -63,7 +63,7 @@
     position: relative;
     display: inline-block;
     .button {
-      padding: 10px;
+      padding: 10px 2px;
     }
   }
 
