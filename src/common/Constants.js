@@ -1,0 +1,1 @@
+export const AMOUNT_EFUN_FER_CHANCE = 10000;

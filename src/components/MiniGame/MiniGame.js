@@ -1,5 +1,5 @@
 import Images from "src/common/Images";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./styles.scss";
 import MenuTop from "../MenuTop/MenuTop";
 import SlideOptions from "./SlideOptions/SlideOptions";
@@ -27,14 +27,16 @@ import ModalErrorWallet from "../Modal/ErrorWallet/ErrorWallet";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { WIDTH } from "src/assets/themes/dimension";
+import { AMOUNT_EFUN_FER_CHANCE } from "src/common/Constants";
+import moment from "moment";
+import { RiErrorWarningLine } from "react-icons/ri";
+
 const override = css`
   margin: 0 auto;
 `;
 
 const MiniGame = () => {
   // const
-  const currentSelect = "EFUN";
-  const appLabel = "Approve EFUN";
   const sponsorEven = 1000;
   const sponsorETAmount = 0;
   const [loadingPlace, setLoadingPlace] = useState(false);
@@ -88,9 +90,10 @@ const MiniGame = () => {
   const [sponsorReward, setSponsorReward] = useState(null);
   const [isMobile, setIsMobile] = useState(null);
   const [message, setMessage] = useState(null);
-
-  //list selected options predict
-  const [selectedOptionList, setSelectedOptionList] = useState([]);
+  const [isTimeEndedMatch, setIsTimeEndedMatch] = useState(null);
+  const [currentTime, setCurrentTime] = useState(null);
+  let timer;
+  let currentTimer;
 
   let [color, setColor] = useState("#ffffff");
 
@@ -139,43 +142,80 @@ const MiniGame = () => {
 
   const dataMiniGame = [
     {
-      Team1: "Liverpool",
-      Team2: "Torino",
+      MatchId: "1",
+      Team1: "Man City",
+      Team2: "Chelsea",
       Time: "23/12 - 00:30",
-      Logo1: Images.wales,
-      Logo2: Images.finland,
+      Logo1: Images.mancity,
+      Logo2: Images.chelsea,
     },
     {
-      Team1: "Liverpool",
-      Team2: "Torino",
+      MatchId: "2",
+      Team1: "Manchester",
+      Team2: "Newcas",
       Time: "23/12 - 00:30",
-      Logo1: Images.wales,
-      Logo2: Images.finland,
+      Logo1: Images.mu,
+      Logo2: Images.newcas,
     },
   ];
   // get balance token
   let tokens =
     useSelector((state) => state.wallet.tokens) ||
-    localStorage.getItem("tokens");
-
-  if (tokens && typeof tokens === "string") {
-    tokens = JSON.parse(tokens);
-  }
-
+    JSON.parse(localStorage.getItem("tokens"));
   const currentToken = tokens?.find((item) => item?.symbol === "EFUN");
+  let balanceEfun = currentToken?.balance;
+  const timesCanChance = Math.floor(
+    parseFloat(currentToken?.balance) / AMOUNT_EFUN_FER_CHANCE
+  );
 
-  const balanceEfun = currentToken?.balance;
-  const timesCanChance = Math.floor(parseFloat(currentToken?.balance) / 50000);
+  // time predict
+  const matchTimeEnd = moment("2022-02-10 17:10");
+  useEffect(() => {
+    currentTimer = setInterval(() => {
+      const currentTime = moment();
+      setCurrentTime(currentTime);
+    }, 2000);
+
+    return () => {
+      clearInterval(currentTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    timer = setInterval(() => {
+      let matchEnded = matchTimeEnd.isBefore(currentTime);
+      if (matchEnded) {
+        setIsTimeEndedMatch(true);
+        clearInterval(timer);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [currentTime]);
+
+  // RESULT MATCH
+
+  // get match predicted from blockchain
+
+  const yourPredictBet =
+    useSelector((state) => state.matches.yourBet) ||
+    JSON.parse(localStorage.getItem("yourPredictBet")) ||
+    [];
+  console.log("yourPredictBet", yourPredictBet);
+
+  const resultMatch = { Ban1: 0, Ban2: 3 };
+
+  const areYourReWard = useMemo(() => {
+    return yourPredictBet?.predict?.find(
+      (item) => item.Ban1 === resultMatch.Ban1 && item.Ban2 === resultMatch.Ban2
+    );
+  }, [yourPredictBet]);
+
+  const isMaxChance = yourPredictBet.length >= timesCanChance;
 
   const [seasonList, setSeasonList] = useState(null);
   const [leagueList, setLeagueList] = useState(null);
-
-  const setListPredict = (item) => {
-    let newSetSelectedOptionList = [...selectedOptionList, item];
-    console.log("newSetSelectedOptionList====", newSetSelectedOptionList);
-
-    setSelectedOptionList(newSetSelectedOptionList);
-  };
 
   useEffect(() => {
     axios
@@ -201,8 +241,8 @@ const MiniGame = () => {
 
   const dataOptions = [];
 
-  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => {
-    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item2) => {
+  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => {
+    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item2) => {
       return dataOptions.push({
         Ban1: item,
         Ban2: item2,
@@ -241,11 +281,11 @@ const MiniGame = () => {
           currentToken.symbol === "BNB"
             ? process.env.REACT_APP_BNB_TOKEN
             : process.env.REACT_APP_EFUN_TOKEN;
-        console.log("currentMatches", currentMatches);
-        console.log("methodBet", methodBet);
-        console.log("token", token);
-        console.log("amount", amount);
-        console.log("currentAddress", currentAddress);
+        // console.log("currentMatches", currentMatches);
+        // console.log("methodBet", methodBet);
+        // console.log("token", token);
+        // console.log("amount", amount);
+        // console.log("currentAddress", currentAddress);
 
         const recept = await MatchesContract.predict(
           currentMatches.bc_match_id,
@@ -317,9 +357,6 @@ const MiniGame = () => {
 
   useEffect(() => {
     if (currentToken && currentAddress) {
-      console.log("currentAddress", currentAddress);
-      console.log("currentToken", currentToken);
-
       _checkApprove(false);
     }
   }, [currentToken, currentAddress]);
@@ -330,7 +367,7 @@ const MiniGame = () => {
         currentAddress,
         "EFUN"
       );
-      console.log("checkapprove", checkapprove);
+      //console.log("checkapprove", checkapprove);
       if (checkapprove) {
         setCheckApproveFirst(checkapprove);
         setCheckApprove(checkapprove);
@@ -691,7 +728,7 @@ const MiniGame = () => {
     }
   };
 
-  console.log("checkApprove", checkApprove);
+  //console.log("checkApprove", checkApprove);
   return (
     <div className="container">
       <div className="miniGame">
@@ -761,7 +798,12 @@ const MiniGame = () => {
             >
               <div style={{ width: "25%" }}>
                 <div className="mb-small">
-                  <img src={dataMiniGame[selectedItem].Logo1} alt="" />
+                  <img
+                    src={dataMiniGame[selectedItem].Logo1}
+                    alt=""
+                    width={WIDTH > 600 ? 80 : 30}
+                    height={WIDTH > 600 ? 80 : 30}
+                  />
                 </div>
                 <div>
                   <span className="text-medium gray">
@@ -770,11 +812,21 @@ const MiniGame = () => {
                 </div>
               </div>
 
-              <div className="match-result">0 - 0</div>
+              <div
+                className="match-result"
+                style={{ fontSize: WIDTH > 600 ? "60px" : "40px" }}
+              >
+                {isTimeEndedMatch ? "0 - 2" : "0 - 0"}
+              </div>
 
               <div style={{ width: "25%" }}>
                 <div className="mb-small">
-                  <img src={dataMiniGame[selectedItem].Logo2} alt="" />
+                  <img
+                    src={dataMiniGame[selectedItem].Logo2}
+                    alt=""
+                    width={WIDTH > 600 ? 80 : 30}
+                    height={WIDTH > 600 ? 80 : 30}
+                  />
                 </div>
                 <div>
                   <span className="text-medium gray">
@@ -797,6 +849,13 @@ const MiniGame = () => {
                     <br />
                     <span>{`You can select ${dataOptions.length} options`}</span>
                   </span>
+                  <br />
+                  {isMaxChance && (
+                    <div className="mt-small text-small">
+                      <RiErrorWarningLine /> Your chances is limited. Uncheck
+                      your selected options for your change!
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -804,7 +863,10 @@ const MiniGame = () => {
                 <div className="slider-option">
                   <SlideOptions
                     data={dataOptions}
-                    setListPredict={setListPredict}
+                    yourPredictBet={yourPredictBet}
+                    timesCanChance={timesCanChance}
+                    isTimeEndedMatch={isTimeEndedMatch}
+                    matchId={dataMiniGame[selectedItem].MatchId}
                   />
                 </div>
               </div>
@@ -814,42 +876,55 @@ const MiniGame = () => {
               </div>
 
               <div className="flex_row_center mt-tiny center">
-                {checkApprove === 0 ? (
-                  <div className="flex_row_center">
-                    <div
-                      className="btn-submit flex_row"
-                      onClick={approve}
-                      style={{ minWidth: `${WIDTH < 600 ? "60%" : "30%"}` }}
-                    >
-                      {waitingApprove ? (
+                {isTimeEndedMatch && (
+                  <div
+                    className={`btn-submit flex_row `}
+                    disabled={`${!areYourReWard && "disabled"}`}
+                  >
+                    {areYourReWard ? (
+                      <span>Claim</span>
+                    ) : (
+                      <span>No Reward</span>
+                    )}
+                  </div>
+                )}
+                {!isTimeEndedMatch &&
+                  (checkApprove === 0 ? (
+                    <div className="flex_row_center">
+                      <div
+                        className="btn-submit flex_row"
+                        onClick={approve}
+                        style={{ minWidth: `${WIDTH < 600 ? "60%" : "30%"}` }}
+                      >
+                        {waitingApprove ? (
+                          <ClipLoader
+                            color={color}
+                            loading={waitingApprove}
+                            css={override}
+                            size={30}
+                          />
+                        ) : (
+                          <span> Approve Efun</span>
+                        )}
+                      </div>
+                      <div className="btn-submit flex_row" disabled="disabled">
+                        Place your predict now
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex_row btn-submit" onClick={bet}>
+                      {loadingPlace ? (
                         <ClipLoader
                           color={color}
-                          loading={waitingApprove}
+                          loading={loadingPlace}
                           css={override}
                           size={30}
                         />
                       ) : (
-                        <span> Approve Efun</span>
+                        <span>Place your predict now</span>
                       )}
                     </div>
-                    <div className="btn-submit flex_row" disabled="disabled">
-                      Place your predict now
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex_row btn-submit" onClick={bet}>
-                    {loadingPlace ? (
-                      <ClipLoader
-                        color={color}
-                        loading={loadingPlace}
-                        css={override}
-                        size={30}
-                      />
-                    ) : (
-                      <span>Place your predict now</span>
-                    )}
-                  </div>
-                )}
+                  ))}
               </div>
             </div>
           </div>

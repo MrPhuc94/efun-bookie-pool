@@ -1,0 +1,21 @@
+.footer-2 {
+  .go-top {
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(254, 254, 254, 0.4);
+    position: fixed;
+    bottom: 100px;
+    right: -50px;
+    opacity: 0;
+    cursor: pointer;
+    transition: ease-in 0.3s;
+  }
+
+  .go-top.showBtn {
+    right: 44px;
+    opacity: 1;
+  }
+}

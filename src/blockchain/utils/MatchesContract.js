@@ -326,7 +326,7 @@ const updateResult = async (matchId, result, account) => {
  * @returns
  */
 const checkApproveTx = async (from, tokenSymbol, spender = groupContract) => {
-  console.log("checkApproveTx======");
+  //console.log("checkApproveTx======");
   const web3 = await initWeb3();
   const tokenContract = new web3.eth.Contract(
     erc20Abi,
@@ -337,7 +337,7 @@ const checkApproveTx = async (from, tokenSymbol, spender = groupContract) => {
 
   const allowance = await tokenContract.methods.allowance(from, spender).call();
 
-  console.log("TODO==allowance======", allowance);
+  //console.log("TODO==allowance======", allowance);
 
   return allowance;
 };

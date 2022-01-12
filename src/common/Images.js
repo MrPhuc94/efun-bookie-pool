@@ -9,6 +9,8 @@ import wales from "../assets/images/wales.png";
 import finland from "../assets/images/finland.png";
 import mu from "../assets/images/mu.png";
 import newcas from "../assets/images/newcas.png";
+import chelsea from "../assets/images/chelsea.png";
+import mancity from "../assets/images/mancity.png";
 
 const Images = {
   metaMask,
@@ -22,6 +24,8 @@ const Images = {
   finland,
   mu,
   newcas,
+  chelsea,
+  mancity,
 };
 
 export default Images;

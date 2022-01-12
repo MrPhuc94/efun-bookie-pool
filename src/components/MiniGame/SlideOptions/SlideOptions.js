@@ -3,13 +3,14 @@ import Slider from "react-slick";
 import lodash from "lodash";
 import "./styles.scss";
 import { WIDTH } from "src/assets/themes/dimension";
+import { store } from "src/redux/store";
+import { changeYourBet } from "src/redux/reducers/matchesSlice";
 
 const ArrowLeft = (props) => <button {...props} className={"prev"} />;
 const ArrowRight = (props) => <button {...props} className={"next"} />;
 export default class SlideOptions extends Component {
   state = {
     display: true,
-    selectedOptions: [],
     prevArrow: <ArrowLeft />,
     nextArrow: <ArrowRight />,
     width: WIDTH > 800 ? 600 : WIDTH > 600 ? 480 : 320,
@@ -17,33 +18,49 @@ export default class SlideOptions extends Component {
   };
 
   render() {
-    console.log("WIDTH", WIDTH);
+    const yourPredictBet =
+      JSON.parse(localStorage.getItem("yourPredictBet")) ||
+      this.props.yourPredictBet;
+
+    const timesCanChance = this.props.timesCanChance;
+    const isTimeEndedMatch = this.props.isTimeEndedMatch;
+    const isMaxChance = yourPredictBet.length >= timesCanChance;
+
+    // console.log("yourPredictBet", yourPredictBet);
+    // console.log("timesCanChance", timesCanChance);
+    // console.log("timesCanChance", isMaxChance);
 
     const handleChooseOption = (item) => {
-      if (this.state.selectedOptions.includes(item)) {
-        let newSelectedOptions = this.state.selectedOptions.filter(
-          (_item) => _item !== item
+      let isExistItem = yourPredictBet.find(
+        (value) => value.Ban1 === item.Ban1 && value.Ban2 === item.Ban2
+      );
+      if (isExistItem) {
+        let newSelectedOptions = yourPredictBet.filter(
+          (value) => value.Ban1 !== item.Ban1 || value.Ban2 !== item.Ban2
         );
-        return this.setState({
-          selectedOptions: newSelectedOptions,
-        });
+        // set state to store
+        localStorage.setItem(
+          "yourPredictBet",
+          JSON.stringify(newSelectedOptions)
+        );
+        store.dispatch(changeYourBet(newSelectedOptions));
+      } else {
+        let newSelectedOptions = [...yourPredictBet, item];
+        // set state to storeyourPredictBet
+        localStorage.setItem(
+          "yourPredictBet",
+          JSON.stringify(newSelectedOptions)
+        );
+        store.dispatch(changeYourBet(newSelectedOptions));
       }
-
-      let newSelectedOptions = [
-        ...new Set([...this.state.selectedOptions, item]),
-      ];
-
-      this.setState({
-        selectedOptions: newSelectedOptions,
-      });
-
-      //this.props?.setListPredict(item);
-
-      console.log("selectedOptions", this.state.selectedOptions);
     };
 
     const checkItemSelected = (item) => {
-      return this.state.selectedOptions.includes(item);
+      const findItem = yourPredictBet?.find(
+        (value) => value.Ban1 === item.Ban1 && value.Ban2 === item.Ban2
+      );
+      if (findItem) return true;
+      return false;
     };
 
     const settings = {
@@ -101,11 +118,23 @@ export default class SlideOptions extends Component {
                     return (
                       <div
                         className={`ItemOption ${
-                          checkItemSelected(item) ? "active" : ""
+                          checkItemSelected(item)
+                            ? "active"
+                            : isMaxChance
+                            ? "disable"
+                            : ""
                         }`}
                         onClick={() => {
-                          handleChooseOption(item);
-                          // setListPredict(item);
+                          if (isTimeEndedMatch) {
+                            return;
+                          }
+                          if (checkItemSelected(item)) {
+                            return handleChooseOption(item);
+                          }
+                          if (isMaxChance) {
+                            return;
+                          }
+                          return handleChooseOption(item);
                         }}
                         key={index}
                       >

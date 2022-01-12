@@ -15,12 +15,8 @@ const initialState = {
   showBetDetail: null,
   matchesDetailsLoading: false,
   matchesLoading: false,
-  yourBet: {
-    predictionAmount: ["0", "0", "0"],
-  },
-  yourBetEfun: {
-    predictionAmount: ["0", "0", "0"],
-  },
+  yourBet: null,
+  yourBetEfun: null,
   leagueList: null,
   leagueSelected: null,
   currentFixtures: null,
@@ -103,10 +99,10 @@ export const matchesSlice = createSlice({
       state.changeShowDetail = action.payload;
     },
     changeYourBet(state, action) {
-      state.changeYourBet = action.payload;
+      state.yourBet = action.payload;
     },
     changeYourBetEfun(state, action) {
-      state.changeYourBetEfun = action.payload;
+      state.yourBetEfun = action.payload;
     },
     changeLeagueSelected(state, action) {
       state.changeLeagueSelected = action.payload;

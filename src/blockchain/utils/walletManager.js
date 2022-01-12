@@ -97,7 +97,6 @@ async function connectWallet(walletType, timeout) {
     const accounts = await web3.eth.getAccounts();
     // const accounts = await web3.eth.getAccounts()
     currentAddress = accounts[0];
-    console.log("currentAddress123", currentAddress);
     // set currentAddress to store
     localStorage.setItem("currentAddress", currentAddress);
     store.dispatch(changeCurrentAddress(currentAddress));
