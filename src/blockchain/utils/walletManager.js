@@ -277,10 +277,15 @@ function logout() {
 async function getBalances() {
   try {
     // #need_config
+    // const node =
+    //   process.env.REACT_APP_NODE_ENV === "development"
+    //     ? process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK
+    //     : process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET;
+
     const node =
       process.env.REACT_APP_NODE_ENV === "development"
         ? process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK
-        : process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET;
+        : process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK;
 
     console.log("node=====", node);
     const web3 = new Web3(node);
