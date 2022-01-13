@@ -906,7 +906,9 @@ const MiniGame = () => {
               </div>
 
               <div className="text-small yellow">
-                {`With ${balanceEfun} EFUN, you have ${timesCanChance} options to predict now !`}
+                {`With ${balanceEfun ? balanceEfun : 0} EFUN, you have ${
+                  timesCanChance ? timesCanChance : 0
+                } options to predict now !`}
               </div>
 
               <div className="flex_row_center mt-tiny center">
