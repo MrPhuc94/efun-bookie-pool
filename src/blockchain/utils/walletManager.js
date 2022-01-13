@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-catch */
 
-import ModalErrorWallet from "@src/components/Modal/ErrorWallet/ErrorWallet";
-import { showAppPopup } from "@src/redux/reducers/appSlice";
+import ModalErrorWallet from "src/components/Modal/ErrorWallet/ErrorWallet";
+import { showAppPopup } from "src/redux/reducers/appSlice";
 
 // import _get from 'lodash/get'
 const Web3 = require("web3");
