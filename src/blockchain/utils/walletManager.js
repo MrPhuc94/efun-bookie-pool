@@ -99,9 +99,9 @@ async function connectWallet(walletType, timeout) {
     currentAddress = accounts[0];
     // set currentAddress to store
     // get balance
-    const balance = await getBalance();
+    await getBalance();
     isConnected = true;
-    if (balance) return currentAddress;
+    return currentAddress;
   } catch (error) {
     console.log(error);
     throw new WalletError.NewUnknowError(
@@ -114,10 +114,10 @@ async function getBalance() {
   try {
     const tokens = await getBalances();
     //console.log("balances====", tokens);
-
-    await localStorage.setItem("tokens", JSON.stringify(tokens));
-    await store.dispatch(changeListToken(tokens));
-    return tokens;
+    if (tokens) {
+      localStorage.setItem("tokens", JSON.stringify(tokens));
+      store.dispatch(changeListToken(tokens));
+    }
   } catch (error) {
     //console.log("Error get balances====", balances);
     throw error;
