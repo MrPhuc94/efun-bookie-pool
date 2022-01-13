@@ -1,4 +1,8 @@
 /* eslint-disable no-useless-catch */
+
+import ModalErrorWallet from "@src/components/Modal/ErrorWallet/ErrorWallet";
+import { showAppPopup } from "@src/redux/reducers/appSlice";
+
 // import _get from 'lodash/get'
 const Web3 = require("web3");
 const BigNumber = require("bignumber.js");
@@ -104,8 +108,8 @@ async function connectWallet(walletType, timeout) {
     return currentAddress;
   } catch (error) {
     console.log(error);
-    throw new WalletError.NewUnknowError(
-      "user rejected permission or don't install wallet extension"
+    store.dispatch(
+      showAppPopup(<ModalErrorWallet messageError={error.toString()} />)
     );
   }
 }
@@ -311,7 +315,9 @@ async function getBalances() {
     // return tokens getBalance?
     return tokens;
   } catch (error) {
-    throw new WalletError.NewUnknowError("can not get balances now");
+    store.dispatch(
+      showAppPopup(<ModalErrorWallet messageError="Can not get balances now" />)
+    );
   }
 }
 
