@@ -11,8 +11,45 @@ import mu from "../assets/images/mu.png";
 import newcas from "../assets/images/newcas.png";
 import chelsea from "../assets/images/chelsea.png";
 import mancity from "../assets/images/mancity.png";
+import aficanationscup from "../assets/images/league/aficacupnations.png";
+import burkinafaso from "../assets/images/country/afica/burkina-faso.png";
+import cameroon from "../assets/images/country/afica/cameroon.png";
+import capeVerde from "../assets/images/country/afica/cape-verde.png";
+import ethiopia from "../assets/images/country/afica/ethiopia.png";
+import guinea from "../assets/images/country/afica/guinea.png";
+import malawi from "../assets/images/country/afica/malawi.png";
+import senegal from "../assets/images/country/afica/senegal.png";
+import zimbabwe from "../assets/images/country/afica/zimbabwe.png";
+import gabon from "../assets/images/country/afica/gabon.png";
+import Morocco from "../assets/images/country/afica/morocco.png";
+import Comoros from "../assets/images/country/afica/comoros.png";
+import Ghana from "../assets/images/country/afica/ghana.png";
+import Nigeria from "../assets/images/country/afica/nigeria.png";
+import GuineaBissau from "../assets/images/country/afica/guinea-bissau.png";
+import Sudan from "../assets/images/country/afica/sudan.png";
+import Egypt from "../assets/images/country/afica/egypt.png";
+import IvoryCoast from "../assets/images/country/afica/ivory-coast.png";
+import Algeria from "../assets/images/country/afica/algeria.png";
+import SierraLeone from "../assets/images/country/afica/sierra-leone.png";
+import EquatorialGuinea from "../assets/images/country/afica/equatorial-guinea.png";
+import Gambia from "../assets/images/country/afica/gambia.png";
+import Mali from "../assets/images/country/afica/mali.png";
+import Mauritania from "../assets/images/country/afica/mauritania.png";
+import Tunisia from "../assets/images/country/afica/tunisia.png";
 
 const Images = {
+  Tunisia,
+  Mauritania,
+  Mali,
+  Gambia,
+  EquatorialGuinea,
+  SierraLeone,
+  Algeria,
+  IvoryCoast,
+  Egypt,
+  Sudan,
+  GuineaBissau,
+  Nigeria,
   metaMask,
   walletConnect,
   trust,
@@ -26,6 +63,19 @@ const Images = {
   newcas,
   chelsea,
   mancity,
+  aficanationscup,
+  burkinafaso,
+  cameroon,
+  capeVerde,
+  ethiopia,
+  guinea,
+  malawi,
+  senegal,
+  zimbabwe,
+  gabon,
+  Morocco,
+  Comoros,
+  Ghana,
 };
 
 export default Images;

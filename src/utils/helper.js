@@ -1,4 +1,18 @@
+import { resetAppSlice } from "src/redux/reducers/appSlice";
+import { resetMatchesSlice } from "src/redux/reducers/matchesSlice";
+import { resetServiceSlice } from "src/redux/reducers/serviceSlice";
+import { resetUserSlice } from "src/redux/reducers/userSlice";
+import { resetWalletSlice } from "src/redux/reducers/walletSlice";
+import { store } from "src/redux/store";
 import { BigNumber } from "bignumber.js";
+
+export const resetStoreRedux = () => {
+  store.dispatch(resetAppSlice());
+  store.dispatch(resetMatchesSlice());
+  store.dispatch(resetServiceSlice());
+  store.dispatch(resetUserSlice());
+  store.dispatch(resetWalletSlice());
+};
 
 export function numberFormat(
   number,

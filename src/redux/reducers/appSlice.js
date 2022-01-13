@@ -23,10 +23,13 @@ export const appSlice = createSlice({
         state.appPopUps.shift();
       }
     },
+    resetAppSlice: (state, action) => {
+      return (state = initialState);
+    },
   },
 });
 
-export const { showAppLoading, showAppPopup, dismissAppPopup } =
+export const { showAppLoading, showAppPopup, dismissAppPopup, resetAppSlice } =
   appSlice.actions;
 
 export default appSlice.reducer;

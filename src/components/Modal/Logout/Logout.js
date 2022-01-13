@@ -3,7 +3,7 @@ import { dismissAppPopup } from "src/redux/reducers/appSlice";
 import { store } from "src/redux/store";
 import { useTranslation } from "react-i18next";
 import "./styles.scss";
-import { changeCurrentAddress } from "src/redux/reducers/walletSlice";
+import { resetStoreRedux } from "src/utils/helper";
 
 const ModalLogout = (props) => {
   const { currentAddress } = props;
@@ -29,9 +29,8 @@ const ModalLogout = (props) => {
   }, [modalRef]);
 
   const handleLogout = () => {
-    localStorage.removeItem("currentAddress");
-    store.dispatch(changeCurrentAddress(null));
-    store.dispatch(dismissAppPopup());
+    localStorage.clear();
+    resetStoreRedux();
   };
 
   return (

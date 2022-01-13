@@ -98,7 +98,7 @@ const Header = () => {
                   <span className="button">
                     <World />
                   </span>
-                  <div class="dropdown-content">
+                  <div className="dropdown-content">
                     {listLang.map((item, index) => (
                       <div key={index}>
                         <img
@@ -137,7 +137,7 @@ const Header = () => {
                   <span className="button">
                     <World />
                   </span>
-                  <div class="dropdown-content">
+                  <div className="dropdown-content">
                     {listLang.map((item, index) => (
                       <div
                         key={index}

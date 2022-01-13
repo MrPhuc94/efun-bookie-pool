@@ -119,6 +119,9 @@ export const matchesSlice = createSlice({
       );
       state.changeHotMatchList = data.data.data.item;
     },
+    resetMatchesSlice: (state, action) => {
+      return (state = initialState);
+    },
   },
 });
 
@@ -142,6 +145,7 @@ export const {
   changeCurrentRoundSelected,
   changeHotMatch,
   changeHotMatchList,
+  resetMatchesSlice,
 } = matchesSlice.actions;
 
 export default matchesSlice.reducer;

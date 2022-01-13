@@ -30,6 +30,9 @@ export const walletSlice = createSlice({
     changeLoadingWallet(state, action) {
       state.isLoadingWallet = action.payload;
     },
+    resetWalletSlice: (state, action) => {
+      return (state = initialState);
+    },
   },
 });
 
@@ -38,6 +41,7 @@ export const {
   changeSupportTokenAndBalance,
   changeLoadingWallet,
   changeListToken,
+  resetWalletSlice,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

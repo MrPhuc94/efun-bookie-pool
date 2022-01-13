@@ -3,7 +3,7 @@ import { dismissAppPopup } from "src/redux/reducers/appSlice";
 import { store } from "src/redux/store";
 import { useTranslation } from "react-i18next";
 import "./styles.scss";
-import { changeCurrentAddress } from "src/redux/reducers/walletSlice";
+import { WIDTH } from "src/assets/themes/dimension";
 
 const ModalErrorWallet = (props) => {
   const { messageError } = props;
@@ -40,7 +40,9 @@ const ModalErrorWallet = (props) => {
             className="text-large"
             style={{ color: "#fff", wordBreak: "break-all" }}
           >
-            {messageError}
+            <span className={`${WIDTH <= 600 && "text-medium"}`}>
+              {messageError}
+            </span>
           </div>
         </div>
         <div className="center">

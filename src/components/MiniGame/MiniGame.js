@@ -30,6 +30,8 @@ import { WIDTH } from "src/assets/themes/dimension";
 import { AMOUNT_EFUN_FER_CHANCE } from "src/common/Constants";
 import moment from "moment";
 import { RiErrorWarningLine } from "react-icons/ri";
+import { DATA_MINI_GAME_AFICANATIONS_CUP } from "src/common/mockup";
+import TableOption from "./TableOption/TableOption";
 
 const override = css`
   margin: 0 auto;
@@ -141,21 +143,26 @@ const MiniGame = () => {
     localStorage.getItem("currentAddress");
 
   const dataMiniGame = [
+    // {
+    //   MatchId: "1",
+    //   Team1: "Man City",
+    //   Team2: "Chelsea",
+    //   Time: "23/12 - 00:30",
+    //   Logo1: Images.mancity,
+    //   Logo2: Images.chelsea,
+    // },
+    // {
+    //   MatchId: "2",
+    //   Team1: "Manchester",
+    //   Team2: "Newcas",
+    //   Time: "23/12 - 00:30",
+    //   Logo1: Images.mu,
+    //   Logo2: Images.newcas,
+    // },
     {
-      MatchId: "1",
-      Team1: "Man City",
-      Team2: "Chelsea",
-      Time: "23/12 - 00:30",
-      Logo1: Images.mancity,
-      Logo2: Images.chelsea,
-    },
-    {
-      MatchId: "2",
-      Team1: "Manchester",
-      Team2: "Newcas",
-      Time: "23/12 - 00:30",
-      Logo1: Images.mu,
-      Logo2: Images.newcas,
+      label: "Who are the Champions of AFCON 2021?",
+      matchId: "aficacupnations_2021",
+      logo: Images.aficanationscup,
     },
   ];
   // get balance token
@@ -169,7 +176,7 @@ const MiniGame = () => {
   );
 
   // time predict
-  const matchTimeEnd = moment("2022-02-10 17:10");
+  const matchTimeEnd = moment("2022-02-21 00:00");
   useEffect(() => {
     currentTimer = setInterval(() => {
       const currentTime = moment();
@@ -212,7 +219,10 @@ const MiniGame = () => {
     );
   }, [yourPredictBet]);
 
-  const isMaxChance = yourPredictBet.length >= timesCanChance;
+  console.log("timesCanChance", timesCanChance);
+
+  const isMaxChance =
+    yourPredictBet.length >= timesCanChance || yourPredictBet.length >= 10;
 
   const [seasonList, setSeasonList] = useState(null);
   const [leagueList, setLeagueList] = useState(null);
@@ -737,7 +747,7 @@ const MiniGame = () => {
             Mini <strong>games</strong>
           </h1>
         </div>
-        <MenuTop menu={leagueList?.items || []} />
+        {/* <MenuTop menu={leagueList?.items || []} /> */}
         <div className="section-games">
           <div className="menu-games">
             {dataMiniGame?.map((item, index) => {
@@ -747,7 +757,7 @@ const MiniGame = () => {
                   key={index}
                   onClick={() => setSelectedItem(index)}
                 >
-                  <div className="team team-left">
+                  {/* <div className="team team-left">
                     <span>{item.Team1}</span>
                     <img
                       src={item?.Logo1}
@@ -766,6 +776,14 @@ const MiniGame = () => {
                     />
                     <span>{item.Team2}</span>
                   </div>
+                  <button className="btn-predict">Predict</button> */}
+
+                  <div>
+                    <img src={item.logo} width={30} height={30} alt="logo" />
+                    <span className={`${WIDTH <= 600 ? "text-small" : ""}`}>
+                      {item.label}
+                    </span>
+                  </div>
                   <button className="btn-predict">Predict</button>
                 </div>
               );
@@ -774,25 +792,35 @@ const MiniGame = () => {
           <div className="detail-games">
             <div className="description mb-large">
               <div className="mb-small">
-                <img src={Images.laliga} alt="" className="mr-small" />
-                <span>Premier League</span>
+                <img
+                  src={Images.aficanationscup}
+                  alt=""
+                  width={60}
+                  height={60}
+                />
               </div>
-              <div>
-                <span className="text-small red">
-                  Deadline : 3 mins before START
+              <div className="mb-small">
+                <span className="text-large bold">
+                  Who are the Champions of AFCON 2021?
                 </span>
               </div>
               <div>
+                <span className="text-small red">
+                  {/* Deadline : 3 mins before START */}
+                  Deadline : 01/20/2022 00:00 UTC
+                </span>
+              </div>
+              {/* <div>
                 <span className="text-small gray">
                   St. James' Park, Newcastle upon Tyne
                 </span>
               </div>
               <div>
                 <span className="text-small">Regular Season - 18</span>
-              </div>
+              </div> */}
             </div>
 
-            <div
+            {/* <div
               className="MatchGame flex_row mb-large"
               style={{ justifyContent: "center" }}
             >
@@ -834,21 +862,21 @@ const MiniGame = () => {
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="your-predict">
               <div className="description mb-large">
                 <div className="mb-large">
                   <span className="bold text-medium">Your predict</span>
                 </div>
-
-                <div className="text-small">
-                  <span className="text-medium yellow">
-                    For each 50k EFUN in your wallet, you have 1 more chance to
-                    predict
-                    <br />
-                    <span>{`You can select ${dataOptions.length} options`}</span>
-                  </span>
+                <div>
+                  <div className="mb-tiny">
+                    <span className="text-medium yellow mb-small">
+                      For each 50k EFUN you have in your wallet, you have 1
+                      chance to predict. Maximum 10 chances.
+                    </span>
+                  </div>
+                  <span className="mt-small yellow">{`In total we have 24 options.`}</span>
                   <br />
                   {isMaxChance && (
                     <div className="mt-small text-small">
@@ -861,7 +889,7 @@ const MiniGame = () => {
               </div>
 
               <div className="table-options mb-large">
-                <div className="slider-option">
+                {/* <div className="slider-option">
                   <SlideOptions
                     data={dataOptions}
                     yourPredictBet={yourPredictBet}
@@ -869,7 +897,13 @@ const MiniGame = () => {
                     isTimeEndedMatch={isTimeEndedMatch}
                     matchId={dataMiniGame[selectedItem].MatchId}
                   />
-                </div>
+                </div> */}
+                <TableOption
+                  data={DATA_MINI_GAME_AFICANATIONS_CUP}
+                  yourPredictBet={yourPredictBet}
+                  isMaxChance={isMaxChance}
+                  isTimeEndedMatch={isTimeEndedMatch}
+                />
               </div>
 
               <div className="text-small yellow">
