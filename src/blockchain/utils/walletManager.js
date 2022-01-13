@@ -98,16 +98,19 @@ async function connectWallet(walletType, timeout) {
     // const accounts = await web3.eth.getAccounts()
     currentAddress = accounts[0];
     // set currentAddress to store
-    localStorage.setItem("currentAddress", currentAddress);
-    store.dispatch(changeCurrentAddress(currentAddress));
+    // get balance
+    getBalance();
     isConnected = true;
+    return currentAddress;
   } catch (error) {
     console.log(error);
     throw new WalletError.NewUnknowError(
       "user rejected permission or don't install wallet extension"
     );
   }
+}
 
+async function getBalance() {
   try {
     const tokens = await getBalances();
     //console.log("balances====", balances);
@@ -117,6 +120,7 @@ async function connectWallet(walletType, timeout) {
       store.dispatch(changeListToken(tokens));
     }
   } catch (error) {
+    //console.log("Error get balances====", balances);
     throw error;
   }
 }

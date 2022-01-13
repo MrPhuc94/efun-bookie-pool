@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const initialState = () => ({
+const initialState = {
   currentAddress: null,
   supportTokenAndBalance: [],
   isLoadingWallet: false,
   tokens: null,
-});
+};
 
 export const walletSlice = createSlice({
   name: "wallet",
@@ -13,7 +13,7 @@ export const walletSlice = createSlice({
   reducers: {
     changeCurrentAddress(state, action) {
       console.log("currentAddress", action);
-      state.currentAddress = action.payload;
+      state.currentAddress = action?.payload;
     },
 
     changeListToken(state, action) {

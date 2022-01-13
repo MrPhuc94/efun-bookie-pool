@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
 import ModalErrorWallet from "../ErrorWallet/ErrorWallet";
+import { changeCurrentAddress } from "src/redux/reducers/walletSlice";
 
 const override = css`
   margin: 0 auto;
@@ -53,19 +54,26 @@ const ModalConnectWallet = () => {
   }, []);
 
   const currentAddress = useSelector((state) => state?.wallet?.currentAddress);
-  console.log("currentAddress", currentAddress);
+  //console.log("currentAddress", currentAddress);
 
   // dynamic function
   const connectWallet = async (walletName) => {
     setLoading(true);
     if (availableWallet && availableWallet.includes(walletName)) {
       try {
-        await walletManager.connectWallet(walletName, false);
+        const currentAddress = await walletManager.connectWallet(
+          walletName,
+          false
+        );
+        localStorage.setItem("currentAddress", currentAddress);
+        store.dispatch(changeCurrentAddress(currentAddress));
         localStorage.setItem("extensionName", walletName);
         setLoading(false);
         store.dispatch(dismissAppPopup());
       } catch (e) {
-        setShowErrorDialog({ text: e });
+        store.dispatch(
+          showAppPopup(<ModalErrorWallet messageError={e.toString()} />)
+        );
       }
     } else {
       setLoading(false);

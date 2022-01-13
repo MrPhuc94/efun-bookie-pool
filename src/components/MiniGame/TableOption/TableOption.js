@@ -10,28 +10,23 @@ import ModalErrorWallet from "src/components/Modal/ErrorWallet/ErrorWallet";
 
 function TableOption(props) {
   const { data, isTimeEndedMatch, isMaxChance } = props;
-  console.log("isMaxChance", isMaxChance);
-  console.log("isTimeEndedMatch", isTimeEndedMatch);
+  //console.log("isMaxChance", isMaxChance);
+  //console.log("isTimeEndedMatch", isTimeEndedMatch);
 
   // get balance token
-  let tokens =
-    useSelector((state) => state.wallet.tokens) ||
-    JSON.parse(localStorage.getItem("tokens"));
-  const currentToken = tokens?.find((item) => item?.symbol === "EFUN");
-  let balanceEfun = currentToken?.balance;
-  const timesCanChance = Math.floor(
-    parseFloat(currentToken?.balance) / AMOUNT_EFUN_FER_CHANCE
-  );
+  let currentAddress =
+    useSelector((state) => state.wallet?.currentAddress) ||
+    localStorage.getItem("currentAddress");
 
-  console.log("timesCanChance", timesCanChance);
+  //console.log("timesCanChance", timesCanChance);
 
   const yourPredictBet =
     JSON.parse(localStorage.getItem("yourPredictBet")) || [];
 
   const handleChooseOption = (item) => {
     //console.log("item====", item);
-    console.log("currentToken", currentToken);
-    if (!currentToken) {
+
+    if (!currentAddress) {
       return store.dispatch(
         showAppPopup(
           <ModalErrorWallet messageError="Your need connect wallet first" />

@@ -8,9 +8,9 @@ import { walletSlice } from "./reducers/walletSlice";
 export const store = configureStore({
   reducer: {
     app: appSlice.reducer,
+    wallet: walletSlice.reducer,
     service: serviceSlice.reducer,
     user: userSlice.reducer,
-    wallet: walletSlice.reducer,
     matches: matchesSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>

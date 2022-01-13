@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./styles.scss";
 import { dismissAppPopup, showAppPopup } from "src/redux/reducers/appSlice";
 import { store } from "src/redux/store";
-import ModalConnectWallet from "../Modal/ConnectWallet/ConnectWallet";
+import ModalConnectWallet from "../Modal/ConnectWallet/ModalConnectWallet";
 import Images from "src/common/Images";
 import { useSelector } from "react-redux";
 import { shortAddress } from "src/utils/helper";
@@ -24,7 +24,7 @@ const showChooseWallet = () => {
 const Header = () => {
   const { t, i18n } = useTranslation();
   const _currentAddress =
-    useSelector((state) => state.wallet.currentAddress) ||
+    useSelector((state) => state.wallet?.currentAddress) ||
     localStorage.getItem("currentAddress");
 
   const [currentAddress, setCurrentAddress] = useState("");

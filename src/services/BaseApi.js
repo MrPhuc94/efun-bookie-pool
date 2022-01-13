@@ -4,6 +4,7 @@ import { store } from "../redux/store";
 import { showAppLoading } from "../redux/reducers/appSlice";
 import { getData } from "src/utils/storageUtils";
 import { ASYNC_STORAGE_KEYS } from "src/common/constants/Constant";
+import { useSelector } from "react-redux";
 
 axios.interceptors.request.use((config) => {
   console.log("request config =================> response: ", config);
@@ -37,7 +38,7 @@ function FETCH({
   hideLoading,
   showError = false,
 }) {
-  const language = store.getState().user.language;
+  const language = useSelector((state) => state.user.language);
   const config = {
     method,
     baseURL: "https://furama.upgo.vn",

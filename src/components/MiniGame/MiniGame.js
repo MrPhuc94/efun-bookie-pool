@@ -176,30 +176,30 @@ const MiniGame = () => {
   );
 
   // time predict
-  const matchTimeEnd = moment("2022-02-21 00:00");
-  useEffect(() => {
-    currentTimer = setInterval(() => {
-      const currentTime = moment();
-      setCurrentTime(currentTime);
-    }, 2000);
+  // const matchTimeEnd = moment("2022-02-21 00:00");
+  // useEffect(() => {
+  //   currentTimer = setInterval(() => {
+  //     const currentTime = moment();
+  //     setCurrentTime(currentTime);
+  //   }, 2000);
 
-    return () => {
-      clearInterval(currentTimer);
-    };
-  }, []);
+  //   return () => {
+  //     clearInterval(currentTimer);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    timer = setInterval(() => {
-      let matchEnded = matchTimeEnd.isBefore(currentTime);
-      if (matchEnded) {
-        setIsTimeEndedMatch(true);
-        clearInterval(timer);
-      }
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, [currentTime]);
+  // useEffect(() => {
+  //   timer = setInterval(() => {
+  //     let matchEnded = matchTimeEnd.isBefore(currentTime);
+  //     if (matchEnded) {
+  //       setIsTimeEndedMatch(true);
+  //       clearInterval(timer);
+  //     }
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, [currentTime]);
 
   // RESULT MATCH
 
@@ -219,7 +219,7 @@ const MiniGame = () => {
     );
   }, [yourPredictBet]);
 
-  console.log("timesCanChance", timesCanChance);
+  //console.log("timesCanChance", timesCanChance);
 
   const isMaxChance =
     yourPredictBet.length >= timesCanChance || yourPredictBet.length >= 10;
@@ -231,7 +231,7 @@ const MiniGame = () => {
     axios
       .get(process.env.REACT_APP_API_HOST + "/api/v1/seasons")
       .then((response) => {
-        console.log("Success ========>", response.data.data);
+        // console.log("Success ========>", response.data.data);
         setSeasonList(response.data.data);
       })
       .catch((error) => {
@@ -241,7 +241,7 @@ const MiniGame = () => {
     axios
       .get(process.env.REACT_APP_API_HOST + "/api/v1/leagues")
       .then((response) => {
-        console.log("Success ========>", response);
+        //console.log("Success ========>", response);
         setLeagueList(response.data.data || []);
       })
       .catch((error) => {
@@ -309,7 +309,7 @@ const MiniGame = () => {
         //   type: 'group_predict',
         //   block_number: recept.tx.hash.blockNumber
         // })
-        console.log(recept, "recept");
+        //console.log(recept, "recept");
         recept = recept.transactionHash;
         setMessage("Your predict was successful!");
         // activeBetting = null
@@ -420,11 +420,10 @@ const MiniGame = () => {
         // checkApproveFirst = 1
       }
     } catch (e) {
-      console.log(e, "eee");
       setWaitingApprove(false);
       setApproveMsg(e?.message);
       store.dispatch(
-        showAppPopup(<ModalErrorWallet messageError={e?.message} />)
+        showAppPopup(<ModalErrorWallet messageError={e?.message?.toString()} />)
       );
     } finally {
       // approveDialog = true
