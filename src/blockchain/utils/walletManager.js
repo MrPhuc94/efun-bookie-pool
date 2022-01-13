@@ -277,15 +277,11 @@ function logout() {
 async function getBalances() {
   try {
     // #need_config
-    // const node =
-    //   process.env.REACT_APP_NODE_ENV === "development"
-    //     ? process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK
-    //     : process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET;
 
-    const node =
-      process.env.REACT_APP_NODE_ENV === "development"
-        ? process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK
-        : process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK;
+    const node = "https://data-seed-prebsc-1-s1.binance.org:8545/";
+    // process.env.REACT_APP_NODE_ENV === "development"
+    //   ? process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK
+    //   : process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET;
 
     console.log("node=====", node);
     const web3 = new Web3(node);
