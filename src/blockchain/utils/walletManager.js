@@ -286,6 +286,7 @@ async function getBalances() {
     console.log("node=====", node);
     const web3 = new Web3(node);
     console.log("web3======", web3);
+    console.log("supportSymbol", supportSymbol);
     tokens = await Promise.all(
       Object.keys(supportSymbol).map(async (symbol) => {
         if (symbol === "BNB") {
