@@ -26,8 +26,8 @@ const network =
 
 const supportSymbol =
   network === "TESTNET"
-    ? require("./tokens/supportSymbolTest")
-    : require("./tokens/supportSymbol");
+    ? require("./tokens/supportSymbolTest.json")
+    : require("./tokens/supportSymbol.json");
 // const supportSymbolFantom = network === 'TESTNET' ? require('./tokens/supportSymbolFantomTest') : require('./tokens/supportSymbolFantomTest')
 let currentAddress = "";
 const supportedWalletsType = Object.values(supportWallet);
@@ -278,10 +278,10 @@ async function getBalances() {
   try {
     // #need_config
 
-    const node = "https://data-seed-prebsc-1-s1.binance.org:8545/";
-    // process.env.REACT_APP_NODE_ENV === "development"
-    //   ? process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK
-    //   : process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET;
+    const node =
+      process.env.REACT_APP_NODE_ENV === "development"
+        ? process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK
+        : process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET;
 
     console.log("node=====", node);
     const web3 = new Web3(node);
@@ -316,6 +316,7 @@ async function getBalances() {
     // return tokens getBalance?
     return tokens;
   } catch (error) {
+    console.log("errorBalance====", error);
     store.dispatch(
       showAppPopup(<ModalErrorWallet messageError="Can not get balances now" />)
     );
