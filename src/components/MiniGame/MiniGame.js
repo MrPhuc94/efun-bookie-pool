@@ -32,6 +32,10 @@ import moment from "moment";
 import { RiErrorWarningLine } from "react-icons/ri";
 import { DATA_MINI_GAME_AFICANATIONS_CUP } from "src/common/mockup";
 import TableOption from "./TableOption/TableOption";
+import {
+  REACT_APP_BNB_TOKEN,
+  REACT_APP_EFUN_TOKEN,
+} from "src/common/Environment";
 
 const override = css`
   margin: 0 auto;
@@ -289,8 +293,8 @@ const MiniGame = () => {
       try {
         const token =
           currentToken.symbol === "BNB"
-            ? process.env.REACT_APP_BNB_TOKEN
-            : process.env.REACT_APP_EFUN_TOKEN;
+            ? REACT_APP_BNB_TOKEN
+            : REACT_APP_EFUN_TOKEN;
         // console.log("currentMatches", currentMatches);
         // console.log("methodBet", methodBet);
         // console.log("token", token);

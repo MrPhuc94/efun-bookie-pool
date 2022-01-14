@@ -1,5 +1,12 @@
 /* eslint-disable no-useless-catch */
 
+import {
+  REACT_APP_BLOCKCHAIN_RPC_NETWORK,
+  REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET,
+  REACT_APP_NODE_ENV,
+  REACT_APP_BLOCKCHAIN_NETWORK_MAINNET,
+  REACT_APP_BLOCKCHAIN_NETWORK,
+} from "src/common/Environment";
 import ModalErrorWallet from "src/components/Modal/ErrorWallet/ErrorWallet";
 import { showAppPopup } from "src/redux/reducers/appSlice";
 
@@ -19,9 +26,9 @@ const {
 } = require("src/redux/reducers/walletSlice");
 // #need_config
 const network =
-  process.env.NODE_ENV === "development"
-    ? process.env.REACT_APP_BLOCKCHAIN_NETWORK
-    : process.env.REACT_APP_BLOCKCHAIN_NETWORK_MAINNET;
+  REACT_APP_NODE_ENV === "development"
+    ? REACT_APP_BLOCKCHAIN_NETWORK
+    : REACT_APP_BLOCKCHAIN_NETWORK_MAINNET;
 // const network = 'MAINNET'
 
 const supportSymbol =
@@ -277,11 +284,10 @@ function logout() {
 async function getBalances() {
   try {
     // #need_config
-
     const node =
-      process.env.REACT_APP_NODE_ENV === "development"
-        ? process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK
-        : process.env.REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET;
+      REACT_APP_NODE_ENV === "development"
+        ? REACT_APP_BLOCKCHAIN_RPC_NETWORK
+        : REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET;
 
     console.log("node=====", node);
     const web3 = new Web3(node);
@@ -317,7 +323,6 @@ async function getBalances() {
     // return tokens getBalance?
     return tokens;
   } catch (error) {
-    console.log("errorBalance====", error);
     store.dispatch(
       showAppPopup(<ModalErrorWallet messageError="Can not get balances now" />)
     );
