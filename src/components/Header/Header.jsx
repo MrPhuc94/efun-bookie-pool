@@ -33,6 +33,7 @@ const Header = () => {
   const [currentAddress, setCurrentAddress] = useState("");
   const [activeNav, setActiveNav] = useState(false);
   const navWrapper = useRef();
+  const [showNavLang, setShowNavLang] = useState(false);
 
   const listLang = [
     { key: "en", label: "English", icon: unitedKingdom },
@@ -46,10 +47,10 @@ const Header = () => {
   ];
 
   const handleChangeLanguage = (param) => {
-    console.log("changeLangue", param);
     i18n.changeLanguage(param?.key);
     store.dispatch(setLanguage(param.key));
     storeData(ASYNC_STORAGE_KEYS.LANGUAGE, JSON.stringify(param));
+    setShowNavLang(false);
   };
 
   useEffect(() => {
@@ -64,6 +65,11 @@ const Header = () => {
   };
 
   const handleCloseNav = () => setActiveNav(!activeNav);
+
+  const _showNavLang = () => {
+    console.log("ABBBBBBBB");
+    setShowNavLang(true);
+  };
 
   return (
     <header className="header">
@@ -102,10 +108,12 @@ const Header = () => {
               </li>
               <li>
                 <div className="dropdown">
-                  <span className="button">
+                  <span className="button" onClick={_showNavLang}>
                     <World />
                   </span>
-                  <div className="dropdown-content">
+                  <div
+                    className={`dropdown-content ${showNavLang && "active"}`}
+                  >
                     {listLang.map((item, index) => (
                       <div
                         key={index}
@@ -144,10 +152,12 @@ const Header = () => {
             <ul className="menu-mobile">
               <li>
                 <div className="dropdown">
-                  <span className="button">
+                  <span className="button" onClick={_showNavLang}>
                     <World />
                   </span>
-                  <div className="dropdown-content">
+                  <div
+                    className={`dropdown-content ${showNavLang && "active"}`}
+                  >
                     {listLang.map((item, index) => (
                       <div
                         key={index}

@@ -67,6 +67,7 @@
     position: relative;
     display: inline-block;
     .button {
+      cursor: pointer;
       padding: 20px 2px;
     }
   }
@@ -103,7 +104,8 @@
 
   /* Show the dropdown menu on hover */
 
-  .dropdown:hover .dropdown-content {
+  .dropdown-content.active {
     display: block;
+    cursor: pointer;
   }
 }
