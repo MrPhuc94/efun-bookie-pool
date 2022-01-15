@@ -74,7 +74,7 @@ export function shortAddress(address) {
   if (address.length === 34 && address.match(/^M/)) {
     return address.slice(0, 5) + "..." + address.slice(address.length - 3);
   }
-  return address.slice(0, 12) + "...";
+  return address.slice(0, 10) + "...";
 }
 
 export function isMobile() {
@@ -504,3 +504,11 @@ export function millisToSeconds(millis) {
   const seconds = (+millis / 1000).toFixed(0);
   return seconds ? +seconds : 0;
 }
+
+export const formatNumberPrice = (number) => {
+  if (!number) return;
+  return parseFloat(number)
+    ?.toFixed(2)
+    ?.toString()
+    ?.replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+};

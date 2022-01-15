@@ -7,6 +7,7 @@ import ir from "../assets/locales/ir.json";
 import pl from "../assets/locales/pl.json";
 import jp from "../assets/locales/jp.json";
 import cn from "../assets/locales/cn.json";
+import fr from "../assets/locales/fr.json";
 
 const resources = {
   en: en,
@@ -16,6 +17,7 @@ const resources = {
   pl: pl,
   jp: jp,
   cn: cn,
+  fr: fr,
 };
 
 const languageDetector = {

@@ -1,4 +1,24 @@
 {
   "translation": {
+    "common": {
+      "about":"关于",
+      "how_it_works":"它是如何工作的",
+      "connect_wallet":"连接钱包",
+      "your_wallet":"您的钱包",
+      "your_predict":"你的预测",
+      "description_1":"你的钱包里每有50k EFUN，就有一次机会。你就有多一次预测的机会",
+      "description_2":"你可以选择10个选项",
+      "error_message_1":"你已经选择了你所有可能的选项。如果你想改变。请先取消一些选择。",
+      "with":"有",
+      "have_predict_1":"你现在有",
+      "have_predict_2":"个选项可以预测！",
+      "approve_to_predict":"批准预测",
+      "place_your_predict_now":"现在进行预测",
+      "terms_of_service":"服务条款",
+      "privacy_policy":"隐私政策",
+      "mini_game":"迷你游戏",
+      "logout":"注销",
+      "error_message_2":"用户拒绝了交易签名。"
+    }
   }
 }

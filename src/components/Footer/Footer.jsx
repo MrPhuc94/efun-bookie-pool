@@ -1,8 +1,10 @@
 import ButtonUp from "src/assets/icons/ButtonUp";
 import React, { useEffect } from "react";
 import "./styles.scss";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation();
   useEffect(() => {
     let scrollToTopBtn = document.getElementById("scrollToTopBtn");
     let rootElement = document.documentElement;
@@ -47,10 +49,10 @@ const Footer = () => {
           </p>
           <ul className="order-md-2 order-1">
             <li>
-              <a href="#">Terms of Service</a>
+              <a href="#">{t("common.terms_of_service")}</a>
             </li>
             <li>
-              <a href="#">Privacy Policy</a>
+              <a href="#">{t("common.privacy_policy")}</a>
             </li>
           </ul>
         </div>

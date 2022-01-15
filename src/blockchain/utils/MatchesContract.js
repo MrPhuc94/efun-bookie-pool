@@ -18,7 +18,7 @@ const supportSymbol =
 // const betAbi = process.env.NODE_ENV === 'development' ? require('./contracts/bet.abi.json') : require('./contracts/bet.abi.json')
 const groupAbi =
   process.env.NODE_ENV === "development"
-    ? require("./contracts/group-test.abi.json")
+    ? require("./contracts/group.abi.json")
     : require("./contracts/group.abi.json");
 const createAbi =
   process.env.NODE_ENV === "development"
@@ -177,15 +177,14 @@ const predict = async (matchId, betContent, token, amount, from) => {
       .multipliedBy(10 ** 18)
       .integerValue();
   };
-  let receipt2 = "";
-  const param = {
-    from,
-  };
-  if (token === process.env.BNB_TOKEN) {
-    param.value = new BigNumber(amount).multipliedBy(10 ** 18).toFixed();
-  }
 
-  console.log("calculateBalanceSend", calculateBalanceSend);
+  let receipt2 = "";
+
+  // if (token === process.env.BNB_TOKEN) {
+  //   param.value = new BigNumber(amount).multipliedBy(10 ** 18).toFixed();
+  // }
+
+  console.log("groupContract", groupContract);
   const txData = await tokenContract.methods
     .predict(
       matchId,
@@ -193,11 +192,11 @@ const predict = async (matchId, betContent, token, amount, from) => {
       token,
       new BigNumber(amount).multipliedBy(10 ** 18).toFixed()
     )
-    .send(param)
+    .send({ from: from })
     .on("error", (error) => {
       receipt2 = error;
       console.log("error", error);
-      throw new WalletError.NewNetworkError("cannot predict now");
+      // throw new WalletError.NewNetworkError("cannot predict now");
     })
     .then((receipt) => {
       console.log("receipt", receipt);
@@ -206,7 +205,7 @@ const predict = async (matchId, betContent, token, amount, from) => {
     .catch((err) => {
       receipt2 = err;
       console.log(err, "hey waht ????");
-      throw new WalletError.NewNetworkError("cannot predict now");
+      // throw new WalletError.NewNetworkError("cannot predict now");
     });
   console.log("txData======", txData);
   // const nonce = await web3.eth.getTransactionCount(from, 'pending')
@@ -244,11 +243,11 @@ const cancelMatchs = async (matchId, from) => {
   };
 };
 
-export const calculateReward = async (matchId, account, token) => {
+export const calculateReward = async (matchId, account, token, saToken) => {
   const web3 = await initWeb3();
   const tokenContract = new web3.eth.Contract(groupAbi, groupContract);
   const txData = await tokenContract.methods
-    .calculateReward(matchId, account, token)
+    .calculateReward(matchId, account, token, saToken)
     .call();
   const tx = {
     account,
@@ -260,7 +259,7 @@ export const calculateReward = async (matchId, account, token) => {
   };
 };
 
-const claimReward = async (matchId, _token, from) => {
+const claimReward = async (matchId, _token, saToken, from) => {
   const web3 = await initWeb3();
   const tokenContract = new web3.eth.Contract(
     groupAbi,
@@ -273,7 +272,7 @@ const claimReward = async (matchId, _token, from) => {
   // console.log(_token, '_token')
 
   const txData = await tokenContract.methods
-    .claimReward(matchId, _token)
+    .claimReward(matchId, _token, saToken)
     // .call()
     .send({ from })
     .on("error", (error) => {

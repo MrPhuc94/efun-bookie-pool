@@ -1,0 +1,24 @@
+{
+  "translation": {
+    "common": {
+      "about":"À propos de",
+      "how_it_works":"Comment ça marche",
+      "connect_wallet":"Connecter le portefeuille",
+      "your_wallet":"Votre porte-monnaie", 
+      "your_predict":"Votre prédiction",
+      "description_1":"Pour chaque 50k EFUN dans votre portefeuille,vous avez 1 chance de plus de prédire",
+      "description_2":"Vous pouvez sélectionner 10 options",
+      "error_message_1":"Vous avez sélectionné toutes vos options possibles. Si vous voulez changer, veuillez d'abord en désélectionner certaines.",
+      "with":"Avec",
+      "have_predict_1":"vous avez",
+      "have_predict_2":"options à prédire maintenant !",
+      "approve_to_predict":"Approuver pour prédire",
+      "place_your_predict_now":"Placez votre prédiction maintenant",
+      "terms_of_service":"Conditions d'utilisation",
+      "privacy_policy":"Politique de confidentialité",
+      "mini_game":"Mini jeu",
+      "logout":"Déconnexion",
+      "error_message_2":"L'utilisateur a refusé la signature de la transaction."
+    }
+  }
+}

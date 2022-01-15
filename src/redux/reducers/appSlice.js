@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   appPopUps: [],
+  pathBackground: "",
 };
 
 export const appSlice = createSlice({
@@ -23,13 +24,24 @@ export const appSlice = createSlice({
         state.appPopUps.shift();
       }
     },
+    setPathBackGround: (state, action) => {
+      const data = action.payload;
+      if (data) {
+        state.pathBackground = data;
+      }
+    },
     resetAppSlice: (state, action) => {
       return (state = initialState);
     },
   },
 });
 
-export const { showAppLoading, showAppPopup, dismissAppPopup, resetAppSlice } =
-  appSlice.actions;
+export const {
+  showAppLoading,
+  showAppPopup,
+  dismissAppPopup,
+  resetAppSlice,
+  setPathBackGround,
+} = appSlice.actions;
 
 export default appSlice.reducer;

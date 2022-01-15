@@ -61,6 +61,39 @@ function TableOption(props) {
     }
   };
 
+  const handleChooseOptionNumber = (item) => {
+    //console.log("item====", item);
+    if (!currentAddress) {
+      return store.dispatch(
+        showAppPopup(
+          <ModalErrorWallet messageError="Your need connect wallet first" />
+        )
+      );
+    }
+
+    let isExistItem = yourPredictBet.find((value) => value === item);
+
+    //console.log("yourPredictBet", yourPredictBet);
+    if (isExistItem) {
+      let newSelectedOptions = yourPredictBet.filter((value) => value !== item);
+      // set state to store
+      localStorage.setItem(
+        "yourPredictBet",
+        JSON.stringify(newSelectedOptions)
+      );
+      store.dispatch(changeYourBet(newSelectedOptions));
+    } else {
+      let newSelectedOptions = [...yourPredictBet, item];
+      // set state to storeyourPredictBet
+      console.log("newSelectedOptions", newSelectedOptions);
+      localStorage.setItem(
+        "yourPredictBet",
+        JSON.stringify(newSelectedOptions)
+      );
+      store.dispatch(changeYourBet(newSelectedOptions));
+    }
+  };
+
   const checkItemSelected = (item) => {
     const findItem = yourPredictBet?.find(
       (value) => value?.country === item?.country
@@ -69,46 +102,129 @@ function TableOption(props) {
     return false;
   };
 
-  return Object.keys(data).map((key, index) => {
-    return (
-      <div className="flex_row" key={index}>
-        <div className="text-tiny bold">{data[key][0].groupName}</div>
-        {data[key].map((item, index) => {
+  const checkItemSelectedNumber = (item) => {
+    const findItem = yourPredictBet?.find((value) => value === item);
+    if (findItem) return true;
+    return false;
+  };
+
+  const renderContent = () => {
+    switch (data?.name) {
+      case "AFCON_2021":
+        return Object.keys(data?.data).map((key, index) => {
           return (
-            <div
-              key={index}
-              className={`item-option text-tiny ${
-                checkItemSelected(item)
-                  ? "active"
-                  : isMaxChance
-                  ? "disable"
-                  : ""
-              }`}
-              onClick={() => {
-                if (isTimeEndedMatch) {
-                  return;
-                }
-                if (checkItemSelected(item)) {
-                  return handleChooseOption(item);
-                }
-                if (isMaxChance) {
-                  return;
-                }
-                return handleChooseOption(item);
-              }}
-            >
-              <img src={item.logo} width={30} height={30} alt="logo" />
-              {WIDTH <= 600
-                ? `${item.country.slice(0, 10)} ${
-                    item.country.length > 10 ? ".." : ""
-                  } `
-                : item.country}
+            <div className="flex_row" key={index}>
+              <div className="text-tiny bold">
+                {data.data[key][0].groupName}
+              </div>
+              {data?.data[key].map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={`item-option text-tiny ${
+                      checkItemSelected(item)
+                        ? "active"
+                        : isMaxChance
+                        ? "disable"
+                        : ""
+                    }`}
+                    onClick={() => {
+                      if (isTimeEndedMatch) {
+                        return;
+                      }
+                      if (checkItemSelected(item)) {
+                        return handleChooseOption(item);
+                      }
+                      if (isMaxChance) {
+                        return;
+                      }
+                      return handleChooseOption(item);
+                    }}
+                  >
+                    <img src={item.logo} width={30} height={30} alt="logo" />
+                    {WIDTH <= 600
+                      ? `${item.country.slice(0, 10)} ${
+                          item.country.length > 10 ? ".." : ""
+                        } `
+                      : item.country}
+                  </div>
+                );
+              })}
             </div>
           );
-        })}
-      </div>
-    );
-  });
+        });
+      case "Cristiano_Ronaldo":
+        return (
+          <div className="flex_row">
+            {data?.data.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className={`item-option-2 text-tiny ${
+                    checkItemSelectedNumber(item)
+                      ? "active"
+                      : isMaxChance
+                      ? "disable"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    if (isTimeEndedMatch) {
+                      return;
+                    }
+                    if (checkItemSelectedNumber(item)) {
+                      return handleChooseOptionNumber(item);
+                    }
+                    if (isMaxChance) {
+                      return;
+                    }
+                    return handleChooseOptionNumber(item);
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      case "LaLiga":
+        return (
+          <div className="flex_row">
+            {data?.data.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className={`item-option-2 text-tiny ${
+                    checkItemSelectedNumber(item)
+                      ? "active"
+                      : isMaxChance
+                      ? "disable"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    if (isTimeEndedMatch) {
+                      return;
+                    }
+                    if (checkItemSelectedNumber(item)) {
+                      return handleChooseOptionNumber(item);
+                    }
+                    if (isMaxChance) {
+                      return;
+                    }
+                    return handleChooseOptionNumber(item);
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return <>{renderContent()}</>;
 }
 
 export default TableOption;

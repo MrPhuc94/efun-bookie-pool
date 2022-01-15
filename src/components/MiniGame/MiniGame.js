@@ -5,7 +5,6 @@ import MenuTop from "../MenuTop/MenuTop";
 import SlideOptions from "./SlideOptions/SlideOptions";
 import { store } from "src/redux/store";
 import {
-  changeSeasonList,
   changeYourBet,
   changeYourBetEfun,
 } from "src/redux/reducers/matchesSlice";
@@ -22,7 +21,7 @@ import {
   changeCurrentAddress,
   changeSupportTokenAndBalance,
 } from "src/redux/reducers/walletSlice";
-import { showAppPopup } from "src/redux/reducers/appSlice";
+import { setPathBackGround, showAppPopup } from "src/redux/reducers/appSlice";
 import ModalErrorWallet from "../Modal/ErrorWallet/ErrorWallet";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -30,24 +29,32 @@ import { WIDTH } from "src/assets/themes/dimension";
 import { AMOUNT_EFUN_FER_CHANCE } from "src/common/Constants";
 import moment from "moment";
 import { RiErrorWarningLine } from "react-icons/ri";
-import { DATA_MINI_GAME_AFICANATIONS_CUP } from "src/common/mockup";
+import {
+  BARCA_PLACE,
+  DATA_MINI_GAME_AFICANATIONS_CUP,
+  ELP_CLUB,
+  RONALDO_GOLD,
+} from "src/common/mockup";
 import TableOption from "./TableOption/TableOption";
 import {
   REACT_APP_BNB_TOKEN,
   REACT_APP_EFUN_TOKEN,
 } from "src/common/Environment";
+import { useTranslation } from "react-i18next";
+import { formatNumberPrice } from "src/utils/helper";
 
 const override = css`
   margin: 0 auto;
 `;
 
 const MiniGame = () => {
+  const { t } = useTranslation();
   // const
   const sponsorEven = 1000;
   const sponsorETAmount = 0;
   const [loadingPlace, setLoadingPlace] = useState(false);
   const loadingPlace2 = false;
-  const methodBet = 1;
+  const predictOptions = "";
   const amountRules = [
     (v) => !!v || "Invalid amount",
     (v) => parseFloat(amount) >= 0.005 || "Min Predict Amount >= 0.005 BNB",
@@ -104,14 +111,14 @@ const MiniGame = () => {
   let [color, setColor] = useState("#ffffff");
 
   const currentMatches = {
-    id: "1",
-    bc_match_id: "1",
-    bc_match_meta: "1",
+    id: "0",
+    bc_match_id: "0",
+    bc_match_meta: "0",
     bc_result: true,
-    bc_result_meta: "1",
-    remote_id: "1",
+    bc_result_meta: "0",
+    remote_id: "0",
     hot: true,
-    timezone: "1",
+    timezone: "0",
     date: "2021-12-11T17:12:37.000Z",
     timestamp: 1646072675,
     status_long: "1",
@@ -147,26 +154,46 @@ const MiniGame = () => {
     localStorage.getItem("currentAddress");
 
   const dataMiniGame = [
-    // {
-    //   MatchId: "1",
-    //   Team1: "Man City",
-    //   Team2: "Chelsea",
-    //   Time: "23/12 - 00:30",
-    //   Logo1: Images.mancity,
-    //   Logo2: Images.chelsea,
-    // },
-    // {
-    //   MatchId: "2",
-    //   Team1: "Manchester",
-    //   Team2: "Newcas",
-    //   Time: "23/12 - 00:30",
-    //   Logo1: Images.mu,
-    //   Logo2: Images.newcas,
-    // },
     {
+      name: "AFCON_2021",
+      type: "mini_game",
       label: "Who are the Champions of AFCON 2021?",
       matchId: "aficacupnations_2021",
       logo: Images.aficanationscup,
+      endDate: "20/01/2022",
+      data: DATA_MINI_GAME_AFICANATIONS_CUP,
+      backGround: Images.header_box,
+    },
+    {
+      name: "Cristiano_Ronaldo",
+      type: "event",
+      label:
+        "How many goals does Cristiano Ronaldo have for MU at the end of the season 2021/2022 in all competitions?",
+      matchId: "aficacupnations_2021",
+      logo: Images.Banner_Ronaldo2,
+      endDate: "31/01/2022",
+      data: RONALDO_GOLD,
+      backGround: Images.Banner_Ronaldo,
+    },
+    {
+      name: "LaLiga",
+      type: "event",
+      label: "Where is Barcelona's place in La Liga season 2021/2022?",
+      matchId: "aficacupnations_2021",
+      logo: Images.Banner_Barca2,
+      endDate: "31/01/2022",
+      data: BARCA_PLACE,
+      backGround: Images.BannerBarca,
+    },
+    {
+      name: "EPL_club",
+      type: "event",
+      label: "Which EPL club will have the biggest summer 2022 transfers in? ",
+      matchId: "aficacupnations_2021",
+      logo: Images.Banner_Ronaldo2,
+      endDate: "31/01/2022",
+      data: ELP_CLUB,
+      backGround: Images.Banner_Ronaldo,
     },
   ];
   // get balance token
@@ -228,42 +255,6 @@ const MiniGame = () => {
   const isMaxChance =
     yourPredictBet.length >= timesCanChance || yourPredictBet.length >= 10;
 
-  const [seasonList, setSeasonList] = useState(null);
-  const [leagueList, setLeagueList] = useState(null);
-
-  useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_API_HOST + "/api/v1/seasons")
-      .then((response) => {
-        // console.log("Success ========>", response.data.data);
-        setSeasonList(response.data.data);
-      })
-      .catch((error) => {
-        console.log("Error ========>", error);
-      });
-
-    axios
-      .get(process.env.REACT_APP_API_HOST + "/api/v1/leagues")
-      .then((response) => {
-        //console.log("Success ========>", response);
-        setLeagueList(response.data.data || []);
-      })
-      .catch((error) => {
-        console.log("Error ========>", error);
-      });
-  }, []);
-
-  const dataOptions = [];
-
-  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => {
-    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item2) => {
-      return dataOptions.push({
-        Ban1: item,
-        Ban2: item2,
-      });
-    });
-  });
-
   const [selectedItem, setSelectedItem] = useState(0);
 
   // method
@@ -279,14 +270,11 @@ const MiniGame = () => {
     }
   };
 
-  const bet = async () => {
+  const predict = async () => {
     setLoadingPlace(true);
     if (!currentAddress) {
       setAddWalletDialog(true);
       setLoadingPlace(false);
-      // } else if (formBet.validate()) {
-      //   formBet.validate();
-      //   setLoadingPlace(false);
     } else if (activeBetting === null) {
       setLoadingPlace(false);
     } else {
@@ -295,19 +283,21 @@ const MiniGame = () => {
           currentToken.symbol === "BNB"
             ? REACT_APP_BNB_TOKEN
             : REACT_APP_EFUN_TOKEN;
-        // console.log("currentMatches", currentMatches);
-        // console.log("methodBet", methodBet);
-        // console.log("token", token);
-        // console.log("amount", amount);
-        // console.log("currentAddress", currentAddress);
 
         const recept = await MatchesContract.predict(
           currentMatches.bc_match_id,
-          methodBet,
+          "0-0;0-1;0-2;0-3;",
           token,
-          amount,
+          0,
           currentAddress
         );
+        // const recept = await MatchesContract.predict(
+        //   currentMatches.bc_match_id,
+        //   predictOptions,
+        //   token,
+        //   amount,
+        //   currentAddress
+        // );
 
         // await axios.post(process.env.API_HOST + '/api/v1/block-numbers/create', {
         //   type: 'group_predict',
@@ -340,20 +330,20 @@ const MiniGame = () => {
         await walletManager.connectWallet(extensionName, 0);
         const data = await MatchesContract.getMatchInfo(
           currentMatches.bc_match_id,
-          process.env.BNB_TOKEN
+          REACT_APP_BNB_TOKEN
         );
         const dataEfun = await MatchesContract.getMatchInfo(
           currentMatches.bc_match_id,
-          process.env.EFUN_TOKEN
+          REACT_APP_EFUN_TOKEN
         );
         const yourDataEfun = await MatchesContract.getBetInfo(
           currentMatches.bc_match_id,
-          process.env.EFUN_TOKEN,
+          REACT_APP_EFUN_TOKEN,
           currentAddress
         );
         const yourData = await MatchesContract.getBetInfo(
           currentMatches.bc_match_id,
-          process.env.BNB_TOKEN,
+          REACT_APP_BNB_TOKEN,
           currentAddress
         );
         changeCurrentMatchesBlockchain(data.tx.data);
@@ -397,9 +387,9 @@ const MiniGame = () => {
     }
   };
 
-  const changeBetting = (methodBet) => {
-    methodBet = methodBet;
-    activeBetting = methodBet;
+  const changeBetting = (predictOptions) => {
+    predictOptions = predictOptions;
+    activeBetting = predictOptions;
   };
 
   const approve = async () => {
@@ -446,37 +436,15 @@ const MiniGame = () => {
     }, 2000);
   };
 
-  const maxAmount = () => {
-    if (!currentAddress) {
-      addWalletDialog = true;
-    } else {
-      const number = new Decimal(_get(currentToken, "balance", 0));
-      amount = number.toFixed(5, Decimal.ROUND_DOWN);
-    }
-  };
+  // const maxAmount = () => {
+  //   if (!currentAddress) {
+  //     addWalletDialog = true;
+  //   } else {
+  //     const number = new Decimal(_get(currentToken, "balance", 0));
+  //     amount = number.toFixed(5, Decimal.ROUND_DOWN);
+  //   }
+  // };
 
-  const getFixtures = () => {
-    axios
-      .get(
-        "https://efun.datsan247.com/api/v1/fixtures/sponsor?filter[bc_match_id]=1"
-      )
-      .then((res) => {
-        fixtureList = res.data.item;
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-  const getHotFixtures = () => {
-    axios
-      .get("https://efun.datsan247.com/api/v1/fixtures/sponsor/hot")
-      .then((res) => {
-        hotList = res.data.item;
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
   const convertAmountBC = (amount) => {
     return new BigNumber(amount).dividedBy(10 ** 18).toString();
   };
@@ -490,45 +458,46 @@ const MiniGame = () => {
     }
   };
 
-  const calculateReward = async () => {
-    try {
-      const reward = await MatchesContract.calculateReward(
-        currentMatches.bc_match_id,
-        currentAddress,
-        process.env.BNB_TOKEN
-      );
-      console.log(reward.tx.data, "calculateReward");
-      totalReward = reward.tx.data._reward;
-      sponsorReward = reward.tx.data._sponsorReward;
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  const calculateRewardEfun = async () => {
-    try {
-      const reward = await MatchesContract.calculateReward(
-        currentMatches.bc_match_id,
-        currentAddress,
-        process.env.EFUN_TOKEN
-      );
-      // console.log(reward.tx.data, 'rewardefun')
-      totalRewardEfun = reward.tx.data._reward;
-      sponsorReward = reward.tx.data._sponsorReward;
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const calculateReward = async () => {
+  //   try {
+  //     const reward = await MatchesContract.calculateReward(
+  //       currentMatches.bc_match_id,
+  //       currentAddress,
+  //       REACT_APP_BNB_TOKEN
+  //     );
+  //     console.log(reward.tx.data, "calculateReward");
+  //     totalReward = reward.tx.data._reward;
+  //     sponsorReward = reward.tx.data._sponsorReward;
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+  // const calculateRewardEfun = async () => {
+  //   try {
+  //     const reward = await MatchesContract.calculateReward(
+  //       currentMatches.bc_match_id,
+  //       currentAddress,
+  //       REACT_APP_EFUN_TOKEN,
+  //       REACT_APP_EFUN_TOKEN
+  //     );
+  //     // console.log(reward.tx.data, 'rewardefun')
+  //     totalRewardEfun = reward.tx.data._reward;
+  //     sponsorReward = reward.tx.data._sponsorReward;
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
   const claim = async () => {
     try {
       loadingPlace = true;
       await MatchesContract.claimReward(
         currentMatches.bc_match_id,
-        process.env.BNB_TOKEN,
+        REACT_APP_BNB_TOKEN,
         currentAddress
       );
       const yourData = await MatchesContract.getBetInfo(
         currentMatches.bc_match_id,
-        process.env.BNB_TOKEN,
+        REACT_APP_BNB_TOKEN,
         currentAddress
       );
       changeYourBet(yourData.tx.data);
@@ -548,12 +517,13 @@ const MiniGame = () => {
       loadingPlace2 = true;
       await MatchesContract.claimReward(
         currentMatches.bc_match_id,
-        process.env.EFUN_TOKEN,
+        REACT_APP_EFUN_TOKEN,
+        REACT_APP_EFUN_TOKEN,
         currentAddress
       );
       const yourDataEfun = await MatchesContract.getBetInfo(
         currentMatches.bc_match_id,
-        process.env.EFUN_TOKEN,
+        REACT_APP_EFUN_TOKEN,
         currentAddress
       );
       changeYourBetEfun(yourDataEfun.tx.data);
@@ -589,23 +559,23 @@ const MiniGame = () => {
       try {
         const data = await MatchesContract.getMatchInfo(
           currentMatches.bc_match_id,
-          process.env.BNB_TOKEN
+          REACT_APP_BNB_TOKEN
         );
         const dataEfun = await MatchesContract.getMatchInfo(
           currentMatches.bc_match_id,
-          process.env.EFUN_TOKEN
+          REACT_APP_EFUN_TOKEN
         );
         // console.log(data, 'data')
         // console.log(dataEfun, 'dataEfun')
         if (currentAddress) {
           const yourData = await MatchesContract.getBetInfo(
             currentMatches.bc_match_id,
-            process.env.BNB_TOKEN,
+            REACT_APP_BNB_TOKEN,
             currentAddress
           );
           const yourDataEfun = await MatchesContract.getBetInfo(
             currentMatches.bc_match_id,
-            process.env.EFUN_TOKEN,
+            REACT_APP_EFUN_TOKEN,
             currentAddress
           );
           // console.log(yourData, 'yourData')
@@ -625,15 +595,15 @@ const MiniGame = () => {
         matchSelected = currentMatches.id;
         const data = await MatchesContract.getMatchInfo(
           currentMatches.bc_match_id,
-          process.env.BNB_TOKEN
+          REACT_APP_BNB_TOKEN
         );
         const dataEfun = await MatchesContract.getMatchInfo(
           currentMatches.bc_match_id,
-          process.env.EFUN_TOKEN
+          REACT_APP_EFUN_TOKEN
         );
         // if (currentAddress) {
-        //   const yourData = await MatchesContract.getBetInfo(currentMatches.bc_match_id, process.env.BNB_TOKEN, currentAddress)
-        //   const yourDataEfun = await MatchesContract.getBetInfo(currentMatches.bc_match_id, process.env.EFUN_TOKEN, currentAddress)
+        //   const yourData = await MatchesContract.getBetInfo(currentMatches.bc_match_id, REACT_APP_BNB_TOKEN, currentAddress)
+        //   const yourDataEfun = await MatchesContract.getBetInfo(currentMatches.bc_match_id, REACT_APP_EFUN_TOKEN, currentAddress)
         //   await changeYourBet(yourData.tx.data)
         //   await changeYourBetEfun(yourDataEfun.tx.data)
         // }
@@ -741,14 +711,29 @@ const MiniGame = () => {
     }
   };
 
-  //console.log("checkApprove", checkApprove);
+  const handleSelectMiniGame = (index) => {
+    setSelectedItem(index);
+    localStorage.removeItem("yourPredictBet");
+    store.dispatch(changeYourBet(null));
+  };
+
   return (
     <div className="container">
       <div className="miniGame">
-        <div className="heading-box">
-          <h1>
-            Mini <strong>games</strong>
-          </h1>
+        <div
+          className={`heading-box ${
+            dataMiniGame[selectedItem].type === "event" && "heading-box-contain"
+          }`}
+          style={{
+            background: `url(${dataMiniGame[selectedItem].backGround}) no-repeat center center`,
+            objectFit: "cover",
+          }}
+        >
+          {dataMiniGame[selectedItem].type === "mini_game" && (
+            <h1>
+              Mini <strong>games</strong>
+            </h1>
+          )}
         </div>
         {/* <MenuTop menu={leagueList?.items || []} /> */}
         <div className="section-games">
@@ -758,161 +743,87 @@ const MiniGame = () => {
                 <div
                   className={`item  ${selectedItem === index ? "active" : ""}`}
                   key={index}
-                  onClick={() => setSelectedItem(index)}
+                  onClick={() => handleSelectMiniGame(index)}
                 >
-                  {/* <div className="team team-left">
-                    <span>{item.Team1}</span>
-                    <img
-                      src={item?.Logo1}
-                      alt="logo-team1"
-                      width={30}
-                      height={30}
-                    />
-                  </div>
-                  <span>{item.Time}</span>
-                  <div className="team team-right">
-                    <img
-                      src={item?.Logo2}
-                      alt="logo-team2"
-                      width={30}
-                      height={30}
-                    />
-                    <span>{item.Team2}</span>
-                  </div>
-                  <button className="btn-predict">Predict</button> */}
-
-                  <div>
+                  <div className="item-left">
                     <img src={item.logo} width={30} height={30} alt="logo" />
-                    <span className={`${WIDTH <= 600 ? "text-small" : ""}`}>
-                      {item.label}
-                    </span>
                   </div>
-                  <button className="btn-predict">Predict</button>
+                  <div
+                    className={`${
+                      WIDTH <= 600 ? "text-small" : ""
+                    } item-center`}
+                  >
+                    {item.label}
+                  </div>
+                  <div className="btn-predict item-right">Predict</div>
                 </div>
               );
             })}
           </div>
           <div className="detail-games">
             <div className="description mb-large">
-              <div className="mb-small">
+              {/* <div className="mb-small">
                 <img
-                  src={Images.aficanationscup}
+                  src={dataMiniGame[selectedItem].logo}
                   alt=""
                   width={60}
                   height={60}
                 />
-              </div>
+              </div> */}
               <div className="mb-small">
                 <span className="text-large bold">
-                  Who are the Champions of AFCON 2021?
+                  {dataMiniGame[selectedItem].label}
                 </span>
               </div>
               <div>
                 <span className="text-small red">
-                  {/* Deadline : 3 mins before START */}
-                  Deadline : 01/20/2022 00:00 UTC
+                  Deadline : {dataMiniGame[selectedItem].endDate} 00:00 UTC
                 </span>
               </div>
-              {/* <div>
-                <span className="text-small gray">
-                  St. James' Park, Newcastle upon Tyne
-                </span>
-              </div>
-              <div>
-                <span className="text-small">Regular Season - 18</span>
-              </div> */}
             </div>
-
-            {/* <div
-              className="MatchGame flex_row mb-large"
-              style={{ justifyContent: "center" }}
-            >
-              <div style={{ width: "25%" }}>
-                <div className="mb-small">
-                  <img
-                    src={dataMiniGame[selectedItem].Logo1}
-                    alt=""
-                    width={WIDTH > 600 ? 80 : 30}
-                    height={WIDTH > 600 ? 80 : 30}
-                  />
-                </div>
-                <div>
-                  <span className="text-medium gray">
-                    {dataMiniGame[selectedItem].Team1}
-                  </span>
-                </div>
-              </div>
-
-              <div
-                className="match-result"
-                style={{ fontSize: WIDTH > 600 ? "60px" : "40px" }}
-              >
-                {isTimeEndedMatch ? "0 - 2" : "0 - 0"}
-              </div>
-
-              <div style={{ width: "25%" }}>
-                <div className="mb-small">
-                  <img
-                    src={dataMiniGame[selectedItem].Logo2}
-                    alt=""
-                    width={WIDTH > 600 ? 80 : 30}
-                    height={WIDTH > 600 ? 80 : 30}
-                  />
-                </div>
-                <div>
-                  <span className="text-medium gray">
-                    {dataMiniGame[selectedItem].Team2}
-                  </span>
-                </div>
-              </div>
-            </div> */}
 
             <div className="your-predict">
               <div className="description mb-large">
                 <div className="mb-large">
-                  <span className="bold text-medium">Your predict</span>
+                  <span className="bold text-medium">
+                    {t("common.your_predict")}
+                  </span>
                 </div>
                 <div>
                   <div className="mb-tiny">
                     <span className="text-medium yellow mb-small">
-                      For each 50k EFUN you have in your wallet, you have 1
-                      chance to predict. Maximum 10 chances.
+                      {t("common.description_1")}
                     </span>
                   </div>
-                  <span className="mt-small yellow">{`In total we have 24 options.`}</span>
+                  {/* <span className="mt-small yellow">{`In total we have 24 options.`}</span> */}
+                  <span className="mt-small yellow">
+                    {t("common.description_2")}
+                  </span>
+
                   <br />
                   {isMaxChance && (
                     <div className="mt-small text-small">
-                      <RiErrorWarningLine /> You have selected all your possible
-                      options. If you want to change, please deselect some
-                      first.
+                      <RiErrorWarningLine /> {t("common.error_message_1")}
                     </div>
                   )}
                 </div>
               </div>
 
               <div className="table-options mb-large">
-                {/* <div className="slider-option">
-                  <SlideOptions
-                    data={dataOptions}
-                    yourPredictBet={yourPredictBet}
-                    timesCanChance={timesCanChance}
-                    isTimeEndedMatch={isTimeEndedMatch}
-                    matchId={dataMiniGame[selectedItem].MatchId}
-                  />
-                </div> */}
                 <TableOption
-                  data={DATA_MINI_GAME_AFICANATIONS_CUP}
+                  data={dataMiniGame[selectedItem]}
                   yourPredictBet={yourPredictBet}
                   isMaxChance={isMaxChance}
                   isTimeEndedMatch={isTimeEndedMatch}
                 />
               </div>
 
-              <div className="text-small yellow">
-                {`With ${balanceEfun ? balanceEfun : 0} EFUN, you have ${
+              <div className="text-small yellow margin-horizontal-large">
+                {`${t("common.with")} ${
+                  balanceEfun ? formatNumberPrice(balanceEfun) : 0
+                } EFUN, ${t("common.have_predict_1")} ${
                   timesCanChance ? timesCanChance : 0
-                } options to predict now !`}
+                } ${t("common.have_predict_2")}`}
               </div>
 
               <div className="flex_row_center mt-tiny center">
@@ -932,7 +843,7 @@ const MiniGame = () => {
                   (checkApprove === 0 ? (
                     <div className="flex_row_center">
                       <div
-                        className="btn-submit flex_row"
+                        className="btn-submit flex_row_center center"
                         onClick={approve}
                         style={{ minWidth: `${WIDTH < 600 ? "60%" : "30%"}` }}
                       >
@@ -944,15 +855,17 @@ const MiniGame = () => {
                             size={30}
                           />
                         ) : (
-                          <span> Approve to Predict</span>
+                          <span className="center">
+                            {t("common.approve_to_predict")}
+                          </span>
                         )}
                       </div>
                       <div className="btn-submit flex_row" disabled="disabled">
-                        Place your predict now
+                        {t("common.place_your_predict_now")}
                       </div>
                     </div>
                   ) : (
-                    <div className="flex_row btn-submit" onClick={bet}>
+                    <div className="flex_row btn-submit" onClick={predict}>
                       {loadingPlace ? (
                         <ClipLoader
                           color={color}
@@ -961,7 +874,7 @@ const MiniGame = () => {
                           size={30}
                         />
                       ) : (
-                        <span>Place your predict now</span>
+                        <span>{t("common.place_your_predict_now")}</span>
                       )}
                     </div>
                   ))}

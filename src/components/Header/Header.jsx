@@ -16,6 +16,9 @@ import philippines from "src/assets/images/country/philippines.png";
 import southKorea from "src/assets/images/country/south-korea.png";
 import iran from "src/assets/images/country/iran.png";
 import { useTranslation } from "react-i18next";
+import { storeData } from "src/utils/storageUtils";
+import { ASYNC_STORAGE_KEYS } from "src/common/Constants";
+import { setLanguage } from "src/redux/reducers/userSlice";
 
 const showChooseWallet = () => {
   store.dispatch(showAppPopup(<ModalConnectWallet />));
@@ -33,16 +36,20 @@ const Header = () => {
 
   const listLang = [
     { key: "en", label: "English", icon: unitedKingdom },
-    { key: "in", label: "Indonesia", icon: indonesia },
+    { key: "id", label: "Indonesia", icon: indonesia },
     { key: "kr", label: "Korea", icon: southKorea },
     { key: "ir", label: "Persian", icon: iran },
     { key: "pl", label: "Philippines", icon: philippines },
     { key: "jp", label: "Japan", icon: japan },
     { key: "cn", label: "Chinese", icon: china },
+    { key: "fr", label: "France", icon: Images.France },
   ];
 
   const handleChangeLanguage = (param) => {
+    console.log("changeLangue", param);
     i18n.changeLanguage(param?.key);
+    store.dispatch(setLanguage(param.key));
+    storeData(ASYNC_STORAGE_KEYS.LANGUAGE, JSON.stringify(param));
   };
 
   useEffect(() => {
@@ -80,7 +87,7 @@ const Header = () => {
                   alt=""
                   rel="noreferrer"
                 >
-                  About
+                  {t("common.about")}
                 </a>
               </li>
               <li>
@@ -90,7 +97,7 @@ const Header = () => {
                   alt=""
                   rel="noreferrer"
                 >
-                  How It Works
+                  {t("common.how_it_works")}
                 </a>
               </li>
               <li>
@@ -100,7 +107,10 @@ const Header = () => {
                   </span>
                   <div className="dropdown-content">
                     {listLang.map((item, index) => (
-                      <div key={index}>
+                      <div
+                        key={index}
+                        onClick={() => handleChangeLanguage(item)}
+                      >
                         <img
                           src={item.icon}
                           width={20}
@@ -125,7 +135,7 @@ const Header = () => {
                       className="connect-wallet-btn"
                       onClick={showChooseWallet}
                     >
-                      Connect Wallet
+                      {t("common.connect_wallet")}
                     </button>
                   </div>
                 )}
@@ -167,7 +177,7 @@ const Header = () => {
                       className="connect-wallet-btn"
                       onClick={showChooseWallet}
                     >
-                      Connect Wallet
+                      {t("common.connect_wallet")}
                     </button>
                   </div>
                 )}
@@ -239,7 +249,7 @@ const Header = () => {
                   alt=""
                   rel="noreferrer"
                 >
-                  About
+                  {t("common.about")}
                 </a>
               </li>
               <li className="nav-mobile-item">
@@ -249,7 +259,7 @@ const Header = () => {
                   alt=""
                   rel="noreferrer"
                 >
-                  How It Works
+                  {t("common.how_it_works")}
                 </a>
               </li>
             </ul>

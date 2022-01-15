@@ -1,5 +1,24 @@
 {
   "translation": {
-  
+    "common": {
+      "about":"About",
+      "how_it_works":"How it works",
+      "connect_wallet":"Connect wallet",
+      "your_wallet":"Your Wallet", 
+      "your_predict":"Your Predict",
+      "description_1":"For each 50k EFUN in your wallet, you have 1 more chance to predict",
+      "description_2":"You can select 10 options",
+      "error_message_1":"You have selected all your possible options. If you want to change, please deselect some first.",
+      "with":"With",
+      "have_predict_1":"you have",
+      "have_predict_2":"options to predict now !",
+      "approve_to_predict":"Approve to predict",
+      "place_your_predict_now":"Place your predict now",
+      "terms_of_service":"Terms of service",
+      "privacy_policy":"Privacy policy",
+      "mini_game":"Mini game",
+      "logout":"Logout",
+      "error_message_2":"User denied transaction signature."
+    }
   }
 }

@@ -1,4 +1,24 @@
 {
   "translation": {
+    "common": {
+      "about":"について",
+      "how_it_works":"仕組み",
+      "connect_wallet":"コネクトウォレット",
+      "your_wallet":"あなたの財布", 
+      "your_predict":"あなたの予測",
+      "description_1":"あなたの財布の中のEFUNが50kになるごとに予測する機会が1回増えます。",
+      "description_2":"10の選択肢を選択することができます",
+      "error_message_1":"あなたは可能なすべての選択肢を選択しました。変更したい場合は 先にいくつか選択を解除してください。",
+      "with":"で",
+      "have_predict_1":"今予測",
+      "have_predict_2":"できるのは5つの選択肢です！",
+      "approve_to_predict":"予測することを承認する",
+      "place_your_predict_now":"今すぐ登録する",
+      "terms_of_service":"利用規約",
+      "privacy_policy":"個人情報保護方針",
+      "mini_game":"ミニゲーム",
+      "logout":"ログアウト",
+      "error_message_2":"ユーザーがトランザクションの署名を拒否しました。"
+    }
   }
 }

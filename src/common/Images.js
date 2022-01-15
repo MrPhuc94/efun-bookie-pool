@@ -36,8 +36,19 @@ import Gambia from "../assets/images/country/afica/gambia.png";
 import Mali from "../assets/images/country/afica/mali.png";
 import Mauritania from "../assets/images/country/afica/mauritania.png";
 import Tunisia from "../assets/images/country/afica/tunisia.png";
+import France from "../assets/images/country/france.png";
+import BannerBarca from "../assets/images/event/Banner_Barca.png";
+import Banner_Barca2 from "../assets/images/event/Banner_Barca2.png";
+import Banner_Ronaldo from "../assets/images/event/Banner_Ronaldo.png";
+import Banner_Ronaldo2 from "../assets/images/event/Banner_Ronaldo2.png";
+import header_box from "../assets/images/header_box.jpg";
 
 const Images = {
+  header_box,
+  Banner_Ronaldo2,
+  Banner_Ronaldo,
+  Banner_Barca2,
+  BannerBarca,
   Tunisia,
   Mauritania,
   Mali,
@@ -76,6 +87,7 @@ const Images = {
   Morocco,
   Comoros,
   Ghana,
+  France,
 };
 
 export default Images;

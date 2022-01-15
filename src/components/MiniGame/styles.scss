@@ -1,13 +1,15 @@
 .miniGame {
   padding-top: 80px;
   .heading-box {
-    height: 220px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url("../../assets/images/header_box.jpg") no-repeat center
-      center;
-    background-size: cover;
+    background-size: fill;
+    height: 220px;
+  }
+  .heading-box-contain {
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
   }
   .heading-box h1 {
     display: block;
@@ -80,15 +82,27 @@
       .item {
         position: relative;
         display: flex;
-        justify-content: space-around;
+        justify-content: left;
         padding: 15px 0;
         cursor: pointer;
         border-top: 1px solid #424242;
         align-items: center;
         padding: 10px;
+        color: #bdbdbd;
+        font-size: 15px;
 
-        @media (max-width: 480px) {
-          justify-content: center;
+        &-left {
+          width: 10%;
+        }
+        &-center {
+          width: 75%;
+        }
+        &-right {
+          width: 15%;
+        }
+
+        @media (max-width: 675px) {
+          justify-content: space-between;
         }
 
         .team {
@@ -114,17 +128,15 @@
         span {
           color: #bdbdbd;
           font-size: 15px;
-          @media (max-width: 600px) {
-            white-space: nowrap;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-          }
         }
         img {
-          margin: 0 20px;
+          margin-right: 10px;
         }
 
         .btn-predict {
+          display: flex;
+          justify-content: center;
+          width: 100px;
           background-color: #4caf50 !important;
           border-color: #4caf50 !important;
           border-radius: 12px;
@@ -132,8 +144,7 @@
           height: 24px;
           align-items: center;
           cursor: pointer;
-          padding: 0 12px;
-          border: none !important;
+          color: #333;
 
           @media (max-width: 480px) {
             display: none;
@@ -169,6 +180,7 @@
         );
         color: #fff;
         border: none;
+        font-size: 16px;
       }
 
       .btn-submit:disabled {

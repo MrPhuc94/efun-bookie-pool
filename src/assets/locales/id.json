@@ -1,4 +1,24 @@
 {
   "translation": {
+    "common": {
+      "about":"Tentang",
+      "how_it_works":"Bagaimana Cara Bermain",
+      "connect_wallet":"Hubungkan Wallet",
+      "your_wallet":"Wallet Anda",
+      "your_predict":"Prediksi Anda",
+      "description_1":"Untuk setiap 50,000 EFUN di Wallet Anda,Anda memiliki 1 kesempatan lagi untuk memprediksi",
+      "description_2":"Anda dapat memilih 10 opsi yang tersedia",
+      "error_message_1":"Anda telah memilih semua opsi yang memungkinkan.Jika Anda ingin merubahnya,tolong batalkan pilihan Anda terlebih dahulu.",
+      "with":"Dengan",
+      "have_predict_1":"Anda memiliki",
+      "have_predict_2":"kesempatan untuk diprediksi sekarang!",
+      "approve_to_predict":"Setuju untuk memprediksi",
+      "place_your_predict_now":"Tempatkan prediksi Anda sekarang",
+      "terms_of_service":"Persyaratan Layanan",
+      "privacy_policy":"Kerahasiaan Pengguna",
+      "mini_game":"Permainan kecil",
+      "logout":"Keluar",
+      "error_message_2":"Pengguna menolak tanda tangan transaksi."
+    }
   }
 }
