@@ -42,8 +42,16 @@ import Banner_Barca2 from "../assets/images/event/Banner_Barca2.png";
 import Banner_Ronaldo from "../assets/images/event/Banner_Ronaldo.png";
 import Banner_Ronaldo2 from "../assets/images/event/Banner_Ronaldo2.png";
 import header_box from "../assets/images/header_box.jpg";
+import logo_barca from "../assets/images/event/barcelona_logo.png";
+import man_united_logo from "../assets/images/event/man_united.png";
+import PremierLeague from "../assets/images/event/PremierLeague.png";
+import Africa_Cup_logo from "../assets/images/event/Africa_Cup.png";
 
 const Images = {
+  Africa_Cup_logo,
+  PremierLeague,
+  man_united_logo,
+  logo_barca,
   header_box,
   Banner_Ronaldo2,
   Banner_Ronaldo,

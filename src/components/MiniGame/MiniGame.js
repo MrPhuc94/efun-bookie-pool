@@ -42,6 +42,8 @@ import {
 } from "src/common/Environment";
 import { useTranslation } from "react-i18next";
 import { formatNumberPrice } from "src/utils/helper";
+import SelectCustom from "src/components/UI/Select/Select";
+import Dropdown from "../UI/Dropdown/Dropdown";
 
 const override = css`
   margin: 0 auto;
@@ -105,9 +107,10 @@ const MiniGame = () => {
   const [message, setMessage] = useState(null);
   const [isTimeEndedMatch, setIsTimeEndedMatch] = useState(null);
   const [currentTime, setCurrentTime] = useState(null);
+
+  const [showMoreMiniGame, setShowMoreMiniGame] = useState(false);
   let timer;
   let currentTimer;
-
   let [color, setColor] = useState("#ffffff");
 
   const currentMatches = {
@@ -159,10 +162,10 @@ const MiniGame = () => {
       type: "mini_game",
       label: "Who are the Champions of AFCON 2021?",
       matchId: "aficacupnations_2021",
-      logo: Images.aficanationscup,
+      logo: Images.Africa_Cup_logo,
       endDate: "20/01/2022",
       data: DATA_MINI_GAME_AFICANATIONS_CUP,
-      backGround: Images.header_box,
+      backGround: Images.aficanationscup,
     },
     {
       name: "Cristiano_Ronaldo",
@@ -170,27 +173,27 @@ const MiniGame = () => {
       label:
         "How many goals does Cristiano Ronaldo have for MU at the end of the season 2021/2022 in all competitions?",
       matchId: "aficacupnations_2021",
-      logo: Images.Banner_Ronaldo2,
+      logo: Images.man_united_logo,
       endDate: "31/01/2022",
       data: RONALDO_GOLD,
-      backGround: Images.Banner_Ronaldo,
+      backGround: Images.Banner_Barca2,
     },
     {
       name: "LaLiga",
       type: "event",
       label: "Where is Barcelona's place in La Liga season 2021/2022?",
       matchId: "aficacupnations_2021",
-      logo: Images.Banner_Barca2,
+      logo: Images.logo_barca,
       endDate: "31/01/2022",
       data: BARCA_PLACE,
-      backGround: Images.BannerBarca,
+      backGround: Images.Banner_Barca2,
     },
     {
       name: "EPL_club",
       type: "event",
       label: "Which EPL club will have the biggest summer 2022 transfers in? ",
       matchId: "aficacupnations_2021",
-      logo: Images.Banner_Ronaldo2,
+      logo: Images.man_united_logo,
       endDate: "31/01/2022",
       data: ELP_CLUB,
       backGround: Images.Banner_Ronaldo,
@@ -725,159 +728,147 @@ const MiniGame = () => {
             dataMiniGame[selectedItem].type === "event" && "heading-box-contain"
           }`}
           style={{
-            background: `url(${dataMiniGame[selectedItem].backGround}) no-repeat center center`,
+            background: `url(${Images.header_box}) no-repeat center center`,
             objectFit: "cover",
           }}
         >
-          {dataMiniGame[selectedItem].type === "mini_game" && (
-            <h1>
-              Mini <strong>games</strong>
-            </h1>
-          )}
+          <h1>
+            Mini <strong>games</strong>
+          </h1>
         </div>
         {/* <MenuTop menu={leagueList?.items || []} /> */}
+
         <div className="section-games">
           <div className="menu-games">
-            {dataMiniGame?.map((item, index) => {
-              return (
-                <div
-                  className={`item  ${selectedItem === index ? "active" : ""}`}
-                  key={index}
-                  onClick={() => handleSelectMiniGame(index)}
-                >
-                  <div className="item-left">
-                    <img src={item.logo} width={30} height={30} alt="logo" />
-                  </div>
-                  <div
-                    className={`${
-                      WIDTH <= 600 ? "text-small" : ""
-                    } item-center`}
-                  >
-                    {item.label}
-                  </div>
-                  <div className="btn-predict item-right">Predict</div>
-                </div>
-              );
-            })}
+            <Dropdown
+              selectedValue={dataMiniGame[selectedItem]}
+              options={dataMiniGame}
+              changeSelected={(item) => setSelectedItem(item)}
+            />
+          </div>
+          <div className="description mb-large center mt-medium margin-horizontal-large">
+            <div className="mb-small">
+              <span className="text-large">
+                {dataMiniGame[selectedItem].label}
+              </span>
+            </div>
+            <div>
+              <span className="text-small red bold">
+                Deadline : {dataMiniGame[selectedItem].endDate} 00:00 UTC
+              </span>
+            </div>
           </div>
           <div className="detail-games">
-            <div className="description mb-large">
-              {/* <div className="mb-small">
-                <img
-                  src={dataMiniGame[selectedItem].logo}
-                  alt=""
-                  width={60}
-                  height={60}
-                />
-              </div> */}
-              <div className="mb-small">
-                <span className="text-large bold">
-                  {dataMiniGame[selectedItem].label}
-                </span>
-              </div>
-              <div>
-                <span className="text-small red">
-                  Deadline : {dataMiniGame[selectedItem].endDate} 00:00 UTC
-                </span>
-              </div>
+            <div className="detail-games-banner">
+              <img
+                src={dataMiniGame[selectedItem].backGround}
+                height={500}
+                width="100%"
+                alt="background"
+              />
             </div>
 
-            <div className="your-predict">
-              <div className="description mb-large">
-                <div className="mb-large">
-                  <span className="bold text-medium">
-                    {t("common.your_predict")}
-                  </span>
-                </div>
-                <div>
-                  <div className="mb-tiny">
-                    <span className="text-medium yellow mb-small">
-                      {t("common.description_1")}
+            <div className="detail-games-description">
+              <div className="your-predict">
+                <div className="description mb-large">
+                  <div className="mb-large">
+                    <span className="bold text-medium">
+                      {t("common.your_predict")}
                     </span>
                   </div>
-                  {/* <span className="mt-small yellow">{`In total we have 24 options.`}</span> */}
-                  <span className="mt-small yellow">
-                    {t("common.description_2")}
-                  </span>
-
-                  <br />
-                  {isMaxChance && (
-                    <div className="mt-small text-small">
-                      <RiErrorWarningLine /> {t("common.error_message_1")}
+                  <div>
+                    <div className="mb-tiny">
+                      <span className="text-medium yellow mb-small">
+                        {t("common.description_1")}
+                      </span>
                     </div>
-                  )}
-                </div>
-              </div>
+                    {/* <span className="mt-small yellow">{`In total we have 24 options.`}</span> */}
+                    <span className="mt-small yellow">
+                      {t("common.description_2")}
+                    </span>
 
-              <div className="table-options mb-large">
-                <TableOption
-                  data={dataMiniGame[selectedItem]}
-                  yourPredictBet={yourPredictBet}
-                  isMaxChance={isMaxChance}
-                  isTimeEndedMatch={isTimeEndedMatch}
-                />
-              </div>
-
-              <div className="text-small yellow margin-horizontal-large">
-                {`${t("common.with")} ${
-                  balanceEfun ? formatNumberPrice(balanceEfun) : 0
-                } EFUN, ${t("common.have_predict_1")} ${
-                  timesCanChance ? timesCanChance : 0
-                } ${t("common.have_predict_2")}`}
-              </div>
-
-              <div className="flex_row_center mt-tiny center">
-                {isTimeEndedMatch && (
-                  <div
-                    className={`btn-submit flex_row `}
-                    disabled={`${!areYourReWard && "disabled"}`}
-                  >
-                    {areYourReWard ? (
-                      <span>Claim</span>
-                    ) : (
-                      <span>No Reward</span>
+                    <br />
+                    {isMaxChance && (
+                      <div className="mt-small text-small">
+                        <RiErrorWarningLine /> {t("common.error_message_1")}
+                      </div>
                     )}
                   </div>
-                )}
-                {!isTimeEndedMatch &&
-                  (checkApprove === 0 ? (
-                    <div className="flex_row_center">
-                      <div
-                        className="btn-submit flex_row_center center"
-                        onClick={approve}
-                        style={{ minWidth: `${WIDTH < 600 ? "60%" : "30%"}` }}
-                      >
-                        {waitingApprove ? (
+                </div>
+
+                <div className="table-options mb-large">
+                  <TableOption
+                    data={dataMiniGame[selectedItem]}
+                    yourPredictBet={yourPredictBet}
+                    isMaxChance={isMaxChance}
+                    isTimeEndedMatch={isTimeEndedMatch}
+                  />
+                </div>
+
+                <div className="text-small yellow margin-horizontal-large">
+                  {`${t("common.with")} ${
+                    balanceEfun ? formatNumberPrice(balanceEfun) : 0
+                  } EFUN, ${t("common.have_predict_1")} ${
+                    timesCanChance ? timesCanChance : 0
+                  } ${t("common.have_predict_2")}`}
+                </div>
+
+                <div className="flex_row_center mt-tiny center">
+                  {isTimeEndedMatch && (
+                    <div
+                      className={`btn-submit flex_row `}
+                      disabled={`${!areYourReWard && "disabled"}`}
+                    >
+                      {areYourReWard ? (
+                        <span>Claim</span>
+                      ) : (
+                        <span>No Reward</span>
+                      )}
+                    </div>
+                  )}
+                  {!isTimeEndedMatch &&
+                    (checkApprove === 0 ? (
+                      <div className="flex_row_center">
+                        <div
+                          className="btn-submit flex_row_center center"
+                          onClick={approve}
+                          style={{ minWidth: `${WIDTH < 600 ? "60%" : "30%"}` }}
+                        >
+                          {waitingApprove ? (
+                            <ClipLoader
+                              color={color}
+                              loading={waitingApprove}
+                              css={override}
+                              size={30}
+                            />
+                          ) : (
+                            <span className="center">
+                              {t("common.approve_to_predict")}
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          className="btn-submit flex_row"
+                          disabled="disabled"
+                        >
+                          {t("common.place_your_predict_now")}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex_row btn-submit" onClick={predict}>
+                        {loadingPlace ? (
                           <ClipLoader
                             color={color}
-                            loading={waitingApprove}
+                            loading={loadingPlace}
                             css={override}
                             size={30}
                           />
                         ) : (
-                          <span className="center">
-                            {t("common.approve_to_predict")}
-                          </span>
+                          <span>{t("common.place_your_predict_now")}</span>
                         )}
                       </div>
-                      <div className="btn-submit flex_row" disabled="disabled">
-                        {t("common.place_your_predict_now")}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex_row btn-submit" onClick={predict}>
-                      {loadingPlace ? (
-                        <ClipLoader
-                          color={color}
-                          loading={loadingPlace}
-                          css={override}
-                          size={30}
-                        />
-                      ) : (
-                        <span>{t("common.place_your_predict_now")}</span>
-                      )}
-                    </div>
-                  ))}
+                    ))}
+                </div>
               </div>
             </div>
           </div>

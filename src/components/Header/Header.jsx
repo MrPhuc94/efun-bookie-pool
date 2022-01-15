@@ -54,6 +54,7 @@ const Header = () => {
   };
 
   useEffect(() => {
+    console.log("logout======Change");
     setCurrentAddress(_currentAddress);
   }, [_currentAddress]);
 
