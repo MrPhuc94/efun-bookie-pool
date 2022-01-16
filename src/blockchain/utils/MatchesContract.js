@@ -361,16 +361,29 @@ const createApproveTx = async (
     supportSymbol[tokenSymbol]
   );
 
-  const txData = await tokenContract.methods.approve(spender, amount);
+  const txData = await tokenContract.methods.approve(
+    spender,
+    amount
+  )
+    .send({ from })
+    .on('error', (error) => {
+      console.log(error)
+    })
+    .then((receipt) => {
+      console.log(receipt)
+    })
+    .catch((err) => {
+      console.log(err)
+      throw new WalletError.NewNetworkError('cannot approve now')
+    });
 
   // const nonce = await web3.eth.getTransactionCount(from, 'pending')
-  // data đầy đủ
   const tx = {
     from,
     to: supportSymbol[tokenSymbol],
     value: 0,
     // nonce,
-    data: txData.encodeABI(),
+    data: txData,
   };
 
   // const gasData = await gasInfo.getGasInformation(tx)

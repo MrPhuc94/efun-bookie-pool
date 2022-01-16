@@ -31,7 +31,7 @@ const Dropdown = (props) => {
             </div>
             <div className="btn-predict item-right">Predict</div>
             <div style={{ display: "block", width: 20 }}>
-              {isListOpen ? <FiArrowDown /> : <FiArrowUp />}
+              {isListOpen ? <FiArrowUp /> : <FiArrowDown />}
             </div>
           </div>
         </div>

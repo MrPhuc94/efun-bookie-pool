@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { storeData } from "src/utils/storageUtils";
 import { ASYNC_STORAGE_KEYS } from "src/common/Constants";
 import { setLanguage } from "src/redux/reducers/userSlice";
+import { LogoEFUN } from "src/assets/icons";
 
 const showChooseWallet = () => {
   store.dispatch(showAppPopup(<ModalConnectWallet />));
@@ -68,216 +69,161 @@ const Header = () => {
   const handleCloseNav = () => setActiveNav(!activeNav);
 
   const _showNavLang = () => {
-    console.log("ABBBBBBBB");
     setShowNavLang(true);
   };
 
   return (
-    <header className="header">
-      <div className="container">
-        <div className="d-flex justify-content-between align-items-center">
-          <a
-            href="https://app.efun.tech/"
-            target="_blank"
-            alt=""
-            rel="noreferrer"
-            className="logo"
-          >
-            <img src={Images.logo} alt="" />
-          </a>
-          <nav className="main-menu">
-            <ul className="menu-pc">
-              <li>
-                <a
-                  href="https://efun.tech/"
-                  target="_blank"
-                  alt=""
-                  rel="noreferrer"
-                >
-                  {t("common.about")}
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://docs.efun.tech/efun-ecosystem-1/efun-sponsored-events"
-                  target="_blank"
-                  alt=""
-                  rel="noreferrer"
-                >
-                  {t("common.how_it_works")}
-                </a>
-              </li>
-              <li>
-                <div className="dropdown">
-                  <span className="button" onClick={_showNavLang}>
-                    <World />
-                  </span>
-                  <div
-                    className={`dropdown-content ${showNavLang && "active"}`}
-                  >
-                    {listLang.map((item, index) => (
-                      <div
-                        key={index}
-                        onClick={() => handleChangeLanguage(item)}
-                      >
-                        <img
-                          src={item.icon}
-                          width={20}
-                          height={20}
-                          alt={item.label}
-                        />
-                        <span style={{ marginLeft: 10 }}>{item.label} </span>
-                        <br />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </li>
-              <li>
-                {currentAddress !== null ? (
-                  <button className="btn-address" onClick={showModalLogout}>
-                    {shortAddress(currentAddress, 5)}
-                  </button>
-                ) : (
-                  <div>
-                    <button
-                      className="connect-wallet-btn"
-                      onClick={showChooseWallet}
-                    >
-                      {t("common.connect_wallet")}
-                    </button>
-                  </div>
-                )}
-              </li>
-            </ul>
-            <ul className="menu-mobile">
-              <li>
-                <div className="dropdown">
-                  <span className="button" onClick={_showNavLang}>
-                    <World />
-                  </span>
-                  <div
-                    className={`dropdown-content ${showNavLang && "active"}`}
-                  >
-                    {listLang.map((item, index) => (
-                      <div
-                        key={index}
-                        onClick={() => handleChangeLanguage(item)}
-                      >
-                        <img
-                          src={item.icon}
-                          width={20}
-                          height={20}
-                          alt={item.label}
-                        />
-                        <span style={{ marginLeft: 10 }}>{item.label} </span>
-                        <br />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </li>
-              <li>
-                {currentAddress !== null ? (
-                  <button className="btn-address" onClick={showModalLogout}>
-                    {shortAddress(currentAddress, 5)}
-                  </button>
-                ) : (
-                  <div>
-                    <button
-                      className="connect-wallet-btn"
-                      onClick={showChooseWallet}
-                    >
-                      {t("common.connect_wallet")}
-                    </button>
-                  </div>
-                )}
-              </li>
-              <li onClick={handleCloseNav}>
-                <span
-                  className="menu_mb_btn"
-                  onClick={() => {
-                    //return openMenu();
-                  }}
-                >
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect
-                      x="2"
-                      y="3"
-                      width="20"
-                      height="2"
-                      rx="1"
-                      fill="white"
-                    />
-                    <rect
-                      x="2"
-                      y="11"
-                      width="20"
-                      height="2"
-                      rx="1"
-                      fill="white"
-                    />
-                    <rect
-                      x="2"
-                      y="19"
-                      width="20"
-                      height="2"
-                      rx="1"
-                      fill="white"
-                    />
-                  </svg>
-                </span>
-              </li>
-            </ul>
-          </nav>
-          <div
-            className={`nav-wrapper ${activeNav ? "nav-active" : ""}`}
-            ref={navWrapper}
-            onClick={handleCloseNav}
-          >
-            <ul className="nav-mobile">
-              <li style={{ marginBottom: 10 }}>
-                <a
-                  href="https://app.efun.tech/"
-                  target="_blank"
-                  alt=""
-                  rel="noreferrer"
-                  className="logo"
-                >
-                  <img src={Images.logo} alt="" />
-                </a>
-              </li>
-              <li className="nav-mobile-item">
-                <a
-                  href="https://efun.tech/"
-                  target="_blank"
-                  alt=""
-                  rel="noreferrer"
-                >
-                  {t("common.about")}
-                </a>
-              </li>
-              <li className="nav-mobile-item">
-                <a
-                  href="https://docs.efun.tech/efun-ecosystem-1/efun-sponsored-events"
-                  target="_blank"
-                  alt=""
-                  rel="noreferrer"
-                >
-                  {t("common.how_it_works")}
-                </a>
-              </li>
-            </ul>
-          </div>
+    <div className="header">
+      <nav className="main-menu">
+        <div>
+          <LogoEFUN />
         </div>
+        <ul className="menu-pc">
+          <li>
+            <a
+              href="https://efun.tech/"
+              target="_blank"
+              alt=""
+              rel="noreferrer"
+            >
+              {t("common.about")}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://docs.efun.tech/efun-ecosystem-1/efun-sponsored-events"
+              target="_blank"
+              alt=""
+              rel="noreferrer"
+            >
+              {t("common.how_it_works")}
+            </a>
+          </li>
+          <li>
+            <div className="dropdown">
+              <span className="button" onClick={_showNavLang}>
+                <World />
+              </span>
+              <div className={`dropdown-content ${showNavLang && "active"}`}>
+                {listLang.map((item, index) => (
+                  <div key={index} onClick={() => handleChangeLanguage(item)}>
+                    <img
+                      src={item.icon}
+                      width={20}
+                      height={20}
+                      alt={item.label}
+                    />
+                    <span style={{ marginLeft: 10 }}>{item.label} </span>
+                    <br />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </li>
+          <li>
+            {currentAddress !== null ? (
+              <button className="btn-address" onClick={showModalLogout}>
+                {shortAddress(currentAddress, 5)}
+              </button>
+            ) : (
+              <div>
+                <button
+                  className="connect-wallet-btn"
+                  onClick={showChooseWallet}
+                >
+                  {t("common.connect_wallet")}
+                </button>
+              </div>
+            )}
+          </li>
+        </ul>
+        <ul className="menu-mobile">
+          <li>
+            <div className="dropdown">
+              <span className="button" onClick={_showNavLang}>
+                <World />
+              </span>
+              <div className={`dropdown-content ${showNavLang && "active"}`}>
+                {listLang.map((item, index) => (
+                  <div key={index} onClick={() => handleChangeLanguage(item)}>
+                    <img
+                      src={item.icon}
+                      width={20}
+                      height={20}
+                      alt={item.label}
+                    />
+                    <span style={{ marginLeft: 10 }}>{item.label} </span>
+                    <br />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </li>
+          <li>
+            {currentAddress !== null ? (
+              <button className="btn-address" onClick={showModalLogout}>
+                {shortAddress(currentAddress, 5)}
+              </button>
+            ) : (
+              <div>
+                <button
+                  className="connect-wallet-btn"
+                  onClick={showChooseWallet}
+                >
+                  {t("common.connect_wallet")}
+                </button>
+              </div>
+            )}
+          </li>
+          <li onClick={handleCloseNav}>
+            <span className="menu_mb_btn">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect x="2" y="3" width="20" height="2" rx="1" fill="white" />
+                <rect x="2" y="11" width="20" height="2" rx="1" fill="white" />
+                <rect x="2" y="19" width="20" height="2" rx="1" fill="white" />
+              </svg>
+            </span>
+          </li>
+        </ul>
+      </nav>
+      <div
+        className={`nav-wrapper ${activeNav && "nav-active"}`}
+        ref={navWrapper}
+        onClick={handleCloseNav}
+      >
+        <ul className="nav-mobile">
+          <div>
+            <LogoEFUN />
+          </div>
+          <li className="item">
+            <a
+              href="https://efun.tech/"
+              target="_blank"
+              alt=""
+              rel="noreferrer"
+            >
+              {t("common.about")}
+            </a>
+          </li>
+          <li className="item">
+            <a
+              href="https://docs.efun.tech/efun-ecosystem-1/efun-sponsored-events"
+              target="_blank"
+              alt=""
+              rel="noreferrer"
+            >
+              {t("common.how_it_works")}
+            </a>
+          </li>
+        </ul>
       </div>
-    </header>
+    </div>
   );
 };
 

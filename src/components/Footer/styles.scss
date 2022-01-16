@@ -1,4 +1,73 @@
-.footer-2 {
+.footer {
+  margin-top: 120px;
+  border-top: 1px solid #424242;
+  width: 100%;
+
+  .footer-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+
+    @media (max-width: 675px) {
+      ol,
+      ul {
+        padding: 0;
+      }
+      ul,
+      .copyright {
+        width: 100%;
+        margin-top: 20px;
+      }
+    }
+  }
+  .text-primary {
+    color: #fbc02d !important;
+  }
+  .container {
+    padding: 24px 0;
+  }
+  .social {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  ul,
+  li,
+  a {
+    text-decoration: none;
+    margin-bottom: 0;
+  }
+
+  ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    gap: 36px;
+    li a {
+      color: #bdbdbd;
+      text-decoration: none;
+    }
+  }
+
+  //go-to-top
+
+  .go-top:before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: rgba(254, 254, 254, 0.4);
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    transition: ease-in 0.3s;
+  }
+
   .go-top {
     width: 54px;
     height: 54px;
@@ -17,5 +86,66 @@
   .go-top.showBtn {
     right: 44px;
     opacity: 1;
+  }
+
+  .social li {
+    width: 50%;
+    margin-bottom: 12px;
+  }
+  .social li a {
+    display: flex;
+    align-items: center;
+    color: #fff;
+  }
+  .social li a .icon {
+    display: block;
+  }
+  .social li a label {
+    display: block;
+    font-size: 14px;
+    padding-left: 8px;
+    cursor: pointer;
+  }
+  .social li a:hover {
+    text-decoration: underline;
+  }
+  .footer-title {
+    font-weight: 600;
+    color: #fbc02d;
+    margin-bottom: 24px;
+  }
+
+  .footer-link li a:hover {
+    text-decoration: underline;
+  }
+
+  .copyright {
+    margin-top: 1px;
+    text-align: center;
+    font-size: 14px;
+    color: #bdbdbd;
+    margin-bottom: 0;
+  }
+
+  .copyright {
+    .label {
+      font-weight: bold;
+      font-size: 16px;
+      color: #fbc02d !important;
+    }
+  }
+  .copyright a:hover {
+    text-decoration: underline;
+  }
+  .eabout {
+    margin-top: 10px;
+    font-size: 11px;
+    color: #bdbdbd;
+    margin-bottom: 0;
+  }
+  @media (max-width: 1023px) {
+    .eabout {
+      margin-top: 30px;
+    }
   }
 }

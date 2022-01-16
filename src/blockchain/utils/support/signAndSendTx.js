@@ -10,7 +10,7 @@ export const signAndSendTx = async (data) => {
 
   // const web3 = await initWeb3()
 
-  console.log(tx, 'before sendTransaction')
+  // console.log(tx, 'before sendTransaction')
   // const receipt = await web3.eth.sendTransaction(tx)
   const receipt = await window.ethereum.request({
     method: 'eth_sendTransaction',

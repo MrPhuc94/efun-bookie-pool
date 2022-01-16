@@ -8,6 +8,12 @@
   margin-bottom: 10px;
   padding: 2px 0;
   width: 20%;
+  cursor: pointer;
+  transition: 0.3s ease-in;
+}
+
+.item-option:hover {
+  background: #000;
 }
 
 .item-option-2 {
@@ -20,6 +26,7 @@
   margin-bottom: 10px;
   padding: 15px 0;
   width: 23%;
+  cursor: pointer;
 }
 
 .item-option-2.active {
@@ -32,6 +39,10 @@
   background-color: #fbc02d !important;
   color: #333 !important;
   font-weight: bold;
+}
+
+.item-option-2.disable {
+  background-color: #9d9c9c !important;
 }
 
 .item-option.disable {

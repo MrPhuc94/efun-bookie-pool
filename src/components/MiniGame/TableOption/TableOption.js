@@ -24,8 +24,6 @@ function TableOption(props) {
     JSON.parse(localStorage.getItem("yourPredictBet")) || [];
 
   const handleChooseOption = (item) => {
-    //console.log("item====", item);
-
     if (!currentAddress) {
       return store.dispatch(
         showAppPopup(
@@ -38,7 +36,6 @@ function TableOption(props) {
       (value) => value?.country === item?.country
     );
 
-    console.log("yourPredictBet", yourPredictBet);
     if (isExistItem) {
       let newSelectedOptions = yourPredictBet.filter(
         (value) => value?.country !== item?.country
@@ -71,11 +68,13 @@ function TableOption(props) {
       );
     }
 
-    let isExistItem = yourPredictBet.find((value) => value === item);
+    let isExistItem = yourPredictBet.find((value) => value.key === item.key);
 
     //console.log("yourPredictBet", yourPredictBet);
     if (isExistItem) {
-      let newSelectedOptions = yourPredictBet.filter((value) => value !== item);
+      let newSelectedOptions = yourPredictBet.filter(
+        (value) => value.key !== item.key
+      );
       // set state to store
       localStorage.setItem(
         "yourPredictBet",
@@ -103,21 +102,32 @@ function TableOption(props) {
   };
 
   const checkItemSelectedNumber = (item) => {
-    const findItem = yourPredictBet?.find((value) => value === item);
+    const findItem = yourPredictBet?.find((value) => value.key === item.key);
     if (findItem) return true;
     return false;
+  };
+
+  const handleSelectItemNumber = (item) => {
+    if (isTimeEndedMatch) {
+      return;
+    }
+    if (checkItemSelectedNumber(item)) {
+      return handleChooseOptionNumber(item);
+    }
+    if (isMaxChance) {
+      return;
+    }
+    return handleChooseOptionNumber(item);
   };
 
   const renderContent = () => {
     switch (data?.name) {
       case "AFCON_2021":
-        return Object.keys(data?.data).map((key, index) => {
+        return data?.data.map((item, index) => {
           return (
             <div className="flex_row" key={index}>
-              <div className="text-tiny bold">
-                {data.data[key][0].groupName}
-              </div>
-              {data?.data[key].map((item, index) => {
+              <div className="text-tiny bold">{item[0].groupName}</div>
+              {item.map((item, index) => {
                 return (
                   <div
                     key={index}
@@ -180,7 +190,7 @@ function TableOption(props) {
                     return handleChooseOptionNumber(item);
                   }}
                 >
-                  {item}
+                  {item.key}
                 </div>
               );
             })}
@@ -201,19 +211,10 @@ function TableOption(props) {
                       : ""
                   }`}
                   onClick={() => {
-                    if (isTimeEndedMatch) {
-                      return;
-                    }
-                    if (checkItemSelectedNumber(item)) {
-                      return handleChooseOptionNumber(item);
-                    }
-                    if (isMaxChance) {
-                      return;
-                    }
-                    return handleChooseOptionNumber(item);
+                    handleSelectItemNumber(item);
                   }}
                 >
-                  {item}
+                  {item.key}
                 </div>
               );
             })}

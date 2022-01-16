@@ -9,7 +9,9 @@ const Home = () => {
   return (
     <>
       <Header />
-      <MiniGame />
+      <div className="container">
+        <MiniGame />
+      </div>
       <Footer />
     </>
   );

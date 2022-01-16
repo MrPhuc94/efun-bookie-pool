@@ -512,3 +512,14 @@ export const formatNumberPrice = (number) => {
     ?.toString()
     ?.replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
 };
+
+// ARRAY
+export const chunkArray = (array, chunk) => {
+  let i, j, temparray;
+  let newArray = [];
+  for (i = 0, j = array.length; i < j; i += chunk) {
+    temparray = array.slice(i, i + chunk);
+    newArray.push(temparray);
+  }
+  return newArray;
+};

@@ -5,6 +5,7 @@ import { store } from "./redux/store";
 import MAppPopups from "./common/MAppPopups";
 import "./base.scss";
 import Home from "./screens/Home/Home";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const PrivateRoute = [
   {
