@@ -74,7 +74,7 @@ export function shortAddress(address) {
   if (address.length === 34 && address.match(/^M/)) {
     return address.slice(0, 5) + "..." + address.slice(address.length - 3);
   }
-  return address.slice(0, 10) + "...";
+  return address.slice(0, 8) + "...";
 }
 
 export function isMobile() {
