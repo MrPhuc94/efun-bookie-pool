@@ -45,6 +45,7 @@ import { useTranslation } from "react-i18next";
 import { chunkArray, formatNumberPrice } from "src/utils/helper";
 import SelectCustom from "src/components/UI/Select/Select";
 import Dropdown from "../UI/Dropdown/Dropdown";
+import { showChooseWallet } from "../Header/Header";
 
 const override = css`
   margin: 0 auto;
@@ -407,6 +408,9 @@ const MiniGame = () => {
   };
 
   const approve = async () => {
+    if (!currentAddress) {
+      showChooseWallet();
+    }
     try {
       setWaitingApprove(true);
       const approve = await MatchesContract.createApproveTx(
@@ -826,7 +830,9 @@ const MiniGame = () => {
               <div className="flex_row_center mt-tiny center">
                 {isTimeEndedMatch && (
                   <div
-                    className={`btn-submit flex_row `}
+                    className={`${
+                      !currentAddress && "disable-btn"
+                    } btn-submit flex_row_center`}
                     disabled={`${!areYourReWard && "disabled"}`}
                   >
                     {areYourReWard ? (
@@ -842,7 +848,6 @@ const MiniGame = () => {
                       <div
                         className="btn-submit flex_row_center center"
                         onClick={approve}
-                        style={{ minWidth: `${WIDTH < 600 ? "60%" : "30%"}` }}
                       >
                         {waitingApprove ? (
                           <ClipLoader
@@ -857,12 +862,22 @@ const MiniGame = () => {
                           </span>
                         )}
                       </div>
-                      <div className="btn-submit flex_row" disabled="disabled">
+                      <div
+                        className={`${
+                          !currentAddress && "disable-btn"
+                        } btn-submit flex_row_center`}
+                        disabled="disabled"
+                      >
                         {t("common.place_your_predict_now")}
                       </div>
                     </div>
                   ) : (
-                    <div className="flex_row btn-submit" onClick={predict}>
+                    <div
+                      className={`${
+                        !currentAddress && "disable-btn"
+                      } btn-submit flex_row_center`}
+                      onClick={predict}
+                    >
                       {loadingPlace ? (
                         <ClipLoader
                           color={color}

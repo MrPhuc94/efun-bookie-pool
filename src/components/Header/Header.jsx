@@ -21,7 +21,7 @@ import { ASYNC_STORAGE_KEYS } from "src/common/Constants";
 import { setLanguage } from "src/redux/reducers/userSlice";
 import { LogoEFUN } from "src/assets/icons";
 
-const showChooseWallet = () => {
+export const showChooseWallet = () => {
   store.dispatch(showAppPopup(<ModalConnectWallet />));
 };
 

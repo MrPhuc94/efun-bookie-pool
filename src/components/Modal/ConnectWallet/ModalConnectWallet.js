@@ -114,7 +114,7 @@ const ModalConnectWallet = () => {
         </div>
 
         <div className="mb-large center">
-          <span className="text-medium">
+          <span className="text-small">
             Please connect account to your wallet
           </span>
         </div>
@@ -129,7 +129,7 @@ const ModalConnectWallet = () => {
               <div className="mr-small">
                 <img src={Images.metaMask} alt="" width={40} height={40} />
               </div>
-              <div>Metamask wallet</div>
+              <div className="text-small">Metamask wallet</div>
             </>
           ) : (
             <ClipLoader
@@ -150,7 +150,7 @@ const ModalConnectWallet = () => {
           <div className="mr-small">
             <img src={Images.trust} alt="" width={40} height={40} />
           </div>
-          <div>Trust wallet</div>
+          <div className="text-small">Trust wallet</div>
         </div>
       </div>
     </div>

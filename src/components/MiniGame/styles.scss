@@ -194,12 +194,13 @@
         }
         .btn-submit {
           height: 40px;
+          width: 200px;
           margin: 12px;
           border-radius: 4px;
           font-size: 20px;
           align-items: center;
           cursor: pointer;
-          padding: 0 60px;
+          text-align: center;
           background: linear-gradient(
             221.15deg,
             #bd8727,
@@ -210,6 +211,17 @@
           color: #fff;
           border: none;
           font-size: 14px;
+        }
+
+        .disable-btn {
+          filter: grayscale(100%) !important;
+        }
+
+        @media (max-width: 675px) {
+          .btn-submit {
+            width: 150px;
+            font-size: 12px;
+          }
         }
 
         .btn-submit:disabled {
