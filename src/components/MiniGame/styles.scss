@@ -1,15 +1,14 @@
-.miniGame {
-  padding-top: 64px;
+.mini-game {
   .heading-box {
     display: flex;
     align-items: center;
+    margin-top: 75px;
     justify-content: center;
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
     height: 220px;
-    margin-top: -64px;
   }
   .heading-box-contain {
     background-size: cover !important;
@@ -60,196 +59,97 @@
     width: 216px;
   }
 
-  .section-games {
-    width: 100%;
-    height: 100%;
-    border: 1px solid #424242;
-    padding: 0;
-    margin: auto;
-    background: #1d1d1d;
-    flex: 1;
-
-    @media (max-width: 1023px) {
-      flex-direction: column;
-    }
-
-    .menu-games {
-      padding: 15px;
-      border-right: 1px solid #424242;
-
-      @media (max-width: 1023px) {
-        flex: 1;
-      }
+  .list-mini-game {
+    margin-top: 60px;
+    .box-item {
+      display: flex;
+      gap: 60px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
 
       .item:hover {
-        background-color: #000;
+        .thumb:after {
+          opacity: 0.6;
+        }
+        .thumb {
+          .btn {
+            opacity: 1;
+          }
+        }
       }
+
       .item {
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        padding: 15px 0;
-        cursor: pointer;
-        border-top: 1px solid #424242;
-        align-items: center;
-        padding: 10px;
-        color: #bdbdbd;
-        font-size: 15px;
-        transition: 0.3s ease-in;
-
-        &-left {
-          width: 10%;
-        }
-        &-center {
-          width: 75%;
-        }
-        &-right {
-          width: 15%;
-        }
-
-        @media (max-width: 675px) {
-          justify-content: space-between;
-        }
-
-        .team {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 120px;
-          @media (min-width: 600px) {
-            &-left {
-              display: flex;
-              justify-content: flex-end;
-              width: 200px;
-              align-items: center;
-            }
-            &-right {
-              display: flex;
-              width: 200px;
-              justify-content: flex-start;
-              align-items: center;
-            }
-          }
-        }
-        span {
-          color: #bdbdbd;
-          font-size: 15px;
-        }
-        img {
-          margin-right: 10px;
-        }
-
-        .btn-predict {
-          display: flex;
-          justify-content: center;
-          width: 100px;
-          background-color: #4caf50 !important;
-          border-color: #4caf50 !important;
-          border-radius: 12px;
-          font-size: 12px;
-          height: 24px;
-          align-items: center;
-          cursor: pointer;
-          color: #333;
-
-          @media (max-width: 480px) {
-            display: none;
-          }
-        }
-      }
-      .item.active {
-        background: #1b2340;
-      }
-    }
-    .detail-games {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      text-align: center;
-      height: 100%;
-      padding: 2%;
-      flex: 1;
-
-      @media (max-width: 1023px) {
-        flex-direction: column;
-      }
-
-      &-banner {
-        flex: 6;
-        padding: 20px;
-      }
-
-      @media (max-width: 1023px) {
-        &-banner {
-          flex: 1;
-          margin-bottom: 30px;
-        }
-      }
-
-      &-description {
-        flex: 6;
+        width: calc(33.33333% - 40px);
 
         @media (max-width: 1023px) {
-          flex: 1;
+          width: calc(50% - 30px);
         }
-        .btn-submit {
-          height: 40px;
-          width: 200px;
-          margin: 12px;
-          border-radius: 4px;
-          font-size: 20px;
-          align-items: center;
+
+        @media (max-width: 480px) {
+          width: calc(100%);
+        }
+
+        .thumb {
+          display: block;
+          position: relative;
+          margin-bottom: 16px;
           cursor: pointer;
-          text-align: center;
-          background: linear-gradient(
-            221.15deg,
-            #bd8727,
-            #ffd574 49.02%,
-            #feca50 62.02%,
-            #bd8727 101.47%
-          );
+          img {
+            width: 100%;
+          }
+
+          .btn {
+            height: 44px;
+            width: 140px;
+            border: 1px solid #fbc02d;
+            color: #fbc02d;
+            font-weight: 600;
+            padding: 10px 24px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            margin: auto;
+            z-index: 1;
+            transition: 0.3s ease-in;
+            opacity: 0;
+          }
+          .btn:hover {
+            background-color: #fbc02d;
+            color: #fff;
+          }
+        }
+
+        .thumb:after {
+          content: "";
+          display: block;
+          width: 100%;
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: 0;
+          bottom: 0;
+          opacity: 0;
+          transition: 0.3s ease-in;
+          background: #000;
+        }
+
+        .name {
+          display: block;
+          font-weight: 600;
           color: #fff;
-          border: none;
+          margin-bottom: 12px;
+        }
+        .deadline {
           font-size: 14px;
+          color: #bdbdbd;
         }
-
-        .disable-btn {
-          filter: grayscale(100%) !important;
-        }
-
-        @media (max-width: 675px) {
-          .btn-submit {
-            width: 150px;
-            font-size: 12px;
-          }
-        }
-
-        .btn-submit:disabled {
-          filter: grayscale(100%) !important;
-          background-color: hsla(0, 0%, 100%, 0.12) !important;
-          color: rgba(255, 255, 255, 0.3) !important;
-        }
-
-        .description {
-        }
-        .MatchGame {
-          .match-result {
-            font-size: 60px;
-            color: rgb(21, 195, 236);
-            text-align: center;
-            font-weight: 400;
-          }
-        }
-        .your-predict {
-          .description {
-            text-align: left;
-          }
-
-          .slider-option {
-            display: flex !important;
-            justify-content: center;
-            align-items: center;
-          }
+        .time {
+          margin-left: 6px;
+          font-size: 16px;
+          font-weight: bold;
+          color: red;
         }
       }
     }

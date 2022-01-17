@@ -3,7 +3,11 @@ import { dismissAppPopup } from "src/redux/reducers/appSlice";
 import { store } from "src/redux/store";
 import { useTranslation } from "react-i18next";
 import "./styles.scss";
-import { resetStoreRedux } from "src/utils/helper";
+import {
+  changeCurrentAddress,
+  changeListToken,
+} from "src/redux/reducers/walletSlice";
+import { changeYourBet } from "src/redux/reducers/matchesSlice";
 
 const ModalLogout = (props) => {
   const { currentAddress } = props;
@@ -29,8 +33,12 @@ const ModalLogout = (props) => {
   }, [modalRef]);
 
   const handleLogout = () => {
+    //console.log("logoutHandle=======", currentAddress);
     localStorage.clear();
-    resetStoreRedux();
+    store.dispatch(dismissAppPopup());
+    store.dispatch(changeCurrentAddress(null));
+    store.dispatch(changeListToken(null));
+    store.dispatch(changeYourBet(null));
   };
 
   return (

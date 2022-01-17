@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { showAppPopup } from "src/redux/reducers/appSlice";
 import ModalErrorWallet from "src/components/Modal/ErrorWallet/ErrorWallet";
 
-function TableOption(props) {
+const TableOption = (props) => {
   const { data, isTimeEndedMatch, isMaxChance } = props;
   //console.log("isMaxChance", isMaxChance);
   //console.log("isTimeEndedMatch", isTimeEndedMatch);
@@ -125,7 +125,7 @@ function TableOption(props) {
       case "AFCON_2021":
         return data?.data.map((item, index) => {
           return (
-            <div className="flex_row" key={index}>
+            <div className="flex_row table-option" key={index}>
               <div className="text-tiny bold">{item[0].groupName}</div>
               {item.map((item, index) => {
                 return (
@@ -226,6 +226,6 @@ function TableOption(props) {
   };
 
   return <>{renderContent()}</>;
-}
+};
 
 export default TableOption;

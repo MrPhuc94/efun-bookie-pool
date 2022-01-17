@@ -6,11 +6,16 @@ import MAppPopups from "./common/MAppPopups";
 import "./base.scss";
 import Home from "./screens/Home/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
+import MiniGameDetail from "./components/MiniGameDetail/MiniGameDetail";
 
 const PrivateRoute = [
   {
     path: "/",
     component: Home,
+  },
+  {
+    path: "/mini-game/detail",
+    component: MiniGameDetail,
   },
 ];
 

@@ -27,6 +27,11 @@
   padding: 15px 0;
   width: 23%;
   cursor: pointer;
+  transition: 0.3s ease-in;
+}
+
+.item-option-2:hover {
+  background: #000;
 }
 
 .item-option-2.active {

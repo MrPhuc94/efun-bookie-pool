@@ -20,6 +20,7 @@ import { storeData } from "src/utils/storageUtils";
 import { ASYNC_STORAGE_KEYS } from "src/common/Constants";
 import { setLanguage } from "src/redux/reducers/userSlice";
 import { LogoEFUN } from "src/assets/icons";
+import { Link } from "react-router-dom";
 
 export const showChooseWallet = () => {
   store.dispatch(showAppPopup(<ModalConnectWallet />));
@@ -27,11 +28,10 @@ export const showChooseWallet = () => {
 
 const Header = () => {
   const { t, i18n } = useTranslation();
-  const _currentAddress =
+  const currentAddress =
     useSelector((state) => state.wallet?.currentAddress) ||
     localStorage.getItem("currentAddress");
 
-  const [currentAddress, setCurrentAddress] = useState("");
   const [activeNav, setActiveNav] = useState(false);
   const navWrapper = useRef();
   const [showNavLang, setShowNavLang] = useState(false);
@@ -54,11 +54,6 @@ const Header = () => {
     setShowNavLang(false);
   };
 
-  useEffect(() => {
-    console.log("logout======Change");
-    setCurrentAddress(_currentAddress);
-  }, [_currentAddress]);
-
   const showModalLogout = () => {
     store.dispatch(dismissAppPopup());
     store.dispatch(
@@ -76,7 +71,9 @@ const Header = () => {
     <div className="header">
       <nav className="main-menu">
         <div>
-          <LogoEFUN />
+          <Link to="/">
+            <LogoEFUN />
+          </Link>
         </div>
         <ul className="menu-pc">
           <li>

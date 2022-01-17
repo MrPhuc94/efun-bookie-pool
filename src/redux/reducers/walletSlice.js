@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  currentAddress: null,
+  currentAddress: localStorage.getItem("currentAddress"),
   supportTokenAndBalance: [],
   isLoadingWallet: false,
   tokens: null,
@@ -31,6 +31,7 @@ export const walletSlice = createSlice({
       state.isLoadingWallet = action.payload;
     },
     resetWalletSlice: (state, action) => {
+      console.log("state8888888", initialState);
       return (state = initialState);
     },
   },

@@ -1,7 +1,9 @@
 :root {
   // background
-  --primary-color: #1e1e1e;
+  // --primary-color: #1e1e1e;
+  --primary-color: #00050a;
   --white-color: #ffffff;
+  --bs-gutter-x: 10px;
 
   // dimension
   --tiny: 6px;
@@ -27,6 +29,8 @@
     .container-xl,
     .container-xxl {
       max-width: 1320px;
+      padding-right: var(--bs-gutter-x, 0.75rem);
+      padding-left: var(--bs-gutter-x, 0.75rem);
     }
   }
 
@@ -37,6 +41,8 @@
     .container-sm,
     .container-xl {
       max-width: 1140px;
+      padding-right: var(--bs-gutter-x, 0.75rem);
+      padding-left: var(--bs-gutter-x, 0.75rem);
     }
   }
   @media (max-width: 992px) {
@@ -45,6 +51,8 @@
     .container-md,
     .container-sm {
       max-width: 960px;
+      padding-right: var(--bs-gutter-x, 0.75rem);
+      padding-left: var(--bs-gutter-x, 0.75rem);
     }
   }
   @media (max-width: 768px) {
@@ -52,12 +60,16 @@
     .container-md,
     .container-sm {
       max-width: 720px;
+      padding-right: var(--bs-gutter-x, 0.75rem);
+      padding-left: var(--bs-gutter-x, 0.75rem);
     }
   }
   @media (max-width: 576px) {
     .container,
     .container-sm {
       max-width: 540px;
+      padding-right: var(--bs-gutter-x, 0.75rem);
+      padding-left: var(--bs-gutter-x, 0.75rem);
     }
   }
 
@@ -69,8 +81,6 @@
   .container-xl,
   .container-xxl {
     width: 100%;
-    padding-right: 0px !important;
-    padding-left: 0px !important;
     margin-right: auto;
     margin-left: auto;
   }
@@ -93,7 +103,8 @@
 }
 
 body {
-  background: #1d1d1d !important;
+  //background: #1d1d1d !important;
+  background: #00050a !important;
   color: #fff !important;
 }
 
@@ -121,6 +132,24 @@ body.modal-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  align-self: center;
+}
+
+.flex_row_left {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  align-self: center;
+}
+
+.flex_row_right {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
   align-items: center;
   flex-wrap: wrap;
   align-self: center;

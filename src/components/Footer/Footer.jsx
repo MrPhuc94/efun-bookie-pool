@@ -16,12 +16,12 @@ const Footer = () => {
       });
     }
 
-    console.log("scrollToTopBtn", scrollToTopBtn);
+    //console.log("scrollToTopBtn", scrollToTopBtn);
 
     scrollToTopBtn.addEventListener("click", scrollToTop);
 
     const handleScroll = () => {
-      console.log("111111111");
+      //console.log("scroll");
       // Do something on scroll
       let scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
       if (rootElement.scrollTop / scrollTotal > 0.8) {
