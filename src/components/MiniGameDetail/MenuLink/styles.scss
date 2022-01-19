@@ -1,0 +1,15 @@
+.menu-link {
+  display: flex;
+  height: 60px;
+  width: 100%;
+  color: white;
+  padding: 2%;
+  justify-content: flex-start;
+  align-items: center;
+  .link-item {
+    text-decoration: none;
+  }
+  .link-dot {
+    margin: 0 10px;
+  }
+}

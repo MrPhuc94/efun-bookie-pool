@@ -49,6 +49,7 @@ import { showChooseWallet } from "../Header/Header";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { useLocation } from "react-router-dom";
+import MenuLink from "./MenuLink/MenuLink";
 
 const override = css`
   margin: 0 auto;
@@ -144,49 +145,19 @@ const MiniGameDetail = (props) => {
     useSelector((state) => state.wallet.currentAddress) ||
     localStorage.getItem("currentAddress");
 
-  const dataMiniGame = [
-    {
-      name: "AFCON_2021",
-      type: "mini_game",
-      label: "Who are the Champions of AFCON 2021?",
-      matchId: "aficacupnations_2021",
-      logo: Images.Africa_Cup_logo,
-      endDate: "20/01/2022",
-      data: chunkArray(DATA_MINI_GAME_AFICANATIONS_CUP, 4),
-      backGround: Images.aficanationscup,
-    },
-    {
-      name: "Cristiano_Ronaldo",
-      type: "event",
-      label:
-        "How many goals does Cristiano Ronaldo have for MU at the end of the season 2021/2022 in all competitions?",
-      matchId: "aficacupnations_2021",
-      logo: Images.man_united_logo,
-      endDate: "31/01/2022",
-      data: RONALDO_GOLD,
-      backGround: Images.Banner_Ronaldo2,
-    },
-    {
-      name: "LaLiga",
-      type: "event",
-      label: "Where is Barcelona's place in La Liga season 2021/2022?",
-      matchId: "aficacupnations_2021",
-      logo: Images.logo_barca,
-      endDate: "31/01/2022",
-      data: BARCA_PLACE,
-      backGround: Images.Banner_Barca2,
-    },
-    {
-      name: "EPL_club",
-      type: "event",
-      label: "Which EPL club will have the biggest summer 2022 transfers in? ",
-      matchId: "aficacupnations_2021",
-      logo: Images.PremierLeague,
-      endDate: "31/01/2022",
-      data: ELP_CLUB,
-      backGround: Images.Banner_Ronaldo,
-    },
-  ];
+  // scroll top for mobile
+  useEffect(() => {
+    let rootElement = document.documentElement;
+    function scrollToTop() {
+      // Scroll to top logic
+      rootElement.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+    scrollToTop();
+  }, []);
+
   // get balance token
   let tokens =
     useSelector((state) => state.wallet.tokens) ||
@@ -255,7 +226,7 @@ const MiniGameDetail = (props) => {
     if (yourPredictBet?.length < 1) {
       console.log("itemOptionPredict", itemOptionPredict);
 
-      itemOptionPredict.current.classList.add("option-effect");
+      itemOptionPredict.current?.classList.add("option-effect");
       return;
     }
     setLoadingPlace(true);
@@ -263,52 +234,58 @@ const MiniGameDetail = (props) => {
     // handle map param request to blockchain
     const listAnswer =
       yourPredictBet?.map((item) => item.value).join(";") + ";" || "";
-    console.log("listAnswer", listAnswer);
+    //console.log("listAnswer", listAnswer);
 
     // get amount EFFUN TOKEN for this predict
     const amount = yourPredictBet?.length * AMOUNT_EFUN_FER_CHANCE;
-    console.log("amount", amount);
+    //console.log("amount", amount);
+    //console.log("dataItem.matchId", dataItem.matchId);
 
-    if (!currentAddress) {
-      setLoadingPlace(false);
-    } else {
-      try {
-        const token =
-          currentToken.symbol === "BNB"
-            ? REACT_APP_BNB_TOKEN
-            : REACT_APP_EFUN_TOKEN;
+    try {
+      const token =
+        currentToken.symbol === "BNB"
+          ? REACT_APP_BNB_TOKEN
+          : REACT_APP_EFUN_TOKEN;
 
-        console.log("predictToken", token);
+      //console.log("predictToken", token);
 
-        let recept = await MatchesContract.predict(
-          currentMatches.bc_match_id,
-          listAnswer,
-          token,
-          amount,
-          currentAddress
-        );
+      let recept = await MatchesContract.predict(
+        dataItem.matchId,
+        listAnswer,
+        token,
+        amount,
+        currentAddress
+      );
 
-        console.log("receptPredict=====", recept);
+      console.log("receptPredict=====", recept);
 
-        // await axios.post(process.env.API_HOST + '/api/v1/block-numbers/create', {
-        //   type: 'group_predict',
-        //   block_number: recept.tx.hash.blockNumber
-        // })
-      } catch (e) {
-        console.log("error====", e);
-        store.dispatch(
-          showAppPopup(<ModalErrorWallet messageError={e.message} />)
-        );
-      } finally {
-        //repeat(this, 10);
+      // await axios.post(process.env.API_HOST + '/api/v1/block-numbers/create', {
+      //   type: 'group_predict',
+      //   block_number: recept.tx.hash.blockNumber
+      // })
+
+      if (!recept.error) {
         setLoadingPlace(false);
-        //setSuccessDialog(true);
-        //Show success
         store.dispatch(
-          showAppPopup(<ModalErrorWallet messageError="Approve success" />)
+          showAppPopup(
+            <ModalErrorWallet
+              messageError={`Approve success! Transaction hash: ${recept?.hash}`}
+            />
+          )
         );
-        // formBet.resetValidation();
+      } else {
+        setLoadingPlace(false);
+        store.dispatch(
+          showAppPopup(
+            <ModalErrorWallet messageError={`${recept.error?.message}`} />
+          )
+        );
       }
+    } catch (e) {
+      console.log("error====", e);
+      store.dispatch(
+        showAppPopup(<ModalErrorWallet messageError={e.message} />)
+      );
     }
   };
 
@@ -708,8 +685,9 @@ const MiniGameDetail = (props) => {
               Mini <strong>games</strong>
             </h1>
           </div>
+
           <div className="section-games">
-            <div className="menu-games"></div>
+            <MenuLink />
             <div className="description mb-large center mt-medium margin-horizontal-large">
               <div className="mb-small">
                 <span className="text-large bold">{dataItem?.label}</span>

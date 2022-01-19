@@ -16,6 +16,10 @@
 
   @media (max-width: 675px) {
     padding: 0 10px;
+    ol,
+    ul {
+      padding-left: 0;
+    }
   }
 
   dl,

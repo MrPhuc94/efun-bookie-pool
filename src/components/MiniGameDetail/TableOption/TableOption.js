@@ -170,7 +170,7 @@ const TableOption = (props) => {
               return (
                 <div
                   key={index}
-                  className={`item-option-2 text-tiny ${
+                  className={`item-option-2 ${
                     checkItemSelectedNumber(item)
                       ? "active"
                       : isMaxChance
@@ -203,7 +203,7 @@ const TableOption = (props) => {
               return (
                 <div
                   key={index}
-                  className={`item-option-2 text-tiny ${
+                  className={`item-option-2 ${
                     checkItemSelectedNumber(item)
                       ? "active"
                       : isMaxChance

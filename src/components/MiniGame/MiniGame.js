@@ -5,11 +5,13 @@ import {
   ELP_CLUB,
   RONALDO_GOLD,
 } from "src/common/mockup";
-import React from "react";
+import React, { useEffect } from "react";
 import "./styles.scss";
 import { chunkArray } from "src/utils/helper";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { store } from "src/redux/store";
+import { changeYourBet } from "src/redux/reducers/matchesSlice";
 
 function MiniGame() {
   const { t } = useTranslation();
@@ -19,7 +21,7 @@ function MiniGame() {
       name: "AFCON_2021",
       type: "mini_game",
       label: "Who are the Champions of AFCON 2021?",
-      matchId: "aficacupnations_2021",
+      matchId: 1,
       logo: Images.Africa_Cup_logo,
       endDate: "20/01/2022",
       data: chunkArray(DATA_MINI_GAME_AFICANATIONS_CUP, 4),
@@ -30,7 +32,7 @@ function MiniGame() {
       type: "event",
       label:
         "How many goals does Cristiano Ronaldo have for MU at the end of the season 2021/2022 in all competitions?",
-      matchId: "aficacupnations_2021",
+      matchId: 2,
       logo: Images.man_united_logo,
       endDate: "31/01/2022",
       data: RONALDO_GOLD,
@@ -40,7 +42,7 @@ function MiniGame() {
       name: "LaLiga",
       type: "event",
       label: "Where is Barcelona's place in La Liga season 2021/2022?",
-      matchId: "aficacupnations_2021",
+      matchId: 3,
       logo: Images.logo_barca,
       endDate: "31/01/2022",
       data: BARCA_PLACE,
@@ -50,13 +52,18 @@ function MiniGame() {
       name: "EPL_club",
       type: "event",
       label: "Which EPL club will have the biggest summer 2022 transfers in? ",
-      matchId: "aficacupnations_2021",
+      matchId: 4,
       logo: Images.PremierLeague,
       endDate: "31/01/2022",
       data: ELP_CLUB,
       backGround: Images.Banner_Barca2,
     },
   ];
+
+  useEffect(() => {
+    localStorage.removeItem("yourPredictBet");
+    store.dispatch(changeYourBet(null));
+  }, []);
 
   const directToDetail = (item) => {
     console.log("item", item);
@@ -88,7 +95,7 @@ function MiniGame() {
               >
                 <div className="thumb" to="">
                   <img src={item?.backGround} alt="efun mini game" />
-                  <span class="btn">Join now</span>
+                  <span className="btn">Join now</span>
                 </div>
                 <div className="name">{item.label}</div>
                 <div className="deadline flex_row_left">

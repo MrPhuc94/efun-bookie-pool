@@ -71,9 +71,11 @@ const Header = () => {
     <div className="header">
       <nav className="main-menu">
         <div>
-          <Link to="/">
-            <LogoEFUN />
-          </Link>
+          <a href="https://app.efun.tech/" target="_blank" rel="noreferrer">
+            {/* <LogoEFUN /> */}
+
+            <img src={Images.logo} />
+          </a>
         </div>
         <ul className="menu-pc">
           <li>

@@ -178,14 +178,11 @@ const predict = async (matchId, betContent, token, amount, from) => {
       .integerValue();
   };
 
-  let receipt2 = "";
-
   // if (token === process.env.BNB_TOKEN) {
   //   param.value = new BigNumber(amount).multipliedBy(10 ** 18).toFixed();
   // }
 
-  console.log("groupContract", groupContract);
-  const txData = await tokenContract.methods
+  const txData = tokenContract.methods
     .predict(
       matchId,
       betContent,
@@ -193,36 +190,30 @@ const predict = async (matchId, betContent, token, amount, from) => {
       new BigNumber(amount).multipliedBy(10 ** 18).toFixed()
     )
     .send({ from: from })
-    .on("error", (error) => {
-      receipt2 = error;
-      console.log("error", error);
-      // throw new WalletError.NewNetworkError("cannot predict now");
-    })
-    .then((receipt) => {
-      console.log("receipt", receipt);
-      receipt2 = receipt;
+    .then((result) => {
+      //console.log("receipt", receipt);
+
+      // const nonce = await web3.eth.getTransactionCount(from, 'pending')
+      const amountFormat = calculateBalanceSend(amount);
+      const amountInHex = "0x" + amountFormat.toString(16);
+      const tx = {
+        from,
+        to: groupContract,
+        // value: 0,
+        value: amountInHex,
+        hash: result?.blockHash,
+        // nonce,
+        data: result,
+      };
+      return tx;
     })
     .catch((err) => {
-      receipt2 = err;
-      console.log(err, "hey waht ????");
-      // throw new WalletError.NewNetworkError("cannot predict now");
+      console.log("hey what ????", err);
+      const tx = { error: err };
+      return tx;
     });
-  console.log("txData======", txData);
-  // const nonce = await web3.eth.getTransactionCount(from, 'pending')
-  const amountFormat = calculateBalanceSend(amount);
-  const amountInHex = "0x" + amountFormat.toString(16);
-  const tx = {
-    from,
-    to: groupContract,
-    // value: 0,
-    value: amountInHex,
-    hash: receipt2,
-    // nonce,
-    data: txData,
-  };
-  return {
-    tx,
-  };
+
+  return txData;
 };
 
 const cancelMatchs = async (matchId, from) => {
@@ -361,20 +352,18 @@ const createApproveTx = async (
     supportSymbol[tokenSymbol]
   );
 
-  const txData = await tokenContract.methods.approve(
-    spender,
-    amount
-  )
+  const txData = await tokenContract.methods
+    .approve(spender, amount)
     .send({ from })
-    .on('error', (error) => {
-      console.log(error)
+    .on("error", (error) => {
+      console.log(error);
     })
     .then((receipt) => {
-      console.log(receipt)
+      console.log(receipt);
     })
     .catch((err) => {
-      console.log(err)
-      throw new WalletError.NewNetworkError('cannot approve now')
+      console.log(err);
+      throw new WalletError.NewNetworkError("cannot approve now");
     });
 
   // const nonce = await web3.eth.getTransactionCount(from, 'pending')
