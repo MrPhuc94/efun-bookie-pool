@@ -700,7 +700,7 @@ const MiniGameDetail = (props) => {
                   </div>
 
                   <div>
-                    {isTimeEndedMatch && dataResultMatch ? (
+                    {isTimeEndedMatch && areYourReWard ? (
                       <div className="box-result-match">
                         {dataResultMatch?.country || dataResultMatch?.value}
                         <img src={Images.checked} width={20} height={20} />
