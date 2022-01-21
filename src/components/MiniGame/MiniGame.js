@@ -11,7 +11,7 @@ import { chunkArray } from "src/utils/helper";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { store } from "src/redux/store";
-import { changeYourBet } from "src/redux/reducers/matchesSlice";
+import { changeYourPredict } from "src/redux/reducers/matchesSlice";
 
 function MiniGame() {
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ function MiniGame() {
       label: "Who are the Champions of AFCON 2021?",
       matchId: 1,
       logo: Images.Africa_Cup_logo,
-      endDate: "20/01/2022",
+      endDate: "2022-01-22",
       data: chunkArray(DATA_MINI_GAME_AFICANATIONS_CUP, 4),
       backGround: Images.Africa_Cup_logo,
     },
@@ -34,7 +34,7 @@ function MiniGame() {
         "How many goals does Cristiano Ronaldo have for MU at the end of the season 2021/2022 in all competitions?",
       matchId: 2,
       logo: Images.man_united_logo,
-      endDate: "31/01/2022",
+      endDate: "2022-01-31",
       data: RONALDO_GOLD,
       backGround: Images.Banner_Ronaldo2,
     },
@@ -44,7 +44,7 @@ function MiniGame() {
       label: "Where is Barcelona's place in La Liga season 2021/2022?",
       matchId: 3,
       logo: Images.logo_barca,
-      endDate: "31/01/2022",
+      endDate: "2022-01-31",
       data: BARCA_PLACE,
       backGround: Images.Banner_Barca2,
     },
@@ -54,20 +54,20 @@ function MiniGame() {
       label: "Which EPL club will have the biggest summer 2022 transfers in? ",
       matchId: 4,
       logo: Images.PremierLeague,
-      endDate: "31/01/2022",
+      endDate: "2022-01-31 ",
       data: ELP_CLUB,
       backGround: Images.Banner_Barca2,
     },
   ];
 
   useEffect(() => {
-    localStorage.removeItem("yourPredictBet");
-    store.dispatch(changeYourBet(null));
+    localStorage.removeItem("yourPredict");
+    store.dispatch(changeYourPredict(null));
   }, []);
 
   const directToDetail = (item) => {
     console.log("item", item);
-    navigate("/mini-game/detail", { state: { data: item } });
+    navigate(`/mini-game/${item.name}`, { state: { data: item } });
   };
   return (
     <div className="mini-game">

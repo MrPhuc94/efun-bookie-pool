@@ -6,13 +6,14 @@ import "./styles.scss";
 import { WIDTH } from "src/assets/themes/dimension";
 
 const ModalErrorWallet = (props) => {
-  const { messageError } = props;
+  const { messageError, onOk } = props;
   //default function
-  const handleCloseModal = (e) => {
-    if (e.target === modalRef.current) onClose();
-  };
+  // const handleCloseModal = (e) => {
+  //   if (e.target === modalRef.current) onClose();
+  // };
 
   const onClose = () => {
+    onOk && onOk();
     store.dispatch(dismissAppPopup());
   };
 

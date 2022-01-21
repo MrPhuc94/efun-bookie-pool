@@ -7,7 +7,7 @@ import {
   changeCurrentAddress,
   changeListToken,
 } from "src/redux/reducers/walletSlice";
-import { changeYourBet } from "src/redux/reducers/matchesSlice";
+import { changeYourPredict } from "src/redux/reducers/matchesSlice";
 
 const ModalLogout = (props) => {
   const { currentAddress } = props;
@@ -38,7 +38,7 @@ const ModalLogout = (props) => {
     store.dispatch(dismissAppPopup());
     store.dispatch(changeCurrentAddress(null));
     store.dispatch(changeListToken(null));
-    store.dispatch(changeYourBet(null));
+    store.dispatch(changeYourPredict(null));
   };
 
   return (

@@ -47,8 +47,10 @@ import man_united_logo from "../assets/images/event/man_united.png";
 import PremierLeague from "../assets/images/event/PremierLeague.png";
 import Africa_Cup_logo from "../assets/images/event/Africa_Cup.png";
 import minigame_background from "../assets/images/minigame_background.png";
+import closed from "../assets/images/action/closed.png";
 
 const Images = {
+  closed,
   minigame_background,
   Africa_Cup_logo,
   PremierLeague,

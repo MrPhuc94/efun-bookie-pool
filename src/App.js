@@ -14,7 +14,7 @@ const PrivateRoute = [
     component: Home,
   },
   {
-    path: "/mini-game/detail",
+    path: "/mini-game/:id",
     component: MiniGameDetail,
   },
 ];

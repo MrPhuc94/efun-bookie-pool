@@ -34,10 +34,10 @@ const groupContract =
     : process.env.REACT_APP_SPONSOR_PREDICT_DEV;
 const createContract =
   process.env.NODE_ENV === "development"
-    ? process.env.SPONSOR_MATCH_DEV
-    : process.env.SPONSOR_MATCH_DEV;
-const MAX_INT = process.env.VUE_APP_MAX_INT_STAKING
-  ? process.env.VUE_APP_MAX_INT_STAKING
+    ? process.env.REACT_APP_SPONSOR_MATCH_DEV
+    : process.env.REACT_APP_SPONSOR_MATCH_DEV;
+const MAX_INT = process.env.REACT_APP_VUE_APP_MAX_INT_STAKING
+  ? process.env.REACT_APP_VUE_APP_MAX_INT_STAKING
   : "115792089237316195423570985008687907853269984665640564039457584007913129639935";
 
 // not required connect wallet
@@ -57,14 +57,7 @@ const getMatchInfo2 = async (matchId) => {
 };
 const getBetInfo = async (matchId, token, account) => {
   const web3 = await initWeb3();
-  const tokenContract = new web3.eth.Contract(
-    // groupAbi,
-    // createAbi,
-    // createContract
-    groupAbi,
-    groupContract
-    // groupContract
-  );
+  const tokenContract = new web3.eth.Contract(groupAbi, groupContract);
   const txData = await tokenContract.methods
     .getPredictInfo(matchId, account, token)
     .call();
@@ -81,10 +74,12 @@ const getBetInfo = async (matchId, token, account) => {
     tx,
   };
 };
+
 const getMatchInfo = async (matchId, token) => {
   const web3 = await initWeb3();
-  const tokenContract = await new web3.eth.Contract(groupAbi, groupContract);
-  const tokenContract2 = await new web3.eth.Contract(createAbi, createContract);
+  const tokenContract = new web3.eth.Contract(groupAbi, groupContract);
+  const tokenContract2 = new web3.eth.Contract(createAbi, createContract);
+
   const txData = await tokenContract.methods
     .getMatchInfo(matchId, token)
     .call();
@@ -99,6 +94,8 @@ const getMatchInfo = async (matchId, token) => {
     // value: 0,
     data: dataCombine,
   };
+
+  console.log("txMatchPredicted", tx);
 
   return {
     tx,
@@ -182,7 +179,7 @@ const predict = async (matchId, betContent, token, amount, from) => {
   //   param.value = new BigNumber(amount).multipliedBy(10 ** 18).toFixed();
   // }
 
-  const txData = tokenContract.methods
+  const txData = await tokenContract.methods
     .predict(
       matchId,
       betContent,
@@ -190,6 +187,9 @@ const predict = async (matchId, betContent, token, amount, from) => {
       new BigNumber(amount).multipliedBy(10 ** 18).toFixed()
     )
     .send({ from: from })
+    .on("error", (error) => {
+      console.log(error);
+    })
     .then((result) => {
       //console.log("receipt", receipt);
 
@@ -271,22 +271,22 @@ const claimReward = async (matchId, _token, saToken, from) => {
     })
     .then((receipt) => {
       console.log(receipt);
+      const tx = {
+        from,
+        to: groupContract,
+        // value: 0,
+        // nonce,
+        data: txData,
+      };
+      return tx;
     })
     .catch((err) => {
       console.log(err);
-      throw new WalletError.NewNetworkError("cannot predict now");
+      const tx = { error: err };
+      return tx;
     });
+  return txData;
   // const nonce = await web3.eth.getTransactionCount(groupContract, 'pending')
-  const tx = {
-    from,
-    to: groupContract,
-    // value: 0,
-    // nonce,
-    data: txData,
-  };
-  return {
-    tx,
-  };
 };
 
 const updateResult = async (matchId, result, account) => {

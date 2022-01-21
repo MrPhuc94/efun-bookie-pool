@@ -1,14 +1,11 @@
 import Images from "src/common/Images";
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import "./styles.scss";
-import MenuTop from "../MenuTop/MenuTop";
-import SlideOptions from "./SlideOptions/SlideOptions";
 import { store } from "src/redux/store";
 import {
-  changeYourBet,
-  changeYourBetEfun,
+  changeYourPredict,
+  changeYourPredictEfun,
 } from "src/redux/reducers/matchesSlice";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
 import Decimal from "decimal.js";
@@ -17,39 +14,27 @@ import { walletManager } from "src/blockchain/utils/walletManager";
 import * as Support from "src/blockchain/utils/support/signAndSendTx";
 import _get from "lodash/get";
 import { changeCurrentMatchesBlockchainEfun } from "src/redux/reducers/matchesSlice";
-import {
-  changeCurrentAddress,
-  changeSupportTokenAndBalance,
-} from "src/redux/reducers/walletSlice";
-import { setPathBackGround, showAppPopup } from "src/redux/reducers/appSlice";
+import { showAppPopup, showAppLoading } from "src/redux/reducers/appSlice";
 import ModalErrorWallet from "../Modal/ErrorWallet/ErrorWallet";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { WIDTH } from "src/assets/themes/dimension";
 import { AMOUNT_EFUN_FER_CHANCE } from "src/common/Constants";
 import moment from "moment";
-import { RiErrorWarningLine } from "react-icons/ri";
-import {
-  BARCA_PLACE,
-  DATA_MINI_GAME_AFICANATIONS_CUP,
-  ELP_CLUB,
-  RONALDO_GOLD,
-  array_default_result,
-} from "src/common/mockup";
+import { TiWarningOutline } from "react-icons/ti";
 import TableOption from "./TableOption/TableOption";
 import {
   REACT_APP_BNB_TOKEN,
   REACT_APP_EFUN_TOKEN,
 } from "src/common/Environment";
 import { useTranslation } from "react-i18next";
-import { chunkArray, formatNumberPrice } from "src/utils/helper";
-import SelectCustom from "src/components/UI/Select/Select";
-import Dropdown from "../UI/Dropdown/Dropdown";
+import { formatNumberPrice } from "src/utils/helper";
 import { showChooseWallet } from "../Header/Header";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { useLocation } from "react-router-dom";
 import MenuLink from "./MenuLink/MenuLink";
+import AppLoading from "../AppLoading/AppLoading";
 
 const override = css`
   margin: 0 auto;
@@ -58,92 +43,71 @@ const override = css`
 const MiniGameDetail = (props) => {
   const { t } = useTranslation();
   const location = useLocation();
-
   const dataItem = location.state.data;
-  console.log("dataItem======", dataItem);
+  console.log("dataItemMiniGame", dataItem);
 
-  // const
-  const sponsorEven = 1000;
-  const sponsorETAmount = 0;
+  //LOADING APP
+  const loadingApp = useSelector((state) => state.app.loading);
+  console.log("loadingApp", loadingApp);
+
   const [loadingPlace, setLoadingPlace] = useState(false);
-  const predictOptions = "";
-  const amountRules = [
-    (v) => !!v || "Invalid amount",
-    (v) => parseFloat(amount) >= 0.005 || "Min Predict Amount >= 0.005 BNB",
-    (v) =>
-      /^\d+(\.\d{0,5})?$/.test(parseFloat(amount)) ||
-      "must below 5 digit after decimal",
-    (v) =>
-      parseFloat(amount) <= parseFloat(_get(currentToken, "balance", 0)) ||
-      "Insufficient balance",
-  ];
-  const amountRules2 = [
-    (v) => !!v || "Invalid amount",
-    (v) => parseFloat(amount) >= 500 || "Min Predict Amount >= 500 EFUN",
-    (v) =>
-      /^\d+(\.\d{0,5})?$/.test(parseFloat(amount)) ||
-      "must below 5 digit after decimal",
-    (v) =>
-      parseFloat(amount) <= parseFloat(_get(currentToken, "balance", 0)) ||
-      "Insufficient balance",
-  ];
+  const [loadingClaim, setLoadingClaim] = useState(false);
+  // const amountRules = [
+  //   (v) => !!v || "Invalid amount",
+  //   (v) => parseFloat(amount) >= 0.005 || "Min Predict Amount >= 0.005 BNB",
+  //   (v) =>
+  //     /^\d+(\.\d{0,5})?$/.test(parseFloat(amount)) ||
+  //     "must below 5 digit after decimal",
+  //   (v) =>
+  //     parseFloat(amount) <= parseFloat(_get(currentToken, "balance", 0)) ||
+  //     "Insufficient balance",
+  // ];
+  // const amountRules2 = [
+  //   (v) => !!v || "Invalid amount",
+  //   (v) => parseFloat(amount) >= 500 || "Min Predict Amount >= 500 EFUN",
+  //   (v) =>
+  //     /^\d+(\.\d{0,5})?$/.test(parseFloat(amount)) ||
+  //     "must below 5 digit after decimal",
+  //   (v) =>
+  //     parseFloat(amount) <= parseFloat(_get(currentToken, "balance", 0)) ||
+  //     "Insufficient balance",
+  // ];
 
   // variables
-  //const [checkApproveFirst, setCheckApproveFirst] = useState(0);
+
   const [checkApprove, setCheckApprove] = useState(0);
   const [waitingApprove, setWaitingApprove] = useState(false);
   const [amount, setAmount] = useState(AMOUNT_EFUN_FER_CHANCE.toString());
-
   const [isTimeEndedMatch, setIsTimeEndedMatch] = useState(null);
   const [currentTime, setCurrentTime] = useState(null);
+  const [warningPredictNull, setWarningPredictNull] = useState(false);
 
-  let itemOptionPredict = useRef();
+  // list options predicted on blockchain
+
+  const [listPredicted, setListPredicted] = useState([]);
+
   let timer;
   let currentTimer;
-  let [color, setColor] = useState("#ffffff");
-
-  const currentMatches = {
-    id: "0",
-    bc_match_id: "0",
-    bc_match_meta: "0",
-    bc_result: true,
-    bc_result_meta: "0",
-    remote_id: "0",
-    hot: true,
-    timezone: "0",
-    date: "2021-12-11T17:12:37.000Z",
-    timestamp: 1646072675,
-    status_long: "1",
-    status_short: "1",
-    winner: 1,
-    score_meta: "json",
-    meta: "json",
-    created_at: "2021-12-11T17:13:07.000Z",
-    updated_at: "2021-12-11T17:13:10.000Z",
-    deleted_at: null,
-  };
-
-  const matchSelected = currentMatches.id;
-
-  const currentMatchesBlockchain = useSelector(
-    (state) => state.matches.currentMatchesBlockchain
-  );
-
-  const changeCurrentMatches = useSelector(
-    (state) => state.matches.changeCurrentMatches
-  );
 
   const changeCurrentMatchesBlockchain = useSelector(
     (state) => state.matches.changeCurrentMatchesBlockchain
   );
 
-  const currentMatchesBlockchainEfun = useSelector(
-    (state) => state.matches.currentMatchesBlockchainEfun
-  );
-
   const currentAddress =
     useSelector((state) => state.wallet.currentAddress) ||
     localStorage.getItem("currentAddress");
+
+  // get balance token
+  let tokens =
+    useSelector((state) => state.wallet.tokens) ||
+    JSON.parse(localStorage.getItem("tokens"));
+  const currentToken = tokens?.find((item) => item?.symbol === "EFUN");
+  let balanceEfun = currentToken?.balance;
+
+  // Times can chance
+  const timesCanChance = Math.floor(
+    parseFloat(currentToken?.balance) / AMOUNT_EFUN_FER_CHANCE
+  );
 
   // scroll top for mobile
   useEffect(() => {
@@ -158,33 +122,27 @@ const MiniGameDetail = (props) => {
     scrollToTop();
   }, []);
 
-  // get balance token
-  let tokens =
-    useSelector((state) => state.wallet.tokens) ||
-    JSON.parse(localStorage.getItem("tokens"));
-  const currentToken = tokens?.find((item) => item?.symbol === "EFUN");
-  let balanceEfun = currentToken?.balance;
-  const timesCanChance = Math.floor(
-    parseFloat(currentToken?.balance) / AMOUNT_EFUN_FER_CHANCE
-  );
-
-  // time predict
-  const matchTimeEnd = moment("2022-02-21 00:00");
+  // Check approve and get mini game detail from blockchain
   useEffect(() => {
-    return () => {};
+    if (currentToken && currentAddress) {
+      _checkApprove();
+    }
+  }, [currentToken, currentAddress]);
+
+  useEffect(() => {
+    getPredictedOnBlockChain();
   }, []);
 
-  // setInterval(() => {
-  //   const currentTime = moment();
-  //   setCurrentTime(currentTime);
-  // }, 2000);
+  // TIME PREDICT
+  const matchTimeEnd = moment(dataItem?.endDate);
 
-  // setInterval(() => {
-  //   let matchEnded = matchTimeEnd.isBefore(currentTime);
-  //   if (matchEnded) {
-  //     setIsTimeEndedMatch(true);
-  //   }
-  // }, 1000);
+  setInterval(() => {
+    const currentTime = moment();
+    let matchEnded = matchTimeEnd.isBefore(currentTime);
+    if (matchEnded) {
+      setIsTimeEndedMatch(true);
+    }
+  }, 2000);
 
   useEffect(() => {
     return () => {
@@ -197,49 +155,44 @@ const MiniGameDetail = (props) => {
 
   // get match predicted from blockchain
 
-  const yourPredictBet =
-    useSelector((state) => state.matches.yourBet) ||
-    JSON.parse(localStorage.getItem("yourPredictBet")) ||
+  const yourPredict =
+    useSelector((state) => state.matches.yourPredict) ||
+    JSON.parse(localStorage.getItem("yourPredict")) ||
     [];
-  //console.log("yourPredictBet", yourPredictBet);
+  console.log("yourPredict", yourPredict);
 
-  const resultMatch = { Ban1: 0, Ban2: 3 };
+  const resultMatch = { value: "0-1" };
 
   const areYourReWard = useMemo(() => {
-    return yourPredictBet?.predict?.find(
-      (item) => item.Ban1 === resultMatch.Ban1 && item.Ban2 === resultMatch.Ban2
-    );
-  }, [yourPredictBet]);
+    return listPredicted?.find((item) => resultMatch.value === item);
+  }, [yourPredict]);
 
   //console.log("array_default_result", array_default_result);
 
   const isMaxChance =
-    yourPredictBet.length >= timesCanChance || yourPredictBet.length >= 10;
-
-  const [selectedItem, setSelectedItem] = useState(0);
+    yourPredict.length >= timesCanChance || yourPredict.length >= 10;
 
   /**
    * HANDLE DATA REQUEST BLOCKCHAIN =TODO
    */
 
   const predict = async () => {
-    if (yourPredictBet?.length < 1) {
-      console.log("itemOptionPredict", itemOptionPredict);
-
-      itemOptionPredict.current?.classList.add("option-effect");
+    console.log("yourPredict===172", yourPredict);
+    if (yourPredict?.length < 1) {
+      setWarningPredictNull(true);
       return;
     }
     setLoadingPlace(true);
 
     // handle map param request to blockchain
-    const listAnswer =
-      yourPredictBet?.map((item) => item.value).join(";") + ";" || "";
-    //console.log("listAnswer", listAnswer);
+    const listPredict =
+      yourPredict?.map((item) => item.value).join(";") + ";" || "";
 
-    // get amount EFFUN TOKEN for this predict
-    const amount = yourPredictBet?.length * AMOUNT_EFUN_FER_CHANCE;
-    //console.log("amount", amount);
-    //console.log("dataItem.matchId", dataItem.matchId);
+    console.log("listPredict", listPredict);
+
+    // get amount  TOKEN_EFUN for this predict
+    const amount = yourPredict?.length * AMOUNT_EFUN_FER_CHANCE;
+    // console.log("predictAmount", amount);
 
     try {
       const token =
@@ -247,29 +200,22 @@ const MiniGameDetail = (props) => {
           ? REACT_APP_BNB_TOKEN
           : REACT_APP_EFUN_TOKEN;
 
-      //console.log("predictToken", token);
-
       let recept = await MatchesContract.predict(
-        dataItem.matchId,
-        listAnswer,
+        //dataItem.matchId,
+        0,
+        listPredict,
         token,
         amount,
         currentAddress
       );
-
-      console.log("receptPredict=====", recept);
-
-      // await axios.post(process.env.API_HOST + '/api/v1/block-numbers/create', {
-      //   type: 'group_predict',
-      //   block_number: recept.tx.hash.blockNumber
-      // })
 
       if (!recept.error) {
         setLoadingPlace(false);
         store.dispatch(
           showAppPopup(
             <ModalErrorWallet
-              messageError={`Approve success! Transaction hash: ${recept?.hash}`}
+              messageError={`Predict success! Transaction hash: ${recept?.hash}`}
+              onOk={getPredictedOnBlockChain}
             />
           )
         );
@@ -289,48 +235,6 @@ const MiniGameDetail = (props) => {
     }
   };
 
-  const repeat = (self, retryTime) => {
-    setTimeout(async () => {
-      if (localStorage.getItem("extensionName")) {
-        const extensionName = localStorage.getItem("extensionName");
-        await walletManager.connectWallet(extensionName, 0);
-        const data = await MatchesContract.getMatchInfo(
-          currentMatches.bc_match_id,
-          REACT_APP_BNB_TOKEN
-        );
-        const dataEfun = await MatchesContract.getMatchInfo(
-          currentMatches.bc_match_id,
-          REACT_APP_EFUN_TOKEN
-        );
-        const yourDataEfun = await MatchesContract.getBetInfo(
-          currentMatches.bc_match_id,
-          REACT_APP_EFUN_TOKEN,
-          currentAddress
-        );
-        const yourData = await MatchesContract.getBetInfo(
-          currentMatches.bc_match_id,
-          REACT_APP_BNB_TOKEN,
-          currentAddress
-        );
-        changeCurrentMatchesBlockchain(data.tx.data);
-        store.dispatch(changeCurrentMatchesBlockchainEfun(dataEfun.tx.data));
-        changeYourBet(yourData.tx.data);
-        changeYourBetEfun(yourDataEfun.tx.data);
-        changeCurrentAddress(walletManager.currentAddress());
-        changeSupportTokenAndBalance(walletManager.tokens());
-        if (retryTime !== 0) {
-          return repeat(self, retryTime - 1);
-        }
-      }
-    }, 2000);
-  };
-
-  useEffect(() => {
-    if (currentToken && currentAddress) {
-      _checkApprove(false);
-    }
-  }, [currentToken, currentAddress]);
-
   const _checkApprove = async () => {
     if (currentToken) {
       let checkapprove = await MatchesContract.checkApproveTx(
@@ -343,8 +247,7 @@ const MiniGameDetail = (props) => {
         setCheckApprove(checkapprove);
       }
 
-      // waitingApprove = false
-      if (checkapprove != 0) {
+      if (checkapprove !== 0) {
         setWaitingApprove(false);
       }
     }
@@ -360,28 +263,18 @@ const MiniGameDetail = (props) => {
         currentAddress,
         currentToken?.symbol
       );
-      // sign approve TX
-      // const recept = await Support.signAndSendTx(approve);
-      // console.log(recept, 'recept')
       if (approve) {
         if (currentToken?.symbol === "BNB") {
           setCheckApprove(1);
         } else {
           //repeat2(this, 10);
         }
-
-        // setApproveHash(recept.transactionHash);
-        // appLabel = 'Approved EFUN'
-        // checkApproveFirst = 1
       }
     } catch (e) {
       setWaitingApprove(false);
       store.dispatch(
         showAppPopup(<ModalErrorWallet messageError={e?.message?.toString()} />)
       );
-    } finally {
-      // approveDialog = true
-      // waitingApprove = false
     }
   };
 
@@ -447,123 +340,101 @@ const MiniGameDetail = (props) => {
   //     console.log(e);
   //   }
   // };
-  const claim = async () => {
-    try {
-      setLoadingPlace(true);
-      await MatchesContract.claimReward(
-        currentMatches.bc_match_id,
-        REACT_APP_BNB_TOKEN,
-        currentAddress
-      );
-      const yourData = await MatchesContract.getBetInfo(
-        currentMatches.bc_match_id,
-        REACT_APP_BNB_TOKEN,
-        currentAddress
-      );
-      changeYourBet(yourData.tx.data);
-    } catch (e) {
-      // console.log(e, 'err')
-    } finally {
-      // repeat(this, 10)
-      setLoadingPlace(false);
-    }
-  };
+  // const claim = async () => {
+  //   try {
+  //     setLoadingPlace(true);
+  //     await MatchesContract.claimReward(
+  //       dataItem.matchId,
+  //       REACT_APP_BNB_TOKEN,
+  //       currentAddress
+  //     );
+  //     const yourData = await MatchesContract.getBetInfo(
+  //       dataItem.matchId,
+  //       REACT_APP_BNB_TOKEN,
+  //       currentAddress
+  //     );
+  //     changeYourPredict(yourData.tx.data);
+  //   } catch (e) {
+  //     // console.log(e, 'err')
+  //   } finally {
+  //     // repeat(this, 10)
+  //     setLoadingPlace(false);
+  //   }
+  // };
   const claimEfun = async () => {
     try {
-      await MatchesContract.claimReward(
-        currentMatches.bc_match_id,
+      setLoadingClaim(true);
+      const dataClaim = await MatchesContract.claimReward(
+        //dataItem.matchId,
+        0,
         REACT_APP_EFUN_TOKEN,
         REACT_APP_EFUN_TOKEN,
         currentAddress
       );
-      const yourDataEfun = await MatchesContract.getBetInfo(
-        currentMatches.bc_match_id,
-        REACT_APP_EFUN_TOKEN,
-        currentAddress
+      // const yourDataEfun = await MatchesContract.getBetInfo(
+      //   dataItem.matchId,
+      //   REACT_APP_EFUN_TOKEN,
+      //   currentAddress
+      // );
+      //console.log("yourDataEfun", yourDataEfun);
+      //changeYourPredict(yourDataEfun.tx.data);
+      if (dataClaim?.error) {
+        return store.dispatch(
+          showAppPopup(
+            <ModalErrorWallet
+              messageError={dataClaim.error.message?.toString()}
+            />
+          )
+        );
+      }
+      // Announce success
+      store.dispatch(
+        showAppPopup(<ModalErrorWallet messageError="Claim success" />)
       );
-      changeYourBetEfun(yourDataEfun.tx.data);
     } catch (e) {
-      // console.log(e, 'err')
+      console.log(e, "err");
+      store.dispatch(
+        showAppPopup(<ModalErrorWallet messageError={e?.message?.toString()} />)
+      );
     } finally {
       // repeat(this, 10)
+      setLoadingClaim(false);
     }
   };
-  const create = async () => {
-    const tx = await MatchesContract.createMatches(
-      ["description"],
-      [1623171248],
-      [1646072675],
-      [process.env.DFY_TOKEN],
-      currentAddress
-    );
-    const data = tx.tx.data.events;
-  };
-  const getMatchesDetail = async () => {
-    if (currentAddress) {
-      if (localStorage.getItem("extensionName")) {
-        const extensionName = localStorage.getItem("extensionName");
-        await walletManager.connectWallet(extensionName, 0);
-        changeCurrentAddress(walletManager.currentAddress());
-        changeSupportTokenAndBalance(walletManager.tokens());
+
+  const getPredictedOnBlockChain = async () => {
+    try {
+      // const dataEfun = await MatchesContract.getMatchInfo(
+      //   // dataItem.matchId,
+      //   0,
+      //   REACT_APP_EFUN_TOKEN
+      // );
+      store.dispatch(showAppLoading(true));
+      const yourPredicted = await MatchesContract.getBetInfo(
+        // dataItem.matchId,
+        0,
+        REACT_APP_EFUN_TOKEN,
+        currentAddress
+      );
+      console.log("yourPredictedFromBlockChain", yourPredicted);
+      if (yourPredicted) {
+        let dataPredictedOnBlockChain = yourPredicted?.tx.data[1];
+        console.log("dataPredictedOnBlockChain", dataPredictedOnBlockChain);
+        let arrayData = dataPredictedOnBlockChain.split(";");
+
+        // set list predicted
+
+        setListPredicted(arrayData);
       }
-      try {
-        const data = await MatchesContract.getMatchInfo(
-          currentMatches.bc_match_id,
-          REACT_APP_BNB_TOKEN
-        );
-        const dataEfun = await MatchesContract.getMatchInfo(
-          currentMatches.bc_match_id,
-          REACT_APP_EFUN_TOKEN
-        );
-        // console.log(data, 'data')
-        // console.log(dataEfun, 'dataEfun')
-        if (currentAddress) {
-          const yourData = await MatchesContract.getBetInfo(
-            currentMatches.bc_match_id,
-            REACT_APP_BNB_TOKEN,
-            currentAddress
-          );
-          const yourDataEfun = await MatchesContract.getBetInfo(
-            currentMatches.bc_match_id,
-            REACT_APP_EFUN_TOKEN,
-            currentAddress
-          );
-          // console.log(yourData, 'yourData')
-          // console.log(yourDataEfun, 'yourDataEfun')
-          await changeYourBet(yourData.tx.data);
-          await changeYourBetEfun(yourDataEfun.tx.data);
-        }
-        changeCurrentMatchesBlockchain(data.tx.data);
-        changeCurrentMatchesBlockchainEfun(dataEfun.tx.data);
-      } catch (error) {
-        console.log(error, "errr");
-      } finally {
-        changeCurrentMatches(currentMatches);
-      }
-    } else {
-      try {
-        matchSelected = currentMatches.id;
-        const data = await MatchesContract.getMatchInfo(
-          currentMatches.bc_match_id,
-          REACT_APP_BNB_TOKEN
-        );
-        const dataEfun = await MatchesContract.getMatchInfo(
-          currentMatches.bc_match_id,
-          REACT_APP_EFUN_TOKEN
-        );
-        // if (currentAddress) {
-        //   const yourData = await MatchesContract.getBetInfo(currentMatches.bc_match_id, REACT_APP_BNB_TOKEN, currentAddress)
-        //   const yourDataEfun = await MatchesContract.getBetInfo(currentMatches.bc_match_id, REACT_APP_EFUN_TOKEN, currentAddress)
-        //   await changeYourBet(yourData.tx.data)
-        //   await changeYourBetEfun(yourDataEfun.tx.data)
-        // }
-        changeCurrentMatchesBlockchain(data.tx.data);
-        changeCurrentMatchesBlockchainEfun(dataEfun.tx.data);
-      } catch (error) {
-        console.log(error, "errr");
-      } finally {
-        changeCurrentMatches(currentMatches);
-      }
+    } catch (error) {
+      console.log(
+        "Error getPredictedOnBlockChain in file MiniGameDetail line 397 "
+      );
+    } finally {
+      setTimeout(function () {
+        store.dispatch(showAppLoading(false));
+        console.log("listPredicted", listPredicted);
+      }, 800);
     }
   };
 
@@ -661,15 +532,10 @@ const MiniGameDetail = (props) => {
   //   }
   // };
 
-  const handleSelectMiniGame = (index) => {
-    setSelectedItem(index);
-    localStorage.removeItem("yourPredictBet");
-    store.dispatch(changeYourBet(null));
-  };
-
   return (
     <>
       <Header />
+      {loadingApp && <AppLoading />}
       <div className="container">
         <div className="miniGame">
           <div
@@ -702,7 +568,6 @@ const MiniGameDetail = (props) => {
               <div className="detail-games-banner">
                 <img
                   src={dataItem?.backGround}
-                  height={WIDTH >= 675 ? 500 : 200}
                   width={`${WIDTH >= 675 ? "80%" : 200}`}
                   alt="background"
                 />
@@ -729,8 +594,16 @@ const MiniGameDetail = (props) => {
 
                       <br />
                       {isMaxChance && (
-                        <div className="mt-small text-small">
-                          <RiErrorWarningLine /> {t("common.error_message_1")}
+                        <div className="mt-small text-medium red">
+                          <TiWarningOutline style={{ color: "yellow" }} />{" "}
+                          {t("common.error_message_1")}
+                        </div>
+                      )}
+
+                      {yourPredict.length === 0 && warningPredictNull && (
+                        <div className="mt-small text-medium red">
+                          <TiWarningOutline style={{ color: "yellow" }} /> You
+                          need choice minimum 1 option to predict.
                         </div>
                       )}
                     </div>
@@ -739,18 +612,23 @@ const MiniGameDetail = (props) => {
                   <div className="table-options mb-large">
                     <TableOption
                       data={dataItem}
-                      yourPredictBet={yourPredictBet}
+                      yourPredict={yourPredict}
                       isMaxChance={isMaxChance}
                       isTimeEndedMatch={isTimeEndedMatch}
+                      listPredicted={listPredicted}
                     />
                   </div>
 
                   <div className="text-small yellow margin-horizontal-large">
-                    {`${t("common.with")} ${
-                      balanceEfun ? formatNumberPrice(balanceEfun) : 0
-                    } EFUN, ${t("common.have_predict_1")} ${
-                      timesCanChance ? timesCanChance : 0
-                    } ${t("common.have_predict_2")}`}
+                    {`${t("common.with")} `}
+                    <span className="bold">
+                      {balanceEfun ? formatNumberPrice(balanceEfun) : 0} EFUN
+                    </span>
+                    {`, ${t("common.have_predict_1")} `}
+                    <span className="bold">
+                      {timesCanChance ? timesCanChance : 0}
+                    </span>{" "}
+                    {`${t("common.have_predict_2")}`}
                   </div>
 
                   <div className="flex_row_center mt-tiny center">
@@ -759,12 +637,22 @@ const MiniGameDetail = (props) => {
                         className={`${
                           !currentAddress && "disable-btn"
                         } btn-submit flex_row_center`}
-                        disabled={`${!areYourReWard && "disabled"}`}
+                        disabled={`${!areYourReWard ? "disabled" : ""}`}
+                        onClick={claimEfun}
                       >
-                        {areYourReWard ? (
-                          <span>Claim</span>
+                        {!loadingClaim ? (
+                          areYourReWard ? (
+                            <span>Claim</span>
+                          ) : (
+                            <span>No Reward</span>
+                          )
                         ) : (
-                          <span>No Reward</span>
+                          <ClipLoader
+                            color="#fff"
+                            loading={loadingClaim}
+                            css={override}
+                            size={30}
+                          />
                         )}
                       </div>
                     )}
@@ -777,7 +665,7 @@ const MiniGameDetail = (props) => {
                           >
                             {waitingApprove ? (
                               <ClipLoader
-                                color={color}
+                                color="#fff"
                                 loading={waitingApprove}
                                 css={override}
                                 size={30}
@@ -806,7 +694,7 @@ const MiniGameDetail = (props) => {
                         >
                           {loadingPlace ? (
                             <ClipLoader
-                              color={color}
+                              color="#fff"
                               loading={loadingPlace}
                               css={override}
                               size={30}

@@ -20,7 +20,6 @@ import { storeData } from "src/utils/storageUtils";
 import { ASYNC_STORAGE_KEYS } from "src/common/Constants";
 import { setLanguage } from "src/redux/reducers/userSlice";
 import { LogoEFUN } from "src/assets/icons";
-import { Link } from "react-router-dom";
 
 export const showChooseWallet = () => {
   store.dispatch(showAppPopup(<ModalConnectWallet />));
@@ -64,7 +63,7 @@ const Header = () => {
   const handleCloseNav = () => setActiveNav(!activeNav);
 
   const _showNavLang = () => {
-    setShowNavLang(true);
+    setShowNavLang(!showNavLang);
   };
 
   return (
@@ -72,9 +71,7 @@ const Header = () => {
       <nav className="main-menu">
         <div>
           <a href="https://app.efun.tech/" target="_blank" rel="noreferrer">
-            {/* <LogoEFUN /> */}
-
-            <img src={Images.logo} />
+            <img src={Images.logo} alt="logo" />
           </a>
         </div>
         <ul className="menu-pc">

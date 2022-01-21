@@ -2,16 +2,18 @@ import { WIDTH } from "src/assets/themes/dimension";
 import React from "react";
 import "./styles.scss";
 import { store } from "src/redux/store";
-import { changeYourBet } from "src/redux/reducers/matchesSlice";
+import { changeYourPredict } from "src/redux/reducers/matchesSlice";
 import { AMOUNT_EFUN_FER_CHANCE } from "src/common/Constants";
 import { useSelector } from "react-redux";
 import { showAppPopup } from "src/redux/reducers/appSlice";
 import ModalErrorWallet from "src/components/Modal/ErrorWallet/ErrorWallet";
+import Images from "src/common/Images";
 
 const TableOption = (props) => {
-  const { data, isTimeEndedMatch, isMaxChance } = props;
+  const { data, isTimeEndedMatch, isMaxChance, listPredicted } = props;
   //console.log("isMaxChance", isMaxChance);
-  //console.log("isTimeEndedMatch", isTimeEndedMatch);
+  console.log("isTimeEndedMatch", isTimeEndedMatch);
+  //console.log("listPredictedAAA", listPredicted);
 
   // get balance token
   let currentAddress =
@@ -20,8 +22,7 @@ const TableOption = (props) => {
 
   //console.log("timesCanChance", timesCanChance);
 
-  const yourPredictBet =
-    JSON.parse(localStorage.getItem("yourPredictBet")) || [];
+  const yourPredict = JSON.parse(localStorage.getItem("yourPredict")) || [];
 
   const handleChooseOption = (item) => {
     if (!currentAddress) {
@@ -32,29 +33,23 @@ const TableOption = (props) => {
       );
     }
 
-    let isExistItem = yourPredictBet.find(
+    let isExistItem = yourPredict.find(
       (value) => value?.country === item?.country
     );
 
     if (isExistItem) {
-      let newSelectedOptions = yourPredictBet.filter(
+      let newSelectedOptions = yourPredict.filter(
         (value) => value?.country !== item?.country
       );
       // set state to store
-      localStorage.setItem(
-        "yourPredictBet",
-        JSON.stringify(newSelectedOptions)
-      );
-      store.dispatch(changeYourBet(newSelectedOptions));
+      localStorage.setItem("yourPredict", JSON.stringify(newSelectedOptions));
+      store.dispatch(changeYourPredict(newSelectedOptions));
     } else {
-      let newSelectedOptions = [...yourPredictBet, item];
-      // set state to storeyourPredictBet
+      let newSelectedOptions = [...yourPredict, item];
+      // set state to storeyourPredict
       console.log("newSelectedOptions", newSelectedOptions);
-      localStorage.setItem(
-        "yourPredictBet",
-        JSON.stringify(newSelectedOptions)
-      );
-      store.dispatch(changeYourBet(newSelectedOptions));
+      localStorage.setItem("yourPredict", JSON.stringify(newSelectedOptions));
+      store.dispatch(changeYourPredict(newSelectedOptions));
     }
   };
 
@@ -68,33 +63,27 @@ const TableOption = (props) => {
       );
     }
 
-    let isExistItem = yourPredictBet.find((value) => value.key === item.key);
+    let isExistItem = yourPredict.find((value) => value.key === item.key);
 
-    //console.log("yourPredictBet", yourPredictBet);
+    //console.log("yourPredict", yourPredict);
     if (isExistItem) {
-      let newSelectedOptions = yourPredictBet.filter(
+      let newSelectedOptions = yourPredict.filter(
         (value) => value.key !== item.key
       );
       // set state to store
-      localStorage.setItem(
-        "yourPredictBet",
-        JSON.stringify(newSelectedOptions)
-      );
-      store.dispatch(changeYourBet(newSelectedOptions));
+      localStorage.setItem("yourPredict", JSON.stringify(newSelectedOptions));
+      store.dispatch(changeYourPredict(newSelectedOptions));
     } else {
-      let newSelectedOptions = [...yourPredictBet, item];
-      // set state to storeyourPredictBet
+      let newSelectedOptions = [...yourPredict, item];
+      // set state to storeyourPredict
       console.log("newSelectedOptions", newSelectedOptions);
-      localStorage.setItem(
-        "yourPredictBet",
-        JSON.stringify(newSelectedOptions)
-      );
-      store.dispatch(changeYourBet(newSelectedOptions));
+      localStorage.setItem("yourPredict", JSON.stringify(newSelectedOptions));
+      store.dispatch(changeYourPredict(newSelectedOptions));
     }
   };
 
   const checkItemSelected = (item) => {
-    const findItem = yourPredictBet?.find(
+    const findItem = yourPredict?.find(
       (value) => value?.country === item?.country
     );
     if (findItem) return true;
@@ -102,7 +91,7 @@ const TableOption = (props) => {
   };
 
   const checkItemSelectedNumber = (item) => {
-    const findItem = yourPredictBet?.find((value) => value.key === item.key);
+    const findItem = yourPredict?.find((value) => value.key === item.key);
     if (findItem) return true;
     return false;
   };
@@ -118,6 +107,14 @@ const TableOption = (props) => {
       return;
     }
     return handleChooseOptionNumber(item);
+  };
+
+  const checkItemHadPredicted = (item) => {
+    const isPredictedItem = listPredicted.find(
+      (predicted) => predicted === item?.value
+    );
+    if (isPredictedItem) return true;
+    return false;
   };
 
   const renderContent = () => {
@@ -137,9 +134,12 @@ const TableOption = (props) => {
                         : isMaxChance
                         ? "disable"
                         : ""
-                    }`}
+                    } ${checkItemHadPredicted(item) ? "active" : ""}`}
                     onClick={() => {
                       if (isTimeEndedMatch) {
+                        return;
+                      }
+                      if (checkItemHadPredicted(item)) {
                         return;
                       }
                       if (checkItemSelected(item)) {
@@ -176,9 +176,12 @@ const TableOption = (props) => {
                       : isMaxChance
                       ? "disable"
                       : ""
-                  }`}
+                  } ${checkItemHadPredicted(item) ? "active" : ""}`}
                   onClick={() => {
                     if (isTimeEndedMatch) {
+                      return;
+                    }
+                    if (checkItemHadPredicted(item)) {
                       return;
                     }
                     if (checkItemSelectedNumber(item)) {
@@ -209,9 +212,21 @@ const TableOption = (props) => {
                       : isMaxChance
                       ? "disable"
                       : ""
-                  }`}
+                  } ${checkItemHadPredicted(item) ? "active" : ""}`}
                   onClick={() => {
-                    handleSelectItemNumber(item);
+                    if (isTimeEndedMatch) {
+                      return;
+                    }
+                    if (checkItemHadPredicted(item)) {
+                      return;
+                    }
+                    if (checkItemSelectedNumber(item)) {
+                      return handleChooseOptionNumber(item);
+                    }
+                    if (isMaxChance) {
+                      return;
+                    }
+                    return handleChooseOptionNumber(item);
                   }}
                 >
                   {item.key}
@@ -225,7 +240,16 @@ const TableOption = (props) => {
     }
   };
 
-  return <>{renderContent()}</>;
+  return (
+    <div className="table-option">
+      {isTimeEndedMatch ? (
+        <div className="place-closed">
+          <img src={Images.closed} alt="closed" />
+        </div>
+      ) : null}
+      <div>{renderContent()}</div>
+    </div>
+  );
 };
 
 export default TableOption;

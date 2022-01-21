@@ -5,7 +5,7 @@ const Spinner = () => {
   return (
     <Loader
       type="ThreeDots"
-      color="#00BFFF"
+      color="#ffc107"
       height={60}
       width={60}
       style={{

@@ -4,7 +4,7 @@ import lodash from "lodash";
 import "./styles.scss";
 import { WIDTH } from "src/assets/themes/dimension";
 import { store } from "src/redux/store";
-import { changeYourBet } from "src/redux/reducers/matchesSlice";
+import { changeYourPredict } from "src/redux/reducers/matchesSlice";
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -41,45 +41,38 @@ export default class SlideOptions extends Component {
   };
 
   render() {
-    const yourPredictBet =
-      JSON.parse(localStorage.getItem("yourPredictBet")) ||
-      this.props.yourPredictBet;
+    const yourPredict =
+      JSON.parse(localStorage.getItem("yourPredict")) || this.props.yourPredict;
 
     const timesCanChance = this.props.timesCanChance;
     const isTimeEndedMatch = this.props.isTimeEndedMatch;
-    const isMaxChance = yourPredictBet.length >= timesCanChance;
+    const isMaxChance = yourPredict.length >= timesCanChance;
 
-    // console.log("yourPredictBet", yourPredictBet);
+    // console.log("yourPredict", yourPredict);
     // console.log("timesCanChance", timesCanChance);
     // console.log("timesCanChance", isMaxChance);
 
     const handleChooseOption = (item) => {
-      let isExistItem = yourPredictBet.find(
+      let isExistItem = yourPredict.find(
         (value) => value.Ban1 === item.Ban1 && value.Ban2 === item.Ban2
       );
       if (isExistItem) {
-        let newSelectedOptions = yourPredictBet.filter(
+        let newSelectedOptions = yourPredict.filter(
           (value) => value.Ban1 !== item.Ban1 || value.Ban2 !== item.Ban2
         );
         // set state to store
-        localStorage.setItem(
-          "yourPredictBet",
-          JSON.stringify(newSelectedOptions)
-        );
-        store.dispatch(changeYourBet(newSelectedOptions));
+        localStorage.setItem("yourPredict", JSON.stringify(newSelectedOptions));
+        store.dispatch(changeYourPredict(newSelectedOptions));
       } else {
-        let newSelectedOptions = [...yourPredictBet, item];
-        // set state to storeyourPredictBet
-        localStorage.setItem(
-          "yourPredictBet",
-          JSON.stringify(newSelectedOptions)
-        );
-        store.dispatch(changeYourBet(newSelectedOptions));
+        let newSelectedOptions = [...yourPredict, item];
+        // set state to storeyourPredict
+        localStorage.setItem("yourPredict", JSON.stringify(newSelectedOptions));
+        store.dispatch(changeYourPredict(newSelectedOptions));
       }
     };
 
     const checkItemSelected = (item) => {
-      const findItem = yourPredictBet?.find(
+      const findItem = yourPredict?.find(
         (value) => value.Ban1 === item.Ban1 && value.Ban2 === item.Ban2
       );
       if (findItem) return true;
