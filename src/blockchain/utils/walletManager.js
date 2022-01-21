@@ -36,7 +36,7 @@ const supportSymbol =
     ? require("./tokens/supportSymbolTest.json")
     : require("./tokens/supportSymbol.json");
 // const supportSymbolFantom = network === 'TESTNET' ? require('./tokens/supportSymbolFantomTest') : require('./tokens/supportSymbolFantomTest')
-let currentAddress = "";
+let currentAddress = localStorage.getItem("currentAddress") || "";
 const supportedWalletsType = Object.values(supportWallet);
 
 // const REACT_APP_API_URL_WEB3 = 'https://rpc.testnet.fantom.network/'
@@ -121,7 +121,7 @@ async function connectWallet(walletType, timeout) {
   }
 }
 
-async function getBalance() {
+export async function getBalance() {
   try {
     const tokens = await getBalances();
     //console.log("balances====", tokens);
@@ -289,10 +289,10 @@ async function getBalances() {
         ? REACT_APP_BLOCKCHAIN_RPC_NETWORK
         : REACT_APP_BLOCKCHAIN_RPC_NETWORK_MAINNET;
 
-    console.log("node=====", node);
+    // console.log("node=====", node);
     const web3 = new Web3(node);
-    console.log("web3======", web3);
-    console.log("supportSymbol", supportSymbol);
+    // console.log("web3======", web3);
+    // console.log("supportSymbol", supportSymbol);
     tokens = await Promise.all(
       Object.keys(supportSymbol).map(async (symbol) => {
         if (symbol === "BNB") {

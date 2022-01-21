@@ -4,6 +4,12 @@ import erc20Abi from "./contracts/erc20.abi.json";
 import { initWeb3 } from "./support/initWeb3";
 import BigNumber from "bignumber.js";
 import { WalletError } from "./error";
+import {
+  REACT_APP_NODE_ENV,
+  REACT_APP_SPONSOR_MATCH_DEV,
+  REACT_APP_SPONSOR_PREDICT_DEV,
+  REACT_APP_VUE_APP_MAX_INT_STAKING,
+} from "src/common/Environment";
 
 // #need_config
 
@@ -11,17 +17,17 @@ import { WalletError } from "./error";
 // const network = 'MAINNET'
 // const supportSymbol = JSON.parse(localStorage.getItem('supportSymbol'))
 const supportSymbol =
-  process.env.NODE_ENV === "development"
+  REACT_APP_NODE_ENV === "development"
     ? require("./tokens/supportSymbolTest.json")
     : require("./tokens/supportSymbol.json");
 // const betAbi = network === 'TESTNET' ? require('./contracts/ftm.abi.json') : require('./contracts/ftm.abi.json')
 // const betAbi = process.env.NODE_ENV === 'development' ? require('./contracts/bet.abi.json') : require('./contracts/bet.abi.json')
 const groupAbi =
-  process.env.NODE_ENV === "development"
+  REACT_APP_NODE_ENV === "development"
     ? require("./contracts/group.abi.json")
     : require("./contracts/group.abi.json");
 const createAbi =
-  process.env.NODE_ENV === "development"
+  REACT_APP_NODE_ENV === "development"
     ? require("./contracts/create.abi.json")
     : require("./contracts/create.abi.json");
 
@@ -29,15 +35,15 @@ const createAbi =
 // hard_code
 // const groupContract = process.env.NODE_ENV === 'development' ? process.env.FTM_CONTRACT : process.env.FTM_CONTRACT
 const groupContract =
-  process.env.NODE_ENV === "development"
-    ? process.env.REACT_APP_SPONSOR_PREDICT_DEV
-    : process.env.REACT_APP_SPONSOR_PREDICT_DEV;
+  REACT_APP_NODE_ENV === "development"
+    ? REACT_APP_SPONSOR_PREDICT_DEV
+    : REACT_APP_SPONSOR_PREDICT_DEV;
 const createContract =
-  process.env.NODE_ENV === "development"
-    ? process.env.REACT_APP_SPONSOR_MATCH_DEV
-    : process.env.REACT_APP_SPONSOR_MATCH_DEV;
-const MAX_INT = process.env.REACT_APP_VUE_APP_MAX_INT_STAKING
-  ? process.env.REACT_APP_VUE_APP_MAX_INT_STAKING
+  REACT_APP_NODE_ENV === "development"
+    ? REACT_APP_SPONSOR_MATCH_DEV
+    : REACT_APP_SPONSOR_MATCH_DEV;
+const MAX_INT = REACT_APP_VUE_APP_MAX_INT_STAKING
+  ? REACT_APP_VUE_APP_MAX_INT_STAKING
   : "115792089237316195423570985008687907853269984665640564039457584007913129639935";
 
 // not required connect wallet
@@ -255,17 +261,16 @@ const claimReward = async (matchId, _token, saToken, from) => {
   const tokenContract = new web3.eth.Contract(
     groupAbi,
     groupContract
-    // createAbi,
-    // createContract
   );
   // const accounts = await web3.eth.getAccounts()
   // console.log(matchId, 'matchId')
-  // console.log(_token, '_token')
+  console.log(_token, '_token')
+  console.log(saToken, 'saToken')
 
   const txData = await tokenContract.methods
     .claimReward(matchId, _token, saToken)
     // .call()
-    .send({ from })
+    .send({ from: from })
     .on("error", (error) => {
       console.log(error);
     })
@@ -286,7 +291,6 @@ const claimReward = async (matchId, _token, saToken, from) => {
       return tx;
     });
   return txData;
-  // const nonce = await web3.eth.getTransactionCount(groupContract, 'pending')
 };
 
 const updateResult = async (matchId, result, account) => {

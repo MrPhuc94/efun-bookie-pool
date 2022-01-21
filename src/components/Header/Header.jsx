@@ -195,7 +195,7 @@ const Header = () => {
       >
         <ul className="nav-mobile">
           <div>
-            <LogoEFUN />
+            <img src={Images.logo} alt="logo" />
           </div>
           <li className="item">
             <a
