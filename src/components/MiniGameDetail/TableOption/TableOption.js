@@ -120,6 +120,7 @@ const TableOption = (props) => {
   const renderContent = () => {
     switch (data?.name) {
       case "AFCON_2021":
+        console.log("dataAFCON_2021", data.data);
         return data?.data.map((item, index) => {
           return (
             <div className="flex_row table-option" key={index}>

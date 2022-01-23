@@ -5,6 +5,7 @@ import { store } from "src/redux/store";
 import {
   changeYourPredict,
   changeYourPredictEfun,
+  changeYourClaimed,
 } from "src/redux/reducers/matchesSlice";
 import { useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
@@ -44,37 +45,11 @@ const MiniGameDetail = (props) => {
   const { t } = useTranslation();
   const location = useLocation();
   const dataItem = location.state.data;
-  console.log("dataItemMiniGame", dataItem);
-
+  //console.log("dataItemMiniGame", dataItem);
   //LOADING APP
   const loadingApp = useSelector((state) => state.app.loading);
-  console.log("loadingApp", loadingApp);
-
   const [loadingPlace, setLoadingPlace] = useState(false);
   const [loadingClaim, setLoadingClaim] = useState(false);
-  // const amountRules = [
-  //   (v) => !!v || "Invalid amount",
-  //   (v) => parseFloat(amount) >= 0.005 || "Min Predict Amount >= 0.005 BNB",
-  //   (v) =>
-  //     /^\d+(\.\d{0,5})?$/.test(parseFloat(amount)) ||
-  //     "must below 5 digit after decimal",
-  //   (v) =>
-  //     parseFloat(amount) <= parseFloat(_get(currentToken, "balance", 0)) ||
-  //     "Insufficient balance",
-  // ];
-  // const amountRules2 = [
-  //   (v) => !!v || "Invalid amount",
-  //   (v) => parseFloat(amount) >= 500 || "Min Predict Amount >= 500 EFUN",
-  //   (v) =>
-  //     /^\d+(\.\d{0,5})?$/.test(parseFloat(amount)) ||
-  //     "must below 5 digit after decimal",
-  //   (v) =>
-  //     parseFloat(amount) <= parseFloat(_get(currentToken, "balance", 0)) ||
-  //     "Insufficient balance",
-  // ];
-
-  // variables
-
   const [checkApprove, setCheckApprove] = useState(0);
   const [waitingApprove, setWaitingApprove] = useState(false);
   const [amount, setAmount] = useState(AMOUNT_EFUN_FER_CHANCE.toString());
@@ -97,6 +72,11 @@ const MiniGameDetail = (props) => {
   const currentAddress =
     useSelector((state) => state.wallet.currentAddress) ||
     localStorage.getItem("currentAddress");
+
+  let claimSuccessArray = useSelector((state) => state.matches.yourClaimed);
+  let claimSuccess = claimSuccessArray?.find(
+    (item) => item?.matchId === dataItem.matchId
+  )?.claimed;
 
   // get balance token
   let tokens =
@@ -266,6 +246,8 @@ const MiniGameDetail = (props) => {
       if (!recept.error) {
         setLoadingPlace(false);
         updateBalanceToken();
+        store.dispatch(changeYourPredict(null));
+        localStorage.setItem("yourPredict", null);
         store.dispatch(
           showAppPopup(
             <ModalErrorWallet
@@ -279,7 +261,9 @@ const MiniGameDetail = (props) => {
         setLoadingPlace(false);
         store.dispatch(
           showAppPopup(
-            <ModalErrorWallet messageError={`${recept.error?.message}`} />
+            <ModalErrorWallet
+              messageError={`${recept.error?.message.toString()}`}
+            />
           )
         );
       }
@@ -287,7 +271,7 @@ const MiniGameDetail = (props) => {
       updateBalanceToken();
       console.log("error====", e);
       store.dispatch(
-        showAppPopup(<ModalErrorWallet messageError={e.message} />)
+        showAppPopup(<ModalErrorWallet messageError={e.message?.toString()} />)
       );
     }
   };
@@ -298,7 +282,7 @@ const MiniGameDetail = (props) => {
         currentAddress,
         "EFUN"
       );
-      console.log("checkapprove", checkapprove);
+      console.log("checkapprove1111111", checkapprove);
       if (checkapprove) {
         // setCheckApproveFirst(checkapprove);
         setCheckApprove(checkapprove);
@@ -320,90 +304,26 @@ const MiniGameDetail = (props) => {
         currentAddress,
         currentToken?.symbol
       );
+      //const recept = await Support.signAndSendTx(approve);
       if (approve) {
-        if (currentToken?.symbol === "BNB") {
+        if (currentToken?.symbol === "EFUN") {
           setCheckApprove(1);
+          store.dispatch(
+            showAppPopup(<ModalErrorWallet messageError="Approve Success" />)
+          );
         } else {
-          //repeat2(this, 10);
+          setCheckApprove(0);
         }
       }
     } catch (e) {
-      setWaitingApprove(false);
       store.dispatch(
         showAppPopup(<ModalErrorWallet messageError={e?.message?.toString()} />)
       );
+    } finally {
+      setWaitingApprove(false);
     }
   };
 
-  // const repeat2 = (self, retryTime) => {
-  //   setTimeout(async () => {
-  //     if (localStorage.getItem("extensionName")) {
-  //       _checkApprove(false);
-  //       if (retryTime !== 0 && checkApprove == 0) {
-  //         return repeat2(self, retryTime - 1);
-  //       }
-  //     }
-  //   }, 2000);
-  // };
-
-  // const maxAmount = () => {
-  //   if (!currentAddress) {
-  //     addWalletDialog = true;
-  //   } else {
-  //     const number = new Decimal(_get(currentToken, "balance", 0));
-  //     amount = number.toFixed(5, Decimal.ROUND_DOWN);
-  //   }
-  // };
-
-  const convertAmountBC = (amount) => {
-    return new BigNumber(amount).dividedBy(10 ** 18).toString();
-  };
-
-  const setDefaultValue = () => {
-    if (currentToken.symbol === "BNB") {
-      return 0.005;
-    }
-    if (currentToken.symbol === "EFUN") {
-      return 500;
-    }
-  };
-
-  // const calculateReward = async () => {
-  //   try {
-  //     const reward = await MatchesContract.calculateReward(
-  //       currentMatches.bc_match_id,
-  //       currentAddress,
-  //       REACT_APP_BNB_TOKEN
-  //     );
-  //     console.log(reward.tx.data, "calculateReward");
-  //     totalReward = reward.tx.data._reward;
-  //     sponsorReward = reward.tx.data._sponsorReward;
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // const claim = async () => {
-  //   try {
-  //     setLoadingPlace(true);
-  //     await MatchesContract.claimReward(
-  //       dataItem.matchId,
-  //       REACT_APP_BNB_TOKEN,
-  //       currentAddress
-  //     );
-  //     const yourData = await MatchesContract.getBetInfo(
-  //       dataItem.matchId,
-  //       REACT_APP_BNB_TOKEN,
-  //       currentAddress
-  //     );
-  //     changeYourPredict(yourData.tx.data);
-  //   } catch (e) {
-  //     // console.log(e, 'err')
-  //   } finally {
-  //     // repeat(this, 10)
-  //     setLoadingPlace(false);
-  //   }
-  // };
   const claimEfun = async () => {
     try {
       setLoadingClaim(true);
@@ -414,13 +334,7 @@ const MiniGameDetail = (props) => {
         REACT_APP_EFUN_TOKEN,
         currentAddress
       );
-      // const yourDataEfun = await MatchesContract.getBetInfo(
-      //   dataItem.matchId,
-      //   REACT_APP_EFUN_TOKEN,
-      //   currentAddress
-      // );
-      //console.log("yourDataEfun", yourDataEfun);
-      //changeYourPredict(yourDataEfun.tx.data);
+
       if (dataClaim?.error) {
         return store.dispatch(
           showAppPopup(
@@ -429,11 +343,18 @@ const MiniGameDetail = (props) => {
             />
           )
         );
+      } else {
+        // Announce success
+        store.dispatch(
+          changeYourClaimed({
+            matchId: dataItem?.matchId,
+            claimed: true,
+          })
+        );
+        store.dispatch(
+          showAppPopup(<ModalErrorWallet messageError="Claim success" />)
+        );
       }
-      // Announce success
-      store.dispatch(
-        showAppPopup(<ModalErrorWallet messageError="Claim success" />)
-      );
     } catch (e) {
       console.log(e, "err");
       store.dispatch(
@@ -505,100 +426,6 @@ const MiniGameDetail = (props) => {
       }, 800);
     }
   };
-
-  // const ETAmountEfun = (amount, index) => {
-  //   if (currentMatchesBlockchainEfun) {
-  //     let totalBetWithYou = null;
-  //     if (index === null) {
-  //       return 0;
-  //     } else if (index === 1) {
-  //       totalBetWithYou = convertAmountBC(
-  //         currentMatchesBlockchainEfun.predictionAmount[1]
-  //       );
-  //     } else if (index === 2) {
-  //       totalBetWithYou = convertAmountBC(
-  //         currentMatchesBlockchainEfun.predictionAmount[0]
-  //       );
-  //     } else {
-  //       totalBetWithYou = convertAmountBC(
-  //         currentMatchesBlockchainEfun.predictionAmount[2]
-  //       );
-  //     }
-  //     const totalOtherBetting =
-  //       +convertAmountBC(currentMatchesBlockchainEfun.predictionAmount[1]) +
-  //       +convertAmountBC(currentMatchesBlockchainEfun.predictionAmount[0]) +
-  //       +convertAmountBC(currentMatchesBlockchainEfun.predictionAmount[2]) -
-  //       totalBetWithYou;
-  //     const yourPercentBetAmount = +amount / +totalBetWithYou;
-  //     // sponsor token
-  //     // sponsorReward = sponsorEven * yourPercentBetAmount;
-  //     // console.log(sponsorReward, 'sponsorReward');
-  //     return +amount + +yourPercentBetAmount * 0.975 * +totalOtherBetting;
-  //   } else {
-  //     return 0;
-  //   }
-  // };
-
-  // const ETAmount = (amount, index) => {
-  //   if (currentMatchesBlockchain) {
-  //     let totalBetWithYou = null;
-  //     if (index === null) {
-  //       return 0;
-  //     } else if (index === 1) {
-  //       totalBetWithYou = convertAmountBC(
-  //         currentMatchesBlockchain.predictionAmount[1]
-  //       );
-  //     } else if (index === 2) {
-  //       totalBetWithYou = convertAmountBC(
-  //         currentMatchesBlockchain.predictionAmount[0]
-  //       );
-  //     } else {
-  //       totalBetWithYou = convertAmountBC(
-  //         currentMatchesBlockchain.predictionAmount[2]
-  //       );
-  //     }
-  //     const totalOtherBetting =
-  //       +convertAmountBC(currentMatchesBlockchain.predictionAmount[1]) +
-  //       +convertAmountBC(currentMatchesBlockchain.predictionAmount[0]) +
-  //       +convertAmountBC(currentMatchesBlockchain.predictionAmount[2]) -
-  //       totalBetWithYou;
-  //     const yourPercentBetAmount = +amount / +totalBetWithYou;
-  //     return +amount + +yourPercentBetAmount * 0.945 * +totalOtherBetting;
-  //   } else {
-  //     return 0;
-  //   }
-  // };
-
-  // const calculatePercent = (amount) => {
-  //   if (currentMatchesBlockchain) {
-  //     const total =
-  //       +currentMatchesBlockchain.predictionAmount[1] +
-  //       +currentMatchesBlockchain.predictionAmount[0] +
-  //       +currentMatchesBlockchain.predictionAmount[2];
-  //     if (total === 0) {
-  //       return total + "%";
-  //     } else {
-  //       const number = new Decimal((amount * 100) / total);
-  //       const amount2 = number.toFixed(0, Decimal.ROUND_DOWN);
-  //       return "~" + amount2 + "%";
-  //     }
-  //   }
-  // };
-  // const calculatePercentEfun = (amount) => {
-  //   if (currentMatchesBlockchainEfun) {
-  //     const total =
-  //       +currentMatchesBlockchainEfun.predictionAmount[1] +
-  //       +currentMatchesBlockchainEfun.predictionAmount[0] +
-  //       +currentMatchesBlockchainEfun.predictionAmount[2];
-  //     if (total === 0) {
-  //       return total + "%";
-  //     } else {
-  //       const number = new Decimal((amount * 100) / total);
-  //       const amount2 = number.toFixed(0, Decimal.ROUND_DOWN);
-  //       return "~" + amount2 + "%";
-  //     }
-  //   }
-  // };
 
   return (
     <>
@@ -715,8 +542,8 @@ const MiniGameDetail = (props) => {
                           !currentAddress && "disable-btn"
                         } btn-submit flex_row_center ${
                           !areYourReWard ? "disable-btn" : ""
-                        }`}
-                        onClick={claimEfun}
+                        } ${claimSuccess && "claim-success"}`}
+                        onClick={!claimSuccess ? claimEfun : () => {}}
                       >
                         {!loadingClaim ? (
                           areYourReWard ? (
@@ -741,7 +568,9 @@ const MiniGameDetail = (props) => {
                       (checkApprove == 0 ? (
                         <div className="flex_row_center">
                           <div
-                            className="btn-submit flex_row_center center"
+                            className={`btn-submit flex_row_center center ${
+                              waitingApprove && "disable-btn"
+                            }`}
                             onClick={approve}
                           >
                             {waitingApprove ? (

@@ -258,14 +258,11 @@ export const calculateReward = async (matchId, account, token, saToken) => {
 
 const claimReward = async (matchId, _token, saToken, from) => {
   const web3 = await initWeb3();
-  const tokenContract = new web3.eth.Contract(
-    groupAbi,
-    groupContract
-  );
+  const tokenContract = await new web3.eth.Contract(groupAbi, groupContract);
   // const accounts = await web3.eth.getAccounts()
   // console.log(matchId, 'matchId')
-  console.log(_token, '_token')
-  console.log(saToken, 'saToken')
+  console.log(_token, "_token");
+  console.log(saToken, "saToken");
 
   const txData = await tokenContract.methods
     .claimReward(matchId, _token, saToken)
@@ -351,7 +348,7 @@ const createApproveTx = async (
   spender = groupContract
 ) => {
   const web3 = await initWeb3();
-  const tokenContract = new web3.eth.Contract(
+  const tokenContract = await new web3.eth.Contract(
     erc20Abi,
     supportSymbol[tokenSymbol]
   );
