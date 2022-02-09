@@ -24,7 +24,7 @@ function MiniGame() {
       label: "Who are the Champions of AFCON 2021?",
       matchId: 0,
       logo: Images.Africa_Cup_logo,
-      endDate: "2022-02-10 12:00",
+      endDate: "2022-02-08 12:00",
       data: chunkArray(DATA_MINI_GAME_AFICANATIONS_CUP, 4),
       backGround: Images.Africa_Cup_logo,
     },
