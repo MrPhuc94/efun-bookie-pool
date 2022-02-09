@@ -7,16 +7,16 @@ import { ASYNC_STORAGE_KEYS } from "src/common/constants/Constant";
 import { useSelector } from "react-redux";
 
 axios.interceptors.request.use((config) => {
-  console.log("request config =================> response: ", config);
+  // console.log("request config =================> response: ", config);
   return config;
 });
 axios.interceptors.response.use(
   (response) => {
-    console.log("request success =================> response: ", response);
+    // console.log("request success =================> response: ", response);
     return Promise.resolve(response);
   },
   (error) => {
-    console.log("request error =================> error: ", error);
+    //  console.log("request error =================> error: ", error);
     return Promise.reject(error);
   }
 );

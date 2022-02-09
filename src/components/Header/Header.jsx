@@ -19,14 +19,17 @@ import { useTranslation } from "react-i18next";
 import { storeData } from "src/utils/storageUtils";
 import { ASYNC_STORAGE_KEYS } from "src/common/Constants";
 import { setLanguage } from "src/redux/reducers/userSlice";
-import { LogoEFUN } from "src/assets/icons";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
-export const showChooseWallet = () => {
-  store.dispatch(showAppPopup(<ModalConnectWallet />));
+export const showChooseWallet = (navigate) => {
+  store.dispatch(showAppPopup(<ModalConnectWallet navigate={navigate} />));
 };
 
 const Header = () => {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+
   const currentAddress =
     useSelector((state) => state.wallet?.currentAddress) ||
     localStorage.getItem("currentAddress");
@@ -36,17 +39,28 @@ const Header = () => {
   const [showNavLang, setShowNavLang] = useState(false);
 
   const listLang = [
+    // { key: "en", label: "English", icon: unitedKingdom },
+    // { key: "id", label: "Indonesia", icon: indonesia },
+    // { key: "kr", label: "Korea", icon: southKorea },
+    // { key: "ir", label: "Persian", icon: iran },
+    // { key: "pl", label: "Philippines", icon: philippines },
+    // { key: "jp", label: "Japan", icon: japan },
+    // { key: "cn", label: "Chinese", icon: china },
+    // { key: "fr", label: "France", icon: Images.France },
     { key: "en", label: "English", icon: unitedKingdom },
-    { key: "id", label: "Indonesia", icon: indonesia },
-    { key: "kr", label: "Korea", icon: southKorea },
-    { key: "ir", label: "Persian", icon: iran },
-    { key: "pl", label: "Philippines", icon: philippines },
-    { key: "jp", label: "Japan", icon: japan },
-    { key: "cn", label: "Chinese", icon: china },
-    { key: "fr", label: "France", icon: Images.France },
+    { key: "en", label: "Indonesia", icon: indonesia },
+    { key: "en", label: "Korea", icon: southKorea },
+    { key: "en", label: "Persian", icon: iran },
+    { key: "en", label: "Philippines", icon: philippines },
+    { key: "en", label: "Japan", icon: japan },
+    { key: "en", label: "Chinese", icon: china },
+    { key: "en", label: "France", icon: Images.France },
   ];
 
   const handleChangeLanguage = (param) => {
+    if (param?.label !== "English") {
+      toast("Coming soon!");
+    }
     i18n.changeLanguage(param?.key);
     store.dispatch(setLanguage(param.key));
     storeData(ASYNC_STORAGE_KEYS.LANGUAGE, JSON.stringify(param));
@@ -56,7 +70,9 @@ const Header = () => {
   const showModalLogout = () => {
     store.dispatch(dismissAppPopup());
     store.dispatch(
-      showAppPopup(<ModalLogout currentAddress={currentAddress} />)
+      showAppPopup(
+        <ModalLogout currentAddress={currentAddress} navigate={navigate} />
+      )
     );
   };
 
@@ -125,7 +141,7 @@ const Header = () => {
               <div>
                 <button
                   className="connect-wallet-btn"
-                  onClick={showChooseWallet}
+                  onClick={() => showChooseWallet(navigate)}
                 >
                   {t("common.connect_wallet")}
                 </button>
@@ -164,7 +180,7 @@ const Header = () => {
               <div>
                 <button
                   className="connect-wallet-btn"
-                  onClick={showChooseWallet}
+                  onClick={() => showChooseWallet(navigate)}
                 >
                   {t("common.connect_wallet")}
                 </button>

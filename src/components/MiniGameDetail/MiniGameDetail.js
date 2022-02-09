@@ -1,26 +1,32 @@
 import Images from "src/common/Images";
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import "./styles.scss";
 import { store } from "src/redux/store";
 import {
   changeYourPredict,
-  changeYourPredictEfun,
   changeYourClaimed,
+  changeListPredicted,
 } from "src/redux/reducers/matchesSlice";
 import { useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
 import Decimal from "decimal.js";
 import { MatchesContract } from "src/blockchain/utils/MatchesContract";
 import { getBalance, walletManager } from "src/blockchain/utils/walletManager";
-import * as Support from "src/blockchain/utils/support/signAndSendTx";
-import _get from "lodash/get";
-import { changeCurrentMatchesBlockchainEfun } from "src/redux/reducers/matchesSlice";
 import { showAppPopup, showAppLoading } from "src/redux/reducers/appSlice";
 import ModalErrorWallet from "../Modal/ErrorWallet/ErrorWallet";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { WIDTH } from "src/assets/themes/dimension";
-import { AMOUNT_EFUN_FER_CHANCE } from "src/common/Constants";
+import {
+  AMOUNT_EFUN_FER_CHANCE,
+  MAXIMUM_OPTIONS_PREDICT,
+} from "src/common/Constants";
 import moment from "moment";
 import { TiWarningOutline } from "react-icons/ti";
 import TableOption from "./TableOption/TableOption";
@@ -44,9 +50,7 @@ const override = css`
 const MiniGameDetail = (props) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const dataItem = location.state.data;
-  //console.log("dataItemMiniGame", dataItem);
-  //LOADING APP
+  const dataItem = location.state?.data;
   const loadingApp = useSelector((state) => state.app.loading);
   const [loadingPlace, setLoadingPlace] = useState(false);
   const [loadingClaim, setLoadingClaim] = useState(false);
@@ -54,20 +58,25 @@ const MiniGameDetail = (props) => {
   const [waitingApprove, setWaitingApprove] = useState(false);
   const [amount, setAmount] = useState(AMOUNT_EFUN_FER_CHANCE.toString());
   const [isTimeEndedMatch, setIsTimeEndedMatch] = useState(null);
+  const [isTimeEndToPredict, setIsTimeEndToPredict] = useState(false);
   const [currentTime, setCurrentTime] = useState(null);
   const [warningPredictNull, setWarningPredictNull] = useState(false);
   const [isMaxChance, setIsMaxChance] = useState(false);
   const [amountClaimReward, setAmountClaimReward] = useState(0);
+  const [totalReward, setTotalReward] = useState(0);
 
   // list options predicted on blockchain
 
-  const [listPredicted, setListPredicted] = useState([]);
   const [matchInfoOnBlockChain, setMatchInfoOnBlockChain] = useState({});
+
+  const listPredicted = useSelector((state) => state.matches.listPredicted);
+  //console.log("listPredicted", listPredicted);
 
   let timer;
   let currentTimer;
   let timerCheckBalance;
   let timerCheckMatchTimeEnd;
+  let timerCheckMatchTimeEndPredict;
 
   const currentAddress =
     useSelector((state) => state.wallet.currentAddress) ||
@@ -78,6 +87,11 @@ const MiniGameDetail = (props) => {
     (item) => item?.matchId === dataItem.matchId
   )?.claimed;
 
+  const yourPredict =
+    useSelector((state) => state.matches.yourPredict) ||
+    JSON.parse(localStorage.getItem("yourPredict")) ||
+    [];
+
   // get balance token
   let tokens =
     useSelector((state) => state.wallet.tokens) ||
@@ -85,10 +99,48 @@ const MiniGameDetail = (props) => {
   const currentToken = tokens?.find((item) => item?.symbol === "EFUN");
   let balanceEfun = currentToken?.balance;
 
-  // Times can chance
-  const timesCanChance = Math.floor(
+  const isEnoughForChance =
+    parseFloat(currentToken?.balance) >= AMOUNT_EFUN_FER_CHANCE;
+
+  const maxTimeWithBalance = Math.floor(
     parseFloat(currentToken?.balance) / AMOUNT_EFUN_FER_CHANCE
   );
+
+  const getMaximumOptionPredict = () => {
+    if (dataItem.name === "AFCON2021") {
+      return 1;
+    }
+    return 2;
+  };
+
+  // Times can chance
+
+  const isMaxPredictedOnBlockChain = useMemo(() => {
+    return listPredicted.length >= getMaximumOptionPredict();
+  }, [listPredicted]);
+
+  const timesCanChance = useMemo(() => {
+    let timesCanChance = 0;
+    const maxTimeChance =
+      maxTimeWithBalance < getMaximumOptionPredict()
+        ? maxTimeWithBalance
+        : getMaximumOptionPredict();
+
+    if (listPredicted.length) {
+      timesCanChance = maxTimeChance - listPredicted.length;
+    } else {
+      timesCanChance = maxTimeChance;
+    }
+    return timesCanChance;
+  }, [maxTimeWithBalance, listPredicted]);
+
+  //console.log("array_default_result", array_default_result);
+  useEffect(() => {
+    const _isMaxChance =
+      yourPredict.length >= timesCanChance ||
+      yourPredict.length >= maxTimeWithBalance;
+    setIsMaxChance(_isMaxChance);
+  }, [timesCanChance, yourPredict, maxTimeWithBalance]);
 
   // scroll top for mobile
   useEffect(() => {
@@ -117,8 +169,8 @@ const MiniGameDetail = (props) => {
   const calculateRewardEfun = async () => {
     try {
       const reward = await MatchesContract.calculateReward(
-        // dataItem.matchId,
-        0,
+        dataItem.matchId,
+        // 0,
         currentAddress,
         REACT_APP_EFUN_TOKEN,
         REACT_APP_EFUN_TOKEN
@@ -132,19 +184,48 @@ const MiniGameDetail = (props) => {
 
       setAmountClaimReward(amountClaimReward);
     } catch (e) {
-      console.log(e);
+      //console.log(e);
     }
   };
 
+  const getTotalReward = async () => {
+    const matchInfo = await MatchesContract.getMatchInfo(
+      dataItem.matchId,
+      // 0,
+      REACT_APP_EFUN_TOKEN
+    );
+    // console.log("matchInfo?.tx.data.sTotal", matchInfo?.tx.data.sTotal);
+
+    if (matchInfo) {
+      let total = matchInfo?.tx.data.sTotal / 10 ** 18 || 0;
+      setTotalReward(total);
+    }
+  };
+
+  useEffect(() => {
+    getTotalReward(dataItem.matchId);
+  }, []);
+
   // TIME PREDICT
-  const matchTimeEnd = moment(dataItem?.endDate);
+  const matchTimeEnd = moment.parseZone(dataItem?.endDate);
+  const timeEndToPredict = moment
+    .parseZone(dataItem?.endDate)
+    .subtract({ minutes: 3 });
+
+  timerCheckMatchTimeEndPredict = setInterval(() => {
+    const currentTime = moment();
+    let matchEnded = timeEndToPredict.isBefore(currentTime);
+    if (matchEnded) {
+      setIsTimeEndToPredict(true);
+      clearInterval(timerCheckMatchTimeEndPredict);
+    }
+  }, 2000);
 
   timerCheckMatchTimeEnd = setInterval(() => {
     const currentTime = moment();
+
     let matchEnded = matchTimeEnd.isBefore(currentTime);
-    //console.log("AAAAAA");
     if (matchEnded) {
-      //console.log("BBBBBB");
       setIsTimeEndedMatch(true);
       calculateRewardEfun();
       clearInterval(timerCheckMatchTimeEnd);
@@ -162,20 +243,12 @@ const MiniGameDetail = (props) => {
 
   // get match predicted from blockchain
 
-  const yourPredict =
-    useSelector((state) => state.matches.yourPredict) ||
-    JSON.parse(localStorage.getItem("yourPredict")) ||
-    [];
-  console.log("yourPredict", yourPredict);
-
   const resultMatch = {
     value: `${matchInfoOnBlockChain?.score?.firstTeam}-${matchInfoOnBlockChain?.score?.secondTeam}`,
   } || { value: null };
 
-  console.log("resultMatch", resultMatch);
-
   const areYourReWard = useMemo(() => {
-    console.log("listPredicted=====1111111", listPredicted);
+    //console.log("listPredicted=====1111111", listPredicted);
     return listPredicted?.find((item) => resultMatch.value === item);
   }, [resultMatch, listPredicted]);
 
@@ -194,23 +267,16 @@ const MiniGameDetail = (props) => {
         (item) => item.value === resultMatch.value
       );
     }
-    console.log("dataResultMatch", dataResultMatch);
+    //console.log("dataResultMatch", dataResultMatch);
     return dataResultMatch;
   }, [resultMatch, dataItem]);
-
-  //console.log("array_default_result", array_default_result);
-  useEffect(() => {
-    const _isMaxChance =
-      yourPredict.length >= timesCanChance || yourPredict.length >= 10;
-    setIsMaxChance(_isMaxChance);
-  }, [timesCanChance, yourPredict]);
 
   /**
    * HANDLE DATA REQUEST BLOCKCHAIN =TODO
    */
 
   const predict = async () => {
-    console.log("yourPredict===172", yourPredict);
+    // console.log("yourPredict===172", yourPredict);
     if (yourPredict?.length < 1) {
       setWarningPredictNull(true);
       return;
@@ -222,11 +288,11 @@ const MiniGameDetail = (props) => {
     const listPredict =
       yourPredict?.map((item) => item.value).join(";") + ";" || "";
 
-    console.log("listPredict", listPredict);
+    //console.log("listPredict", listPredict);
 
     // get amount  TOKEN_EFUN for this predict
     const amount = yourPredict?.length * AMOUNT_EFUN_FER_CHANCE;
-    // console.log("predictAmount", amount);
+    // console.log("matchIdPredict", dataItem.matchId);
 
     try {
       const token =
@@ -235,8 +301,8 @@ const MiniGameDetail = (props) => {
           : REACT_APP_EFUN_TOKEN;
 
       let recept = await MatchesContract.predict(
-        //dataItem.matchId,
-        0,
+        dataItem.matchId,
+        // 0,
         listPredict,
         token,
         amount,
@@ -251,14 +317,18 @@ const MiniGameDetail = (props) => {
         store.dispatch(
           showAppPopup(
             <ModalErrorWallet
-              messageError={`Predict success! Transaction hash: ${recept?.hash}`}
-              onOk={getMatchDetailOnBlockChain}
+              messageError={`Your predict was successful! Transaction hash: ${recept?.hash}`}
+              onOk={() => {
+                getMatchDetailOnBlockChain(false);
+              }}
             />
           )
         );
       } else {
-        updateBalanceToken();
         setLoadingPlace(false);
+        updateBalanceToken();
+        store.dispatch(changeYourPredict(null));
+        localStorage.setItem("yourPredict", null);
         store.dispatch(
           showAppPopup(
             <ModalErrorWallet
@@ -268,8 +338,11 @@ const MiniGameDetail = (props) => {
         );
       }
     } catch (e) {
+      setLoadingPlace(false);
       updateBalanceToken();
-      console.log("error====", e);
+      store.dispatch(changeYourPredict(null));
+      localStorage.setItem("yourPredict", null);
+      // console.log("error====", e);
       store.dispatch(
         showAppPopup(<ModalErrorWallet messageError={e.message?.toString()} />)
       );
@@ -282,7 +355,7 @@ const MiniGameDetail = (props) => {
         currentAddress,
         "EFUN"
       );
-      console.log("checkapprove1111111", checkapprove);
+      //console.log("checkapprove1111111", checkapprove);
       if (checkapprove) {
         // setCheckApproveFirst(checkapprove);
         setCheckApprove(checkapprove);
@@ -328,8 +401,8 @@ const MiniGameDetail = (props) => {
     try {
       setLoadingClaim(true);
       const dataClaim = await MatchesContract.claimReward(
-        //dataItem.matchId,
-        0,
+        dataItem.matchId,
+        // 0,
         REACT_APP_EFUN_TOKEN,
         REACT_APP_EFUN_TOKEN,
         currentAddress
@@ -356,7 +429,7 @@ const MiniGameDetail = (props) => {
         );
       }
     } catch (e) {
-      console.log(e, "err");
+      // console.log(e, "err");
       store.dispatch(
         showAppPopup(<ModalErrorWallet messageError={e?.message?.toString()} />)
       );
@@ -366,18 +439,12 @@ const MiniGameDetail = (props) => {
     }
   };
 
-  // // check balance
-  // useEffect(() => {
-  //   checkBalanceToken();
-  // });
-
-  // const checkBalanceToken = () => {
-  //   if (currentAddress && currentAddress !== "") {
-  //     setInterval(() => {
-  //       updateBalanceToken();
-  //     }, 2000);
-  //   }
-  // };
+  // check balance
+  useEffect(() => {
+    if (currentAddress && currentAddress !== "") {
+      updateBalanceToken();
+    }
+  }, []);
 
   // update balance then predict success
   const updateBalanceToken = async () => {
@@ -385,44 +452,42 @@ const MiniGameDetail = (props) => {
   };
 
   // get info match from blockchain
-  const getMatchDetailOnBlockChain = async () => {
-    store.dispatch(showAppLoading(true));
+  const getMatchDetailOnBlockChain = async (loading = true) => {
+    loading && store.dispatch(showAppLoading(true));
     try {
       const matchInfo = await MatchesContract.getMatchInfo(
-        // dataItem.matchId,
-        0,
+        dataItem.matchId,
+        // 0,
         REACT_APP_EFUN_TOKEN
       );
-      //console.log("matchInfo", matchInfo);
-
       if (matchInfo) {
+        // console.log("matchInfo====", matchInfo);
         setMatchInfoOnBlockChain(matchInfo?.tx.data);
       }
 
       const yourPredicted = await MatchesContract.getBetInfo(
-        // dataItem.matchId,
-        0,
+        dataItem.matchId,
+        // 0,
         REACT_APP_EFUN_TOKEN,
         currentAddress
       );
-      //console.log("yourPredictedFromBlockChain", yourPredicted);
       if (yourPredicted) {
         let dataPredictedOnBlockChain = yourPredicted?.tx.data[1];
-        console.log("dataPredictedOnBlockChain", dataPredictedOnBlockChain);
         let arrayData = dataPredictedOnBlockChain.split(";");
-
         // set list predicted
-
-        setListPredicted(arrayData);
+        if (arrayData) {
+          arrayData.pop();
+        }
+        store.dispatch(changeListPredicted(arrayData));
       }
     } catch (error) {
-      console.log(
-        "Error getMatchDetailOnBlockChain in file MiniGameDetail line 397 "
-      );
+      // console.log(
+      //   "Error getMatchDetailOnBlockChain in file MiniGameDetail line 397 "
+      // );
     } finally {
       setTimeout(function () {
-        store.dispatch(showAppLoading(false));
-        console.log("listPredicted", listPredicted);
+        loading && store.dispatch(showAppLoading(false));
+        //  console.log("listPredicted", listPredicted);
       }, 800);
     }
   };
@@ -454,8 +519,13 @@ const MiniGameDetail = (props) => {
                 <span className="text-large bold">{dataItem?.label}</span>
               </div>
               <div>
+                <span className="text-medium yellow bold">
+                  Total Reward : {formatNumberPrice(totalReward)} EFUN
+                </span>
+              </div>
+              <div>
                 <span className="text-small red bold">
-                  Deadline : {dataItem?.endDate} 00:00 UTC
+                  Deadline : {dataItem?.endDate} UTC
                 </span>
               </div>
             </div>
@@ -482,23 +552,20 @@ const MiniGameDetail = (props) => {
                           {t("common.description_1")}
                         </span>
                       </div>
-                      {/* <span className="mt-small yellow">{`In total we have 24 options.`}</span> */}
-                      <span className="mt-small yellow">
-                        {t("common.description_2")}
-                      </span>
-
-                      <br />
-                      {balanceEfun > 0 && isMaxChance && (
-                        <div className="mt-small text-medium red">
-                          <TiWarningOutline style={{ color: "yellow" }} />{" "}
-                          {t("common.error_message_1")}
-                        </div>
-                      )}
+                      {balanceEfun > 0 &&
+                        yourPredict.length > 0 &&
+                        isMaxChance &&
+                        !isMaxPredictedOnBlockChain && (
+                          <div className="mt-small text-medium red">
+                            <TiWarningOutline style={{ color: "yellow" }} />{" "}
+                            {t("common.error_message_1")}
+                          </div>
+                        )}
 
                       {yourPredict.length === 0 && warningPredictNull && (
                         <div className="mt-small text-medium red">
-                          <TiWarningOutline style={{ color: "yellow" }} /> You
-                          need choice minimum 1 option to predict.
+                          <TiWarningOutline style={{ color: "yellow" }} />
+                          You need to choose at least 1 option to predict.
                         </div>
                       )}
                     </div>
@@ -520,9 +587,7 @@ const MiniGameDetail = (props) => {
                       {balanceEfun ? formatNumberPrice(balanceEfun) : 0} EFUN
                     </span>
                     {`, ${t("common.have_predict_1")} `}
-                    <span className="bold">
-                      {timesCanChance ? timesCanChance : 0}
-                    </span>{" "}
+                    <span className="bold">{timesCanChance}</span>{" "}
                     {`${t("common.have_predict_2")}`}
                   </div>
 
@@ -530,7 +595,12 @@ const MiniGameDetail = (props) => {
                     {isTimeEndedMatch && areYourReWard ? (
                       <div className="box-result-match">
                         {dataResultMatch?.country || dataResultMatch?.value}
-                        <img src={Images.checked} width={20} height={20} />
+                        <img
+                          src={Images.checked}
+                          width={20}
+                          height={20}
+                          alt="reward"
+                        />
                       </div>
                     ) : null}
                   </div>
@@ -600,9 +670,17 @@ const MiniGameDetail = (props) => {
                           className={`${
                             !currentAddress && "disable-btn"
                           } btn-submit flex_row_center ${
-                            loadingPlace && "disable-btn"
+                            (loadingPlace ||
+                              !isEnoughForChance ||
+                              isMaxPredictedOnBlockChain ||
+                              isTimeEndToPredict) &&
+                            "disable-btn"
                           }`}
-                          onClick={predict}
+                          onClick={
+                            isEnoughForChance && !isMaxPredictedOnBlockChain
+                              ? predict
+                              : () => {}
+                          }
                         >
                           {loadingPlace ? (
                             <ClipLoader

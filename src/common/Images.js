@@ -49,8 +49,12 @@ import Africa_Cup_logo from "../assets/images/event/Africa_Cup.png";
 import minigame_background from "../assets/images/minigame_background.png";
 import closed from "../assets/images/action/closed.png";
 import checked from "../assets/images/action/check.png";
+import Banner_EPL2 from "../assets/images/event/Banner_EPL2.png";
+import NotFound from "../assets/images/action/404error.png";
 
 const Images = {
+  NotFound,
+  Banner_EPL2,
   checked,
   closed,
   minigame_background,

@@ -7,10 +7,13 @@ import {
   changeCurrentAddress,
   changeListToken,
 } from "src/redux/reducers/walletSlice";
-import { changeYourPredict } from "src/redux/reducers/matchesSlice";
+import {
+  changeListPredicted,
+  changeYourPredict,
+} from "src/redux/reducers/matchesSlice";
 
 const ModalLogout = (props) => {
-  const { currentAddress } = props;
+  const { currentAddress, navigate } = props;
   //default function
   const handleCloseModal = (e) => {
     if (e.target === modalRef.current) onClose();
@@ -39,6 +42,8 @@ const ModalLogout = (props) => {
     store.dispatch(changeCurrentAddress(null));
     store.dispatch(changeListToken(null));
     store.dispatch(changeYourPredict(null));
+    store.dispatch(changeListPredicted([]));
+    //navigate("/");
   };
 
   return (

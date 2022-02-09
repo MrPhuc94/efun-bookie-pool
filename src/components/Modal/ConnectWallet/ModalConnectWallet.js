@@ -15,7 +15,8 @@ const override = css`
   margin: 0 auto;
 `;
 
-const ModalConnectWallet = () => {
+const ModalConnectWallet = (props) => {
+  const { navigate } = props;
   let [loading, setLoading] = useState(false);
   let [color, setColor] = useState("#ffffff");
 
@@ -50,7 +51,7 @@ const ModalConnectWallet = () => {
   useEffect(() => {
     let isAvailableWallet = walletManager.checkSupportedWalletsType();
     setAvailableWallet(isAvailableWallet);
-    console.log("availableWallet", isAvailableWallet);
+    // console.log("availableWallet", isAvailableWallet);
   }, []);
 
   const currentAddress = useSelector((state) => state?.wallet?.currentAddress);
@@ -70,6 +71,7 @@ const ModalConnectWallet = () => {
         localStorage.setItem("extensionName", walletName);
         setLoading(false);
         store.dispatch(dismissAppPopup());
+        navigate("/");
       } catch (e) {
         store.dispatch(
           showAppPopup(<ModalErrorWallet messageError={e.toString()} />)

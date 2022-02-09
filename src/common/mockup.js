@@ -13,39 +13,18 @@ const generate_result = () => {
 export const array_default_result = generate_result();
 
 export const PRIMARY_DATA_MINI_GAME_AFICANATIONS_CUP = [
+  { country: "Gambia", logo: Images.Gambia, groupName: "Group F" },
   { country: "Cameroon", logo: Images.cameroon, groupName: "Group A" },
-  { country: "Cape Verde", logo: Images.capeVerde, groupName: "Group A" },
   { country: "Burkina Faso", logo: Images.burkinafaso, groupName: "Group A" },
-  { country: "Ethiopia", logo: Images.ethiopia, groupName: "Group A" },
-  { country: "Guinea", logo: Images.guinea, groupName: "Group B" },
-  { country: "Senegal", logo: Images.senegal, groupName: "Group B" },
-  { country: "Malawi", logo: Images.malawi, groupName: "Group B" },
-  { country: "Zimbabwe", logo: Images.zimbabwe, groupName: "Group B" },
-  { country: "Gabon", logo: Images.gabon, groupName: "Group C" },
-  { country: "Morocco", logo: Images.Morocco, groupName: "Group C" },
-  { country: "Comoros", logo: Images.Comoros, groupName: "Group C" },
-  { country: "Ghana", logo: Images.Ghana, groupName: "Group C" },
-
-  { country: "Nigeria", logo: Images.Nigeria, groupName: "Group D" },
-  {
-    country: "Guinea-Bissau",
-    logo: Images.GuineaBissau,
-    groupName: "Group D",
-  },
-  { country: "Sudan", logo: Images.Sudan, groupName: "Group D" },
+  { country: "Tunisia", logo: Images.Tunisia, groupName: "Group F" },
   { country: "Egypt", logo: Images.Egypt, groupName: "Group D" },
-  { country: "Ivory Coast", logo: Images.IvoryCoast, groupName: "Group E" },
-  { country: "Algeria", logo: Images.Algeria, groupName: "Group E" },
-  { country: "Sierra Leone", logo: Images.SierraLeone, groupName: "Group E" },
+  { country: "Morocco", logo: Images.Morocco, groupName: "Group C" },
+  { country: "Senegal", logo: Images.senegal, groupName: "Group B" },
   {
     country: "Equatorial Guinea",
     logo: Images.EquatorialGuinea,
     groupName: "Group E",
   },
-  { country: "Gambia", logo: Images.Gambia, groupName: "Group F" },
-  { country: "Mali", logo: Images.Mali, groupName: "Group F" },
-  { country: "Mauritania", logo: Images.Mauritania, groupName: "Group F" },
-  { country: "Tunisia", logo: Images.Tunisia, groupName: "Group F" },
 ];
 
 let PRIMARY_RONALDO_GOLD = [
@@ -88,8 +67,8 @@ export const BARCA_PLACE = PRIMARY_BARCA_PLACE.map((item, index) => {
   return { key: item, value: BARCA_PLACE_VALUE[index].value };
 });
 
-export const ELP_CLUB = [
-  { name: "Man. City" },
+export const PRIMARY_ELP_CLUB = [
+  { name: "Man City" },
   { name: "Chelsea" },
   { name: "Liverpool" },
   { name: "Arsenal" },
@@ -110,3 +89,9 @@ export const ELP_CLUB = [
   { name: "Newcastle" },
   { name: "Norwich City" },
 ];
+
+let ELP_CLUB_VALUE = array_default_result.slice(0, PRIMARY_ELP_CLUB.length);
+
+export const ELP_CLUB = PRIMARY_ELP_CLUB.map((item, index) => {
+  return { ...item, value: ELP_CLUB_VALUE[index].value };
+});

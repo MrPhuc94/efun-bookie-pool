@@ -8,11 +8,13 @@ import { useSelector } from "react-redux";
 import { showAppPopup } from "src/redux/reducers/appSlice";
 import ModalErrorWallet from "src/components/Modal/ErrorWallet/ErrorWallet";
 import Images from "src/common/Images";
+import { MatchesContract } from "src/blockchain/utils/MatchesContract";
+import { REACT_APP_EFUN_TOKEN } from "src/common/Environment";
 
 const TableOption = (props) => {
   const { data, isTimeEndedMatch, isMaxChance, listPredicted } = props;
   //console.log("isMaxChance", isMaxChance);
-  console.log("isTimeEndedMatch", isTimeEndedMatch);
+  //console.log("isTimeEndedMatch", isTimeEndedMatch);
   //console.log("listPredictedAAA", listPredicted);
 
   // get balance token
@@ -28,7 +30,7 @@ const TableOption = (props) => {
     if (!currentAddress) {
       return store.dispatch(
         showAppPopup(
-          <ModalErrorWallet messageError="Your need connect wallet first" />
+          <ModalErrorWallet messageError="You need to connect wallet first!" />
         )
       );
     }
@@ -47,7 +49,7 @@ const TableOption = (props) => {
     } else {
       let newSelectedOptions = [...yourPredict, item];
       // set state to storeyourPredict
-      console.log("newSelectedOptions", newSelectedOptions);
+      // console.log("newSelectedOptions", newSelectedOptions);
       localStorage.setItem("yourPredict", JSON.stringify(newSelectedOptions));
       store.dispatch(changeYourPredict(newSelectedOptions));
     }
@@ -58,7 +60,7 @@ const TableOption = (props) => {
     if (!currentAddress) {
       return store.dispatch(
         showAppPopup(
-          <ModalErrorWallet messageError="Your need connect wallet first" />
+          <ModalErrorWallet messageError="You need to connect wallet first!" />
         )
       );
     }
@@ -76,7 +78,36 @@ const TableOption = (props) => {
     } else {
       let newSelectedOptions = [...yourPredict, item];
       // set state to storeyourPredict
-      console.log("newSelectedOptions", newSelectedOptions);
+      // console.log("newSelectedOptions", newSelectedOptions);
+      localStorage.setItem("yourPredict", JSON.stringify(newSelectedOptions));
+      store.dispatch(changeYourPredict(newSelectedOptions));
+    }
+  };
+
+  const handleChooseOptionName = (item) => {
+    //console.log("item====", item);
+    if (!currentAddress) {
+      return store.dispatch(
+        showAppPopup(
+          <ModalErrorWallet messageError="You need to connect wallet first!" />
+        )
+      );
+    }
+
+    let isExistItem = yourPredict.find((value) => value.name === item.name);
+
+    //console.log("yourPredict", yourPredict);
+    if (isExistItem) {
+      let newSelectedOptions = yourPredict.filter(
+        (value) => value.name !== item.name
+      );
+      // set state to store
+      localStorage.setItem("yourPredict", JSON.stringify(newSelectedOptions));
+      store.dispatch(changeYourPredict(newSelectedOptions));
+    } else {
+      let newSelectedOptions = [...yourPredict, item];
+      // set state to storeyourPredict
+      // console.log("newSelectedOptions", newSelectedOptions);
       localStorage.setItem("yourPredict", JSON.stringify(newSelectedOptions));
       store.dispatch(changeYourPredict(newSelectedOptions));
     }
@@ -96,17 +127,10 @@ const TableOption = (props) => {
     return false;
   };
 
-  const handleSelectItemNumber = (item) => {
-    if (isTimeEndedMatch) {
-      return;
-    }
-    if (checkItemSelectedNumber(item)) {
-      return handleChooseOptionNumber(item);
-    }
-    if (isMaxChance) {
-      return;
-    }
-    return handleChooseOptionNumber(item);
+  const checkItemSelectedName = (item) => {
+    const findItem = yourPredict?.find((value) => value.name === item.name);
+    if (findItem) return true;
+    return false;
   };
 
   const checkItemHadPredicted = (item) => {
@@ -119,12 +143,10 @@ const TableOption = (props) => {
 
   const renderContent = () => {
     switch (data?.name) {
-      case "AFCON_2021":
-        console.log("dataAFCON_2021", data.data);
+      case "AFCON2021":
         return data?.data.map((item, index) => {
           return (
-            <div className="flex_row table-option" key={index}>
-              <div className="text-tiny bold">{item[0].groupName}</div>
+            <div className="flex_row_left table-option" key={index}>
               {item.map((item, index) => {
                 return (
                   <div
@@ -164,7 +186,7 @@ const TableOption = (props) => {
             </div>
           );
         });
-      case "Cristiano_Ronaldo":
+      case "CristianoRonaldo":
         return (
           <div className="flex_row">
             {data?.data.map((item, index) => {
@@ -231,6 +253,49 @@ const TableOption = (props) => {
                   }}
                 >
                   {item.key}
+                </div>
+              );
+            })}
+          </div>
+        );
+
+      case "EPLClub":
+        return (
+          <div className="flex_row">
+            {data?.data.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className={`item-option-2 ${
+                    checkItemSelectedName(item)
+                      ? "active"
+                      : isMaxChance
+                      ? "disable"
+                      : ""
+                  } ${checkItemHadPredicted(item) ? "active" : ""}`}
+                  onClick={() => {
+                    if (isTimeEndedMatch) {
+                      return;
+                    }
+                    if (checkItemHadPredicted(item)) {
+                      return;
+                    }
+                    if (checkItemSelectedName(item)) {
+                      return handleChooseOptionName(item);
+                    }
+                    if (isMaxChance) {
+                      return;
+                    }
+                    return handleChooseOptionName(item);
+                  }}
+                >
+                  <span className="bold">
+                    {WIDTH <= 600
+                      ? `${item.name.slice(0, 8)} ${
+                          item.name.length > 8 ? ".." : ""
+                        } `
+                      : item.name}
+                  </span>
                 </div>
               );
             })}

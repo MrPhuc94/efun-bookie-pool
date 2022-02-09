@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   yourPredict: null,
   yourClaimed: [],
+  listPredicted: [],
 };
 
 export const matchesSlice = createSlice({
@@ -19,10 +20,17 @@ export const matchesSlice = createSlice({
     resetMatchesSlice(state, action) {
       state = initialState;
     },
+    changeListPredicted(state, action) {
+      state.listPredicted = action.payload;
+    },
   },
 });
 
-export const { changeYourPredict, resetMatchesSlice, changeYourClaimed } =
-  matchesSlice.actions;
+export const {
+  changeYourPredict,
+  resetMatchesSlice,
+  changeYourClaimed,
+  changeListPredicted,
+} = matchesSlice.actions;
 
 export default matchesSlice.reducer;

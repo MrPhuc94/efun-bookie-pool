@@ -48,7 +48,7 @@ export default (context, inject) => {
 
           // detect network changed
           window.ethereum.on("networkChanged", function (networkId) {
-            console.log("networkChanged", networkId);
+            // console.log("networkChanged", networkId);
           });
 
           // window.BinanceChain.on('accountsChanged', async function (accounts) {
@@ -68,7 +68,7 @@ export default (context, inject) => {
 
           supportUpdateStore(context, transactions);
         } catch (error) {
-          console.log(error, "walletconnect");
+          // console.log(error, "walletconnect");
         } finally {
           await context.store.dispatch(
             "walletStore/changeLoadingWallet",
@@ -92,7 +92,7 @@ export default (context, inject) => {
 
         supportUpdateStore(context, transactions);
       } catch (error) {
-        console.log(error, "connect");
+        // console.log(error, "connect");
       } finally {
         await context.store.dispatch("walletStore/changeLoadingWallet", false);
       }

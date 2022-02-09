@@ -1,4 +1,5 @@
-export const AMOUNT_EFUN_FER_CHANCE = 5000;
+export const AMOUNT_EFUN_FER_CHANCE = 1000;
+export const MAXIMUM_OPTIONS_PREDICT = 2;
 
 export const ASYNC_STORAGE_KEYS = {
   TOKEN: "TOKEN",

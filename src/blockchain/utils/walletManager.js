@@ -114,7 +114,7 @@ async function connectWallet(walletType, timeout) {
     isConnected = true;
     return currentAddress;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     store.dispatch(
       showAppPopup(<ModalErrorWallet messageError={error.toString()} />)
     );

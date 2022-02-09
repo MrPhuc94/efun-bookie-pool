@@ -90,10 +90,13 @@ const getMatchInfo = async (matchId, token) => {
     .getMatchInfo(matchId, token)
     .call();
   const txData2 = await tokenContract2.methods.info(matchId).call();
+
   const dataCombine = {
     predictionAmount: txData.predictionAmount,
     score: txData2.score,
     status: txData2.status,
+    sTotal: txData2.sTotal,
+    sToken: txData.sToken,
   };
   const tx = {
     to: groupContract,
@@ -101,7 +104,7 @@ const getMatchInfo = async (matchId, token) => {
     data: dataCombine,
   };
 
-  console.log("txMatchPredicted", tx);
+  // console.log("txMatchPredicted", tx);
 
   return {
     tx,
@@ -124,7 +127,7 @@ const createMatches = async (
     .createMatches(x, _startTimes, _endTimes, _sToken)
     .send({ from: accounts[0] })
     .on("error", (error) => {
-      console.log(error);
+      //  console.log(error);
     });
   const tx = {
     from,
@@ -150,13 +153,13 @@ const createMatchs = async (
     .createMatchs(matchIds, minBet, startTime, endTime, erc20)
     .send({ from: accounts[0] })
     .on("error", (error) => {
-      console.log(error);
+      //  console.log(error);
     })
     .then((receipt) => {
-      console.log(receipt);
+      //console.log(receipt);
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
   const tx = {
     from,
@@ -194,7 +197,7 @@ const predict = async (matchId, betContent, token, amount, from) => {
     )
     .send({ from: from })
     .on("error", (error) => {
-      console.log(error);
+      //console.log(error);
     })
     .then((result) => {
       //console.log("receipt", receipt);
@@ -214,7 +217,7 @@ const predict = async (matchId, betContent, token, amount, from) => {
       return tx;
     })
     .catch((err) => {
-      console.log("hey what ????", err);
+      //console.log("hey what ????", err);
       const tx = { error: err };
       return tx;
     });
@@ -261,18 +264,18 @@ const claimReward = async (matchId, _token, saToken, from) => {
   const tokenContract = await new web3.eth.Contract(groupAbi, groupContract);
   // const accounts = await web3.eth.getAccounts()
   // console.log(matchId, 'matchId')
-  console.log(_token, "_token");
-  console.log(saToken, "saToken");
+  // console.log(_token, "_token");
+  //console.log(saToken, "saToken");
 
   const txData = await tokenContract.methods
     .claimReward(matchId, _token, saToken)
     // .call()
     .send({ from: from })
     .on("error", (error) => {
-      console.log(error);
+      // console.log(error);
     })
     .then((receipt) => {
-      console.log(receipt);
+      // console.log(receipt);
       const tx = {
         from,
         to: groupContract,
@@ -283,7 +286,7 @@ const claimReward = async (matchId, _token, saToken, from) => {
       return tx;
     })
     .catch((err) => {
-      console.log(err);
+      //console.log(err);
       const tx = { error: err };
       return tx;
     });
@@ -293,7 +296,7 @@ const claimReward = async (matchId, _token, saToken, from) => {
 const updateResult = async (matchId, result, account) => {
   const web3 = await initWeb3();
   const tokenContract = new web3.eth.Contract(groupAbi, groupContract);
-  console.log(result, "result");
+  //console.log(result, "result");
   // const accounts = await web3.eth.getAccounts()
   const txData = await tokenContract.methods.updateResult(matchId, result);
   // const nonce = await web3.eth.getTransactionCount(account, 'pending')
@@ -357,13 +360,13 @@ const createApproveTx = async (
     .approve(spender, amount)
     .send({ from })
     .on("error", (error) => {
-      console.log(error);
+      // console.log(error);
     })
     .then((receipt) => {
-      console.log(receipt);
+      //console.log(receipt);
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw new WalletError.NewNetworkError("cannot approve now");
     });
 

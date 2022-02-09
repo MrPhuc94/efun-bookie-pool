@@ -1,5 +1,6 @@
 .table-option {
   position: relative;
+
   .place-closed {
     display: flex;
     position: absolute;
@@ -31,6 +32,7 @@
     margin-bottom: 10px;
     padding: 2px 0;
     width: 20%;
+    margin: 2.5%;
     cursor: pointer;
     transition: 0.3s ease-in;
   }

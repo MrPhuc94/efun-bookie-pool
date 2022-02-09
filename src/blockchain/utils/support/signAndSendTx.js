@@ -6,7 +6,7 @@ export const signAndSendTx = async (data) => {
   const tx = data.tx;
   tx.gasLimit = data.gasLimit;
   tx.gasPrice = data.gasPrice;
-  console.log(data, tx);
+  //console.log(data, tx);
 
   // const web3 = await initWeb3()
 
@@ -16,7 +16,7 @@ export const signAndSendTx = async (data) => {
     method: "eth_sendTransaction",
     params: [tx],
   });
-  console.log(receipt, "after sendTransaction");
+  //console.log(receipt, "after sendTransaction");
   return receipt;
   // } catch (error) {
   //   throw WalletError.NewUnknowError('can not send transaction now')
