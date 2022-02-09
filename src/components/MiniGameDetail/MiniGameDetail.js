@@ -106,25 +106,20 @@ const MiniGameDetail = (props) => {
     parseFloat(currentToken?.balance) / AMOUNT_EFUN_FER_CHANCE
   );
 
-  const getMaximumOptionPredict = () => {
-    if (dataItem.name === "AFCON2021") {
-      return 1;
-    }
-    return 2;
-  };
+
 
   // Times can chance
 
   const isMaxPredictedOnBlockChain = useMemo(() => {
-    return listPredicted.length >= getMaximumOptionPredict();
+    return listPredicted.length >= MAXIMUM_OPTIONS_PREDICT;
   }, [listPredicted]);
 
   const timesCanChance = useMemo(() => {
     let timesCanChance = 0;
     const maxTimeChance =
-      maxTimeWithBalance < getMaximumOptionPredict()
+      maxTimeWithBalance < MAXIMUM_OPTIONS_PREDICT
         ? maxTimeWithBalance
-        : getMaximumOptionPredict();
+        : MAXIMUM_OPTIONS_PREDICT;
 
     if (listPredicted.length) {
       timesCanChance = maxTimeChance - listPredicted.length;
@@ -610,20 +605,14 @@ const MiniGameDetail = (props) => {
                       <div
                         className={`${
                           !currentAddress && "disable-btn"
-                        } btn-submit flex_row_center ${
-                          !areYourReWard ? "disable-btn" : ""
-                        } ${claimSuccess && "claim-success"}`}
+                        } btn-submit flex_row_center ${claimSuccess && "claim-success"}`}
                         onClick={!claimSuccess ? claimEfun : () => {}}
                       >
                         {!loadingClaim ? (
-                          areYourReWard ? (
                             <span>
                               Claim{" "}
                               {`${formatNumberPrice(amountClaimReward)} EFUN`}
                             </span>
-                          ) : (
-                            <span>No Reward</span>
-                          )
                         ) : (
                           <ClipLoader
                             color="#fff"
