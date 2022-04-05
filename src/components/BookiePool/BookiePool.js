@@ -4,6 +4,13 @@ import "./styles.scss";
 import { store } from "src/redux/store";
 import { changeYourPredict } from "src/redux/reducers/matchesSlice";
 import MenuLink from "./MenuLink/MenuLink";
+import { showAppPopup } from "src/redux/reducers/appSlice";
+import ModalClaim from "../Modal/ModalClaim/ModalClaim";
+
+
+export const showChooseWallet = (navigate) => {
+  store.dispatch(showAppPopup(<ModalClaim navigate={navigate} />));
+};
 
 function BookiePool() {
   useEffect(() => {
@@ -63,7 +70,7 @@ function BookiePool() {
                 <div className="underline bold yellow">Max</div>
               </div>
             </div>
-            <div className="btn-contribute mt-3">
+            <div className="btn-contribute mt-3" onClick={showChooseWallet}>
               <span className="bold black">Contribute EFUN</span>
             </div>
             <div className="mt-3">
