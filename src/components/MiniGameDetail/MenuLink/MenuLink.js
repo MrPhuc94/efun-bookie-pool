@@ -10,7 +10,7 @@ function MenuLink() {
         Home
       </Link>
       <MdOutlineArrowForwardIos className="link-dot" />
-      <span className="link-item">Detail Game</span>
+      <span className="link-item">Bookie Pool</span>
     </div>
   );
 }

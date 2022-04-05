@@ -15,52 +15,9 @@ import { changeYourPredict } from "src/redux/reducers/matchesSlice";
 import { REACT_APP_EFUN_TOKEN } from "src/common/Environment";
 import { MatchesContract } from "src/blockchain/utils/MatchesContract";
 import { formatNumberPrice } from "src/utils/helper";
+import MenuLink from "../MiniGameDetail/MenuLink/MenuLink";
 
 function MiniGame() {
-  const dataMiniGame = [
-    {
-      name: "AFCON2021",
-      type: "mini_game",
-      label: "Who are the Champions of AFCON 2021?",
-      matchId: 0,
-      logo: Images.Africa_Cup_logo,
-      endDate: "2022-02-08 12:00",
-      data: chunkArray(DATA_MINI_GAME_AFICANATIONS_CUP, 4),
-      backGround: Images.Africa_Cup_logo,
-    },
-    {
-      name: "CristianoRonaldo",
-      type: "event",
-      label:
-        "How many goals does Cristiano Ronaldo have for MU at the end of the season 2021/2022 in all competitions?",
-      matchId: 1,
-      logo: Images.man_united_logo,
-      endDate: "2022-02-31 00:00",
-      data: RONALDO_GOLD,
-      backGround: Images.Banner_Ronaldo2,
-    },
-    {
-      name: "LaLiga",
-      type: "event",
-      label: "Where is Barcelona's place in La Liga season 2021/2022?",
-      matchId: 2,
-      logo: Images.logo_barca,
-      endDate: "2022-02-31 00:00",
-      data: BARCA_PLACE,
-      backGround: Images.Banner_Barca2,
-    },
-    {
-      name: "EPLClub",
-      type: "event",
-      label: "Which EPL club will have the biggest summer 2022 transfers in? ",
-      matchId: 3,
-      logo: Images.PremierLeague,
-      endDate: "2022-02-31 00:00",
-      data: ELP_CLUB,
-      backGround: Images.Banner_EPL2,
-    },
-  ];
-
   useEffect(() => {
     localStorage.removeItem("yourPredict");
     store.dispatch(changeYourPredict(null));
@@ -79,11 +36,49 @@ function MiniGame() {
           Mini <strong>games</strong>
         </h1>
       </div>
-      <div className="list-mini-game">
-        <div className="box-item">
-          {dataMiniGame.map((item, index) => {
-            return <DetailItem item={item} index={index} key={index} />;
-          })}
+      <div className="page-bookie">
+        <MenuLink />
+        <div className="box-bookie">
+          <img src={Images.FrameBookie} alt="bookie"/>
+          {/* Contribution */}
+          <div className="contribution mt-5">
+            <div className="item">
+              <span>Your contribution</span>
+              <span>0 EFUN</span>
+            </div>
+            <div className="item">
+              <span>Your P&L</span>
+              <span>0 EFUN</span>
+            </div>
+          </div>
+          <div className="mt-4">
+            <span className="underline">Request Withdraw</span>
+          </div>
+          <div className="section-contribute mt-5">
+            <div className="contribute pt-5">
+              <div className="item">
+                <span>Total Bookie Pool</span>
+                <span>123.000.000 EFUN</span>
+              </div>
+              <div className="item">
+                <span>Return rate</span>
+                <span>0% monthly</span>
+              </div>
+            </div>
+            <div className="contribute mt-4">
+              <span>Contribute Amount - Your Balance:</span>
+              <span> 1,000,000 EFUN</span>
+            </div>
+            <div className="contribute">
+              <div className="box-input mt-3">
+                <input className="input" type="text" />
+                <div className="underline">Max</div>
+              </div>
+            </div>
+            <div className="btn-contribute mt-3">
+              Contribute EFUN
+            </div>
+            </div>
         </div>
       </div>
     </div>

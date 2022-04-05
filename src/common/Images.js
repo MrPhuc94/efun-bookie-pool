@@ -51,8 +51,10 @@ import closed from "../assets/images/action/closed.png";
 import checked from "../assets/images/action/check.png";
 import Banner_EPL2 from "../assets/images/event/Banner_EPL2.png";
 import NotFound from "../assets/images/action/404error.png";
+import FrameBookie from "../assets/images/bookie/Frame.svg"
 
 const Images = {
+  FrameBookie,
   NotFound,
   Banner_EPL2,
   checked,
