@@ -1,0 +1,117 @@
+.mini-game {
+  .heading-box {
+    display: flex;
+    align-items: center;
+    margin-top: 75px;
+    justify-content: center;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    height: 140px;
+  }
+  .heading-box-contain {
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+  }
+  .heading-box h1 {
+    display: block;
+    margin: 0 auto;
+    font-size: 36px;
+    text-transform: uppercase;
+    font-weight: 400;
+    position: relative;
+    padding-bottom: 20px;
+    text-align: center;
+  }
+
+  @media (max-width: 1023px) {
+    .heading-box h1 {
+      font-size: 32px;
+    }
+  }
+  @media (max-width: 480px) {
+    .heading-box h1 {
+      font-size: 24px;
+    }
+  }
+  .heading-box h1:after {
+    content: "";
+    display: block;
+    width: 216px;
+    height: 1px;
+    background: url("../../assets/images/header_line.svg") no-repeat center
+      center;
+    background-size: contain;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+  .heading-box h1 strong {
+    font-weight: 700;
+  }
+  .heading-box h1:after {
+    content: "";
+    display: block;
+    width: 216px;
+  }
+
+  .box-bookie {
+    width: 640px;
+    margin: auto;
+    text-align: center;
+    background: #2E2E2E;
+    border-radius: 10px;
+    padding-top: 48px;
+
+    .contribution{ 
+      padding: 0 30%;
+
+      .item{
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+
+    .section-contribute {
+      background: #424242;
+      border-radius: 0px 0px 10px 10px;
+      padding: 48px 0;
+
+      .contribute {
+        padding: 0 15%;
+        .item{
+          display: flex;
+          justify-content: space-between;
+        }
+
+        .box-input{
+          display: flex;
+          justify-content: space-between;
+          background: #757575;
+          border-radius: 8px;
+          padding: 12px 16px;
+          .input {
+            width: 90%;
+            background: #757575;
+            border: none;
+            color: #fff;
+            font-weight: 600;
+          }
+        }
+      }
+
+      .btn-contribute {
+        background: #FBC02D;
+        border-radius: 8px;
+        width: 40%;
+        padding: 12px 32px;
+        margin: auto;
+        cursor: pointer;
+       }
+    }
+  }
+}

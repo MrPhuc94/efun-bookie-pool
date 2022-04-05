@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Header from "src/components/Header/Header";
 import Footer from "src/components/Footer/Footer";
-import MiniGame from "src/components/MiniGame/MiniGame";
+import BookiePool from "src/components/BookiePool/BookiePool";
 
 const Home = () => {
   useEffect(() => {}, []);
@@ -10,7 +10,7 @@ const Home = () => {
     <>
       <Header />
       <div className="container">
-        <MiniGame />
+        <BookiePool />
       </div>
       <Footer />
     </>
