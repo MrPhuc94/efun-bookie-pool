@@ -32,7 +32,7 @@ const ModalConnectWallet = (props) => {
   //state
   const { t } = useTranslation();
   const modalRef = useRef(null);
-  const [showDialog, setShowDialog] = useState();
+  const [showDialog, setShowDialog] = useState(0);
   const [availableWallet, setAvailableWallet] = useState();
   const [isSigning, setIsSigning] = useState();
   const [hasMetamask, setHasMetamask] = useState();

@@ -67,12 +67,22 @@
     border-radius: 10px;
     padding-top: 48px;
 
+    .box-amount-pending{
+      margin: 0 8%;
+      padding: 12px;
+      background: linear-gradient(0deg, rgba(38, 127, 229, 0.1), rgba(38, 127, 229, 0.1)), #FFFFFF;
+      border-radius: 8px;
+      span {
+        color: #267FE5;
+      }
+    }
+
     @media (max-width: 678px) {
       width: 100%;
     }
 
     .contribution{ 
-      padding: 0 30%;
+      padding: 0 25%;
 
       @media (max-width: 678px) {
         padding: 0 10px;
