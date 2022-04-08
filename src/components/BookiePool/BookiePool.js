@@ -7,7 +7,7 @@ import MenuLink from "./MenuLink/MenuLink";
 import { showAppPopup } from "src/redux/reducers/appSlice";
 import ModalClaim from "../Modal/ModalClaim/ModalClaim";
 import { useSelector } from "react-redux";
-import { formatNumberPrice } from "src/utils/helper";
+import { formatNumber, formatNumberPrice } from "src/utils/helper";
 
 
 export const showChooseWallet = () => {
@@ -18,6 +18,7 @@ export const showChooseWallet = () => {
 const BookiePool = () =>  {
   const [amountContribute, setAmountContribute] =  useState(20000)
   const [errorAmount, setErrorAmount] =  useState('')
+  const [totalBookiePool, setTotalBookiePool] = useState(123000)
 
   useEffect(() => {
     // localStorage.removeItem("yourPredict");
@@ -27,7 +28,6 @@ const BookiePool = () =>  {
   const yourContributed = useSelector(state => state.matches.yourContributed)
   const yourContributedPending = useSelector(state => state.matches.yourContributedPending)
 
-
   // get balance token
   let tokens =
     useSelector((state) => state.wallet.tokens) ||
@@ -36,9 +36,12 @@ const BookiePool = () =>  {
   let balanceEfun = currentToken?.balance;
 
   const contributeEfun= () => {
-    console.log('isFirstDayOfMonth', isFirstDayOfMonth)
+    // console.log('isFirstDayOfMonth', isFirstDayOfMonth)
+    if(errorAmount !== '') return;
     if (isFirstDayOfMonth) {
       const totalContributed = parseFloat(amountContribute) + parseFloat(yourContributed)
+      const newTotalPredictPool = totalBookiePool + totalContributed;
+      setTotalBookiePool(newTotalPredictPool)
       store.dispatch(changeYourContributed(totalContributed))
     } else {
       const totalContributed = parseFloat(amountContribute) + parseFloat(yourContributedPending)
@@ -53,34 +56,32 @@ const BookiePool = () =>  {
   }, [])
 
   const maxAmount = () => {
-    setAmountContribute(formatNumberPrice(balanceEfun))
+    setAmountContribute(formatNumber(balanceEfun))
   }
 
   const requestWithDraw  = () => {
     store.dispatch(showAppPopup(<ModalClaim />));
   }
 
-  const isUndefinedAmount = useMemo(() => {
-    return amountContribute === ''
-  }, [amountContribute])
-
   useEffect(() => {
-    if(isUndefinedAmount){
-      setErrorAmount('Invalid amount')
-    } else {
-      setErrorAmount('')
-    }
-  }, [isUndefinedAmount])
-
-  useEffect(() => {
-    console.log('balanceEfun', balanceEfun)   
-    console.log('amountContribute', amountContribute)
+    // console.log('balanceEfun', balanceEfun)
+    // console.log('amountContribute', amountContribute)
     if(parseFloat(amountContribute) > parseFloat(balanceEfun)){
       setErrorAmount('Insufficient balance')
-    } else {
+    } else if (parseFloat(amountContribute) < 20000 ) {
+      setErrorAmount('Min Predict Amount >= 2000 EFUN')
+    } 
+    else if (amountContribute === '') {
+      setErrorAmount('Invalid amount')
+    } 
+    else {
       setErrorAmount('')
     }
   }, [amountContribute, balanceEfun])
+
+  const percentMonthly = useMemo(() => {
+    return yourContributed / parseFloat(totalBookiePool) * 100
+  }, [yourContributed, totalBookiePool])
 
   return (
     <div className="mini-game">
@@ -128,11 +129,11 @@ const BookiePool = () =>  {
             <div className="contribute">
               <div className="item">
                 <span className="gray">Total Bookie Pool</span>
-                <span className="yellow bold">123.000.000 EFUN</span>
+                <span className="yellow bold">{formatNumberPrice(totalBookiePool)} EFUN</span>
               </div>
               <div className="item">
                 <span className="gray">Return rate</span>
-                <span className="bold">0% monthly</span>
+                <span className="bold">{formatNumberPrice(percentMonthly)}% monthly</span>
               </div>
             </div>
             <div className="flex_row mt-4 contribute">
@@ -150,7 +151,7 @@ const BookiePool = () =>  {
               </div>
               <div style={{ color: "red", textAlign: "left", fontWeight: "bold" }}>{errorAmount}</div>
             </div>
-            <div className="btn-contribute mt-3" onClick={contributeEfun}>
+            <div className={`btn-contribute mt-3 ${errorAmount !== '' && "disable-btn"}`} onClick={contributeEfun}>
               <span className="bold black">Contribute EFUN</span>
             </div>
             <div className="mt-3">

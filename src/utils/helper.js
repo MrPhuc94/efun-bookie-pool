@@ -505,9 +505,14 @@ export function millisToSeconds(millis) {
   return seconds ? +seconds : 0;
 }
 
+export const formatNumber = (number) => {
+  return parseFloat(number)
+    ?.toFixed(1)
+};
+
 export const formatNumberPrice = (number) => {
   return parseFloat(number)
-    ?.toFixed(0)
+    ?.toFixed(1).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 };
 
 // ARRAY
