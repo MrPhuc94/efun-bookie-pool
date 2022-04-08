@@ -37,6 +37,7 @@ const Header = () => {
   const [activeNav, setActiveNav] = useState(false);
   const navWrapper = useRef();
   const [showNavLang, setShowNavLang] = useState(false);
+  const modalRef = useRef(null);
 
   const listLang = [
     // { key: "en", label: "English", icon: unitedKingdom },
@@ -82,6 +83,10 @@ const Header = () => {
     setShowNavLang(!showNavLang);
   };
 
+  const handleCloseModal = (e) => {
+    if (e.target === modalRef.current) _showNavLang();
+  };
+
   return (
     <div className="header">
       <nav className="main-menu">
@@ -116,7 +121,7 @@ const Header = () => {
               <span className="button" onClick={_showNavLang}>
                 <World />
               </span>
-              <div className={`dropdown-content ${showNavLang && "active"}`}>
+              <div className={`dropdown-content ${showNavLang && "active"}`} ref={modalRef}>
                 {listLang.map((item, index) => (
                   <div key={index} onClick={() => handleChangeLanguage(item)}>
                     <img
