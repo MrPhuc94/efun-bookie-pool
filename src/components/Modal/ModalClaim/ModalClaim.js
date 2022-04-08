@@ -61,7 +61,7 @@ const ModalClaim = (props) => {
                <span>Claim now</span>
            </div>
        </div>
-       <div className="underline mt-4 gray" onClick={onClose}>Cancel</div>
+       <div className="underline mt-4 gray cursor-pointer" onClick={onClose}>Cancel</div>
       </div>
     </div>
   );

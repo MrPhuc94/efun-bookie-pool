@@ -69,7 +69,7 @@ const BookiePool = () =>  {
     if(parseFloat(amountContribute) > parseFloat(balanceEfun)){
       setErrorAmount('Insufficient balance')
     } else if (parseFloat(amountContribute) < 20000 ) {
-      setErrorAmount('Min Predict Amount >= 2000 EFUN')
+      setErrorAmount('Min Contribute Amount >= 20000 EFUN')
     } 
     else if (amountContribute === '') {
       setErrorAmount('Invalid amount')
@@ -104,26 +104,15 @@ const BookiePool = () =>  {
           <div className="contribution mt-5">
             <div className="item">
               <span className="gray">Your contribution</span>
-              <span className="yellow bold">{yourContributed} EFUN</span>
+              <span className="yellow bold">{formatNumberPrice(yourContributed)} EFUN</span>
             </div>
             <div className="item">
               <span className="gray">Your P&L</span>
               <span className="bold">0 EFUN</span>
             </div>
-          { yourContributedPending > 0 && 
-              <div className="item">
-                <span className="gray">Pending contribution</span>
-                <span className="yellow bold">{yourContributedPending} EFUN</span>
-              </div> 
-          }
           </div>
-          { yourContributedPending > 0 && 
-            <div className="box-amount-pending mt-4">
-                <span className="gray">Pending contribution amount will be added to the bookie pool on the first day of next month</span>
-              </div> 
-          }
           <div className="mt-4">
-            <span className="underline gray" onClick={requestWithDraw}>Request Withdraw</span>
+            <span className="underline gray cursor-pointer" onClick={requestWithDraw}>Request Withdraw</span>
           </div>
           <div className="section-contribute mt-5">
             <div className="contribute">
@@ -135,9 +124,20 @@ const BookiePool = () =>  {
                 <span className="gray">Return rate</span>
                 <span className={`bold ${percentMonthly > 0 && 'color-green'}`}>{formatNumberPrice(percentMonthly)}% monthly</span>
               </div>
+              { yourContributedPending > 0 &&
+              <div className="item mt-3">
+                <span className="gray">Pending contribution</span>
+                <span className="yellow bold">{formatNumberPrice(yourContributedPending)} EFUN</span>
+              </div> 
+              }
+              { yourContributedPending > 0 && 
+                <div className="box-amount-pending mt-1">
+                    <span className="gray">Pending contribution amount will be added to the bookie pool on the first day of next month</span>
+                </div> 
+              }
             </div>
             <div className="flex_row mt-4 contribute">
-                <span className="gray">Your Balance:</span>
+                <span className="gray">Your Balance</span>
                 <span className="yellow bold">{formatNumberPrice(balanceEfun)} EFUN</span>
             </div>
             <div className="flex_row contribute mt-2">
@@ -147,7 +147,7 @@ const BookiePool = () =>  {
               <div className="box-input mt-2">
                 <input className="input" type="number" style={{ outline: "none" }} value={amountContribute} onChange={(e) => setAmountContribute(e.target.value)}
                 />
-                <div className="underline bold yellow" onClick={maxAmount}>Max</div>
+                <div className="underline bold yellow cursor-pointer" onClick={maxAmount}>Max</div>
               </div>
               <div style={{ color: "red", textAlign: "left", fontWeight: "bold" }}>{errorAmount}</div>
             </div>
@@ -155,7 +155,7 @@ const BookiePool = () =>  {
               <span className="bold black">Contribute EFUN</span>
             </div>
             <div className="mt-3">
-              <span className="underline gray">Contribution rules</span>
+              <span className="underline gray cursor-pointer">Contribution rules</span>
             </div>
           </div>
         </div>

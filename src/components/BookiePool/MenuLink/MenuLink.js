@@ -6,9 +6,9 @@ import "./styles.scss";
 function MenuLink() {
   return (
     <div className="menu-link">
-      <Link to="/" className="link-item">
+      <a href="https://app.efun.tech/" className="link-item" target="_blank" rel="noreferrer">
         Home
-      </Link>
+      </a>
       <MdOutlineArrowForwardIos className="link-dot" />
       <span className="link-item">Bookie Pool</span>
     </div>

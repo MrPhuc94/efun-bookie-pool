@@ -68,7 +68,6 @@
     padding-top: 48px;
 
     .box-amount-pending{
-      margin: 0 8%;
       padding: 12px;
       background: linear-gradient(0deg, rgba(38, 127, 229, 0.1), rgba(38, 127, 229, 0.1)), #FFFFFF;
       border-radius: 8px;
@@ -129,6 +128,7 @@
 
       .disable-btn {
         background: #757575 !important;
+        cursor: none !important;
       }
 
       .color-green {

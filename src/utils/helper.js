@@ -507,12 +507,11 @@ export function millisToSeconds(millis) {
 
 export const formatNumber = (number) => {
   return parseFloat(number)
-    ?.toFixed(1)
 };
 
 export const formatNumberPrice = (number) => {
   return parseFloat(number)
-    ?.toFixed(1).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    ?.toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 };
 
 // ARRAY
