@@ -16,7 +16,7 @@ const override = css`
 `;
 
 const ModalConnectWallet = (props) => {
-  const { navigate } = props;
+  // const { navigate } = props;
   let [loading, setLoading] = useState(false);
   let [color, setColor] = useState("#ffffff");
 
@@ -71,7 +71,7 @@ const ModalConnectWallet = (props) => {
         localStorage.setItem("extensionName", walletName);
         setLoading(false);
         store.dispatch(dismissAppPopup());
-        navigate("/");
+        // navigate("/");
       } catch (e) {
         store.dispatch(
           showAppPopup(<ModalErrorWallet messageError={e.toString()} />)

@@ -8,6 +8,7 @@ import { showAppPopup } from "src/redux/reducers/appSlice";
 import ModalClaim from "../Modal/ModalClaim/ModalClaim";
 import { useSelector } from "react-redux";
 import { formatNumber, formatNumberPrice } from "src/utils/helper";
+import ModalConnectWallet from "../Modal/ConnectWallet/ModalConnectWallet";
 
 
 export const showChooseWallet = () => {
@@ -28,6 +29,10 @@ const BookiePool = () =>  {
   const yourContributed = useSelector(state => state.matches.yourContributed)
   const yourContributedPending = useSelector(state => state.matches.yourContributedPending)
 
+  const currentAddress =
+  useSelector((state) => state.wallet?.currentAddress) ||
+  localStorage.getItem("currentAddress");
+
   // get balance token
   let tokens =
     useSelector((state) => state.wallet.tokens) ||
@@ -37,15 +42,20 @@ const BookiePool = () =>  {
 
   const contributeEfun= () => {
     // console.log('isFirstDayOfMonth', isFirstDayOfMonth)
-    if(errorAmount !== '') return;
-    if (isFirstDayOfMonth) {
-      const totalContributed = parseFloat(amountContribute) + parseFloat(yourContributed)
-      const newTotalPredictPool = totalBookiePool + totalContributed;
-      setTotalBookiePool(newTotalPredictPool)
-      store.dispatch(changeYourContributed(totalContributed))
-    } else {
-      const totalContributed = parseFloat(amountContribute) + parseFloat(yourContributedPending)
-      store.dispatch(changeYourContributedPending(totalContributed))
+    if(currentAddress == null) {
+      store.dispatch(showAppPopup(<ModalConnectWallet />));
+    }else{
+      if(errorAmount !== '') return;
+
+      if (isFirstDayOfMonth) {
+        const totalContributed = parseFloat(amountContribute) + parseFloat(yourContributed)
+        const newTotalPredictPool = totalBookiePool + totalContributed;
+        setTotalBookiePool(newTotalPredictPool)
+        store.dispatch(changeYourContributed(totalContributed))
+      } else {
+        const totalContributed = parseFloat(amountContribute) + parseFloat(yourContributedPending)
+        store.dispatch(changeYourContributedPending(totalContributed))
+      }
     }
   }
 
@@ -111,9 +121,9 @@ const BookiePool = () =>  {
               <span className="bold">0 EFUN</span>
             </div>
           </div>
-          <div className="mt-4">
+          {currentAddress !== null && <div className="mt-4">
             <span className="underline gray cursor-pointer" onClick={requestWithDraw}>Request Withdraw</span>
-          </div>
+          </div>}
           <div className="section-contribute mt-5">
             <div className="contribute">
               <div className="item">
@@ -136,21 +146,25 @@ const BookiePool = () =>  {
                 </div> 
               }
             </div>
-            <div className="flex_row mt-4 contribute">
+            {currentAddress !== null && <div className="flex_row mt-4 contribute">
                 <span className="gray">Your Balance</span>
                 <span className="yellow bold">{formatNumberPrice(balanceEfun)} EFUN</span>
-            </div>
-            <div className="flex_row contribute mt-2">
-              <span>Contribute Amount</span>
-            </div>
-            <div className="contribute">
-              <div className="box-input mt-2">
-                <input className="input" type="number" style={{ outline: "none" }} value={amountContribute} onChange={(e) => setAmountContribute(e.target.value)}
-                />
-                <div className="underline bold yellow cursor-pointer" onClick={maxAmount}>Max</div>
-              </div>
-              <div style={{ color: "red", textAlign: "left", fontWeight: "bold" }}>{errorAmount}</div>
-            </div>
+            </div>}
+            {currentAddress !== null &&            
+              <>
+                <div className="flex_row contribute mt-2">
+                  <span>Contribute Amount</span>
+                </div>
+                <div className="contribute">
+                  <div className="box-input mt-2">
+                    <input className="input" type="number" style={{ outline: "none" }} value={amountContribute} onChange={(e) => setAmountContribute(e.target.value)}
+                    />
+                    <div className="underline bold yellow cursor-pointer" onClick={maxAmount}>Max</div>
+                  </div>
+                  <div style={{ color: "red", textAlign: "left", fontWeight: "bold" }}>{errorAmount}</div>
+                </div>
+              </>
+           }
             <div className={`btn-contribute mt-3 ${errorAmount !== '' && "disable-btn"}`} onClick={contributeEfun}>
               <span className="bold black">Contribute EFUN</span>
             </div>
