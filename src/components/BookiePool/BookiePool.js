@@ -108,7 +108,7 @@ const BookiePool = () =>  {
             </div>
             <div className="item">
               <span className="gray">Your P&L</span>
-              <span className="yellow bold">0 EFUN</span>
+              <span className="bold">0 EFUN</span>
             </div>
           { yourContributedPending > 0 && 
               <div className="item">
@@ -133,7 +133,7 @@ const BookiePool = () =>  {
               </div>
               <div className="item">
                 <span className="gray">Return rate</span>
-                <span className="bold">{formatNumberPrice(percentMonthly)}% monthly</span>
+                <span className={`bold ${percentMonthly > 0 && 'color-green'}`}>{formatNumberPrice(percentMonthly)}% monthly</span>
               </div>
             </div>
             <div className="flex_row mt-4 contribute">
