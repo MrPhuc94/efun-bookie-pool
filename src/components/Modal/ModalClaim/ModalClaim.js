@@ -29,8 +29,9 @@ const ModalClaim = (props) => {
     };
   }, [modalRef]);
 
-  const waitTillClaim = () => {
+  const waitTillClaim = (e) => {
     store.dispatch(changeAmountWaitTillClaim(yourContributed))
+    onClose();
   }
 
   return (
@@ -47,7 +48,7 @@ const ModalClaim = (props) => {
          </span>
        </div>
        <div className="flex_row mt-4">
-           <div className="button" onClick={waitTillClaim}>
+           <div className="button" onClick={(e) => {waitTillClaim(e)}}>
                <span>Wait till May 1st, 2022</span>
            </div>
            <div className="button-highlight" onClick={onClose}>

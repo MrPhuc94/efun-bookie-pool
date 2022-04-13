@@ -71,7 +71,7 @@ const BookiePool = () =>  {
       if(errorAmount !== '') return;
 
       if (isFirstDayOfMonth) {
-        const totalContributed = parseFloat(amountContribute) + parseFloat(yourContributed)
+        const totalContributed = parseFloat(amountContribute);
         const newTotalPredictPool = totalBookiePool + totalContributed;
         setTotalBookiePool(newTotalPredictPool)
         store.dispatch(changeYourContributed(totalContributed))
@@ -154,15 +154,15 @@ const BookiePool = () =>  {
           {
             amountWaitTillClaim > 0 && 
               <div className="mt-4 waitClaim">
-                <div className="item">
+                {/* <div className="item">
                   <span className="gray">     
                     You're already withdrawing. <br />
                     You can withdraw again on May 2nd, 2022.
                   </span>
-                </div>
-                <div className=" mt-3 box-waitClaim">
+                </div> */}
+                <div className="box-waitClaim">
                   <span className="gray">
-                    Claim your <span className="bold">{formatNumberPrice(yourContributed)} EFUN</span> on <span className="bold">{months[month + 1]} 1st, {year}</span> <br/> (This is an estimated amount)
+                    Claim your <span className="bold">{formatNumberPrice(amountWaitTillClaim)} EFUN</span> on <span className="bold">{months[month + 1]} 1st, {year}</span> <br/> (This is an estimated amount)
                   </span>
                 </div> 
               </div>
