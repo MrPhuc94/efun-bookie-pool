@@ -7,9 +7,10 @@ import MenuLink from "./MenuLink/MenuLink";
 import { showAppPopup } from "src/redux/reducers/appSlice";
 import ModalClaim from "../Modal/ModalClaim/ModalClaim";
 import { useSelector } from "react-redux";
-import { formatNumber, formatNumberPrice } from "src/utils/helper";
+import { formatNumber, formatNumberPrice, numberFormat } from "src/utils/helper";
 import ModalConnectWallet from "../Modal/ConnectWallet/ModalConnectWallet";
 import ModalContributeRule from "../Modal/ModalContributeRule/ModalContributeRule";
+import moment from "moment";
 
 
 export const showChooseWallet = () => {
@@ -20,6 +21,7 @@ export const showContributeRule = () => {
   store.dispatch(showAppPopup(<ModalContributeRule />));
 };
 
+let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const BookiePool = () =>  {
   const [amountContribute, setAmountContribute] =  useState(20000)
@@ -35,6 +37,7 @@ const BookiePool = () =>  {
 
   const yourContributed = useSelector(state => state.matches.yourContributed)
   const yourContributedPending = useSelector(state => state.matches.yourContributedPending)
+  const amountWaitTillClaim = useSelector(state => state.matches.amountWaitTillClaim)
 
   const currentAddress =
   useSelector((state) => state.wallet?.currentAddress) ||
@@ -85,6 +88,11 @@ const BookiePool = () =>  {
     return true
   }, [])
 
+  let month = moment().month();
+  let year = new Date().getFullYear();
+
+
+
   const maxAmount = () => {
     setAmountContribute(formatNumber(balanceEfun))
   }
@@ -103,7 +111,7 @@ const BookiePool = () =>  {
     } 
     else if (amountContribute === '') {
       setErrorAmount('Invalid amount')
-    } 
+    }
     else {
       setErrorAmount('')
     }
@@ -130,7 +138,6 @@ const BookiePool = () =>  {
         <MenuLink />
         <div className="box-bookie">
           <img src={Images.FrameBookie} alt="bookie"/>
-          {/* Contribution */}
           <div className="contribution mt-5">
             <div className="item">
               <span className="gray">Your contribution</span>
@@ -144,6 +151,22 @@ const BookiePool = () =>  {
           {currentAddress !== null && yourContributed > 0 && <div className="mt-4">
             <span className="underline gray cursor-pointer" onClick={requestWithDraw}>Request Withdraw</span>
           </div>}
+          {
+            amountWaitTillClaim > 0 && 
+              <div className="mt-4 waitClaim">
+                <div className="item">
+                  <span className="gray">     
+                    You're already withdrawing. <br />
+                    You can withdraw again on May 2nd, 2022.
+                  </span>
+                </div>
+                <div className=" mt-3 box-waitClaim">
+                  <span className="gray">
+                    Claim your <span className="bold">{formatNumberPrice(yourContributed)} EFUN</span> on <span className="bold">{months[month + 1]} 1st, {year}</span> <br/> (This is an estimated amount)
+                  </span>
+                </div> 
+              </div>
+          }
           <div className="section-contribute mt-5">
             <div className="contribute">
               <div className="item">
@@ -166,10 +189,12 @@ const BookiePool = () =>  {
                 </div> 
               }
             </div>
-            {currentAddress !== null && <div className="flex_row mt-4 contribute">
+            { 
+              currentAddress !== null && <div className="flex_row mt-4 contribute">
                 <span className="gray">Your Balance</span>
                 <span className="yellow bold">{formatNumberPrice(balanceEfun)} EFUN</span>
-            </div>}
+            </div>
+            }
             {currentAddress !== null &&            
               <>
                 <div className="flex_row contribute mt-2">
@@ -184,7 +209,7 @@ const BookiePool = () =>  {
                   <div style={{ color: "red", textAlign: "left", fontWeight: "bold" }}>{errorAmount}</div>
                 </div>
               </>
-           }
+            }
             <div className={`btn-contribute mt-3 ${errorAmount !== '' && "disable-btn"}`} onClick={contributeEfun}>
               <span className="bold black">Contribute EFUN</span>
             </div>

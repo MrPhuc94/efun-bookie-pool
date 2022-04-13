@@ -93,6 +93,19 @@
       }
     }
 
+    .waitClaim{
+      padding: 0 15%;
+
+      .box-waitClaim{
+        background: rgba(251, 192, 45, 0.1);
+        border-radius: 8px;
+        padding: 12px;
+        span {
+          color: #FBC02D;
+        }
+      }
+    }
+
     .section-contribute {
       background: #424242;
       border-radius: 0px 0px 10px 10px;

@@ -6,12 +6,16 @@ const initialState = {
   listPredicted: [],
   yourContributed: 0,
   yourContributedPending: 0,
+  amountWaitTillClaim: 0
 };
 
 export const matchesSlice = createSlice({
   name: "matches",
   initialState,
   reducers: {
+    changeAmountWaitTillClaim(state, action) {
+      state.amountWaitTillClaim = action.payload;
+    },
     changeYourContributedPending(state, action) {
       state.yourContributedPending = action.payload;
     },
@@ -40,7 +44,8 @@ export const {
   changeYourClaimed,
   changeListPredicted,
   changeYourContributed,
-  changeYourContributedPending
+  changeYourContributedPending,
+  changeAmountWaitTillClaim
 } = matchesSlice.actions;
 
 export default matchesSlice.reducer;

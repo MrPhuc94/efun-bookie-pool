@@ -4,8 +4,10 @@ import { store } from "src/redux/store";
 import { useTranslation } from "react-i18next";
 import "./styles.scss";
 import Images from "src/common/Images";
+import { useSelector } from "react-redux";
+import { changeAmountWaitTillClaim } from "src/redux/reducers/matchesSlice";
 const ModalClaim = (props) => {
-
+  const yourContributed = useSelector(state => state.matches.yourContributed)
   //default function
   const handleCloseModal = (e) => {
     if (e.target === modalRef.current) onClose();
@@ -27,9 +29,9 @@ const ModalClaim = (props) => {
     };
   }, [modalRef]);
 
-  useEffect(() => {
-      
-  }, []);
+  const waitTillClaim = () => {
+    store.dispatch(changeAmountWaitTillClaim(yourContributed))
+  }
 
   return (
     <div
@@ -45,7 +47,7 @@ const ModalClaim = (props) => {
          </span>
        </div>
        <div className="flex_row mt-4">
-           <div className="button" onClick={onClose}>
+           <div className="button" onClick={waitTillClaim}>
                <span>Wait till May 1st, 2022</span>
            </div>
            <div className="button-highlight" onClick={onClose}>

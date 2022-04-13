@@ -9,6 +9,10 @@
   align-items: center;
   z-index: 10000;
   text-align: left;
+  overflow-y: auto;
+  @media (max-width: 959px) {
+    top: 50px !important;
+  }
   
   .modal-wrapper {
     padding: 20px 30px;
@@ -19,6 +23,9 @@
     max-width: 500px;
     align-items: center;
     text-align: center;
+    @media (max-width: 959px) {
+      padding-top: 100px;
+    }
 
     p {
       font-family: 'Montserrat';
