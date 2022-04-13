@@ -37,7 +37,7 @@ const Header = () => {
     useSelector((state) => state.wallet?.currentAddress) ||
     localStorage.getItem("currentAddress");
 
-  window.ethereum.on("accountsChanged", async function (accounts) {
+  window.ethereum?.on("accountsChanged", async function (accounts) {
     // check balance meta mask
     const currentAddress = await walletManager.connectWallet('Metamask');
     localStorage.setItem("currentAddress", currentAddress);

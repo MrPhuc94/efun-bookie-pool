@@ -141,7 +141,7 @@ const BookiePool = () =>  {
               <span className="bold">0 EFUN</span>
             </div>
           </div>
-          {currentAddress !== null && <div className="mt-4">
+          {currentAddress !== null && yourContributed > 0 && <div className="mt-4">
             <span className="underline gray cursor-pointer" onClick={requestWithDraw}>Request Withdraw</span>
           </div>}
           <div className="section-contribute mt-5">
