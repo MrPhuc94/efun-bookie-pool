@@ -4,16 +4,7 @@ import { store } from "src/redux/store";
 import { useTranslation } from "react-i18next";
 import "./styles.scss";
 import Images from "src/common/Images";
-import { css } from "@emotion/react";
-import ClipLoader from "react-spinners/ClipLoader";
-
-const override = css`
-  margin: 0 auto;
-`;
-
 const ModalClaim = (props) => {
-  const { navigate } = props;
-  let [loading, setLoading] = useState(false);
 
   //default function
   const handleCloseModal = (e) => {

@@ -9,10 +9,15 @@ import ModalClaim from "../Modal/ModalClaim/ModalClaim";
 import { useSelector } from "react-redux";
 import { formatNumber, formatNumberPrice } from "src/utils/helper";
 import ModalConnectWallet from "../Modal/ConnectWallet/ModalConnectWallet";
+import ModalContributeRule from "../Modal/ModalContributeRule/ModalContributeRule";
 
 
 export const showChooseWallet = () => {
   store.dispatch(showAppPopup(<ModalClaim />));
+};
+
+export const showContributeRule = () => {
+  store.dispatch(showAppPopup(<ModalContributeRule />));
 };
 
 
@@ -20,6 +25,8 @@ const BookiePool = () =>  {
   const [amountContribute, setAmountContribute] =  useState(20000)
   const [errorAmount, setErrorAmount] =  useState('')
   const [totalBookiePool, setTotalBookiePool] = useState(123000)
+  const [balanceEfun, setBalanceToken] = useState(0)
+
 
   useEffect(() => {
     // localStorage.removeItem("yourPredict");
@@ -35,11 +42,24 @@ const BookiePool = () =>  {
 
   // get balance token
   let tokens =
-    useSelector((state) => state.wallet.tokens) ||
-    JSON.parse(localStorage.getItem("tokens"));
-  const currentToken = tokens?.find((item) => item?.symbol === "EFUN");
-  let balanceEfun = currentToken?.balance;
+  useSelector((state) => state.wallet.tokens) ||
+  JSON.parse(localStorage.getItem("tokens"));
 
+  useEffect(() => {
+    const currentToken = tokens?.find((item) => item?.symbol === "EFUN");
+    if(currentToken) {
+      setBalanceToken(currentToken?.balance)
+      resetValue()
+    }else{
+      setBalanceToken(0)
+    }
+  }, [currentAddress])
+
+  const resetValue = () => {
+    store.dispatch(changeYourContributed(0))
+    store.dispatch(changeYourContributedPending(0))
+  }
+ 
   const contributeEfun= () => {
     // console.log('isFirstDayOfMonth', isFirstDayOfMonth)
     if(currentAddress == null) {
@@ -168,7 +188,7 @@ const BookiePool = () =>  {
             <div className={`btn-contribute mt-3 ${errorAmount !== '' && "disable-btn"}`} onClick={contributeEfun}>
               <span className="bold black">Contribute EFUN</span>
             </div>
-            <div className="mt-3">
+            <div className="mt-3" onClick={showContributeRule}>
               <span className="underline gray cursor-pointer">Contribution rules</span>
             </div>
           </div>

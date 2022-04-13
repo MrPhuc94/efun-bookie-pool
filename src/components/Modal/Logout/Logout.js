@@ -9,6 +9,8 @@ import {
 } from "src/redux/reducers/walletSlice";
 import {
   changeListPredicted,
+  changeYourContributed,
+  changeYourContributedPending,
   changeYourPredict,
 } from "src/redux/reducers/matchesSlice";
 
@@ -36,14 +38,14 @@ const ModalLogout = (props) => {
   }, [modalRef]);
 
   const handleLogout = () => {
-    //console.log("logoutHandle=======", currentAddress);
     localStorage.clear();
     store.dispatch(dismissAppPopup());
     store.dispatch(changeCurrentAddress(null));
     store.dispatch(changeListToken(null));
     store.dispatch(changeYourPredict(null));
     store.dispatch(changeListPredicted([]));
-    //navigate("/");
+    store.dispatch(changeYourContributed(0))
+    store.dispatch(changeYourContributedPending(0))
   };
 
   return (

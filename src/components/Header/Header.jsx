@@ -21,6 +21,8 @@ import { ASYNC_STORAGE_KEYS } from "src/common/Constants";
 import { setLanguage } from "src/redux/reducers/userSlice";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { walletManager } from "src/blockchain/utils/walletManager";
+import { changeCurrentAddress } from "src/redux/reducers/walletSlice";
 
 export const showChooseWallet = (navigate) => {
   store.dispatch(showAppPopup(<ModalConnectWallet navigate={navigate} />));
@@ -29,10 +31,20 @@ export const showChooseWallet = (navigate) => {
 const Header = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  // const [currentAddress, setCurrentAddress] = useState('')
 
   const currentAddress =
     useSelector((state) => state.wallet?.currentAddress) ||
     localStorage.getItem("currentAddress");
+
+  window.ethereum.on("accountsChanged", async function (accounts) {
+    // check balance meta mask
+    const currentAddress = await walletManager.connectWallet('Metamask');
+    localStorage.setItem("currentAddress", currentAddress);
+    store.dispatch(changeCurrentAddress(currentAddress));
+    localStorage.setItem("extensionName", "metamask");
+  });
+
 
   const [activeNav, setActiveNav] = useState(false);
   const navWrapper = useRef();

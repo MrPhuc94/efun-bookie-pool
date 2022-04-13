@@ -63,8 +63,7 @@ const ModalConnectWallet = (props) => {
     if (availableWallet && availableWallet.includes(walletName)) {
       try {
         const currentAddress = await walletManager.connectWallet(
-          walletName,
-          false
+          walletName
         );
         localStorage.setItem("currentAddress", currentAddress);
         store.dispatch(changeCurrentAddress(currentAddress));
@@ -146,13 +145,13 @@ const ModalConnectWallet = (props) => {
         <div
           className="flex_row_start btn-trust"
           onClick={() => {
-            // connectWallet("TrustWallet");
+            connectWallet("TrustWallet");
           }}
         >
           <div className="mr-small">
             <img src={Images.trust} alt="" width={40} height={40} />
           </div>
-          <div className="text-small">Trust wallet</div>
+          <div className="text-small">Connect width QR code</div>
         </div>
       </div>
     </div>

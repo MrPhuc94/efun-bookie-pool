@@ -42,7 +42,7 @@ const Footer = () => {
         <div className="footer-nav">
           <p className="copyright order-md-1 order-2">
             © 2021{" "}
-            <a href="#" className="text-primary text-medium">
+            <a href="https://efun.tech/" className="text-primary text-medium">
               <span className="label">EFUN.tech </span>
             </a>
             All rights reserved.
