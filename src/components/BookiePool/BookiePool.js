@@ -71,8 +71,8 @@ const BookiePool = () =>  {
       if(errorAmount !== '') return;
 
       if (isFirstDayOfMonth) {
-        const totalContributed = parseFloat(amountContribute);
-        const newTotalPredictPool = totalBookiePool + totalContributed;
+        const totalContributed = parseFloat(amountContribute) + parseFloat(yourContributed)
+        const newTotalPredictPool = totalBookiePool + parseFloat(amountContribute);
         setTotalBookiePool(newTotalPredictPool)
         store.dispatch(changeYourContributed(totalContributed))
       } else {
